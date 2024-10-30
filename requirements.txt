@@ -16,4 +16,8 @@ Language Tools/Framework:
 	- (optional) if u want to use w3.css, it's available
 - Framework:
 	- Flask
+
+**GIT RULES**
+- don't push directly to main branch
+- create separate branches for updates of the code
 	
