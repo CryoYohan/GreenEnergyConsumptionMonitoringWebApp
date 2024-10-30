@@ -1,0 +1,19 @@
+Dependencies:
+- pip install Flask
+- pip install bcrypt ('For Hashing Password | DB Security')
+- pip install mysql-connector-python ('For XAMPP MySQL Server')
+
+Version Control Tools:
+- git/git bash ('REQUIRED')
+
+Language Tools/Framework:
+- Back-end:
+	- Python
+	- Jinja
+	- MySQL MariaDB
+- Front-end:
+	- HTML and CSS
+	- (optional) if u want to use w3.css, it's available
+- Framework:
+	- Flask
+	
