@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/w3.css') }}">
+    <title>EnerGreen</title>
+</head>
+<body>
+    <div class="w3-bar w3-section w3-mobile w3-container">
+        <span class="w3-bar-item w3-left"><a href="{{ url_for('index') }}"><img src="{{url_for('static',filename='images/logo/logo-name.svg')}}" alt="EnerGreen Logo" title="EnerGreen"></a></span>
+        <button class="w3-bar-item w3-round-xlarge w3-margin-left w3-right w3-ios-green" style="width: 8%; color: white;">Sign-up</button>
+        <button class="w3-bar-item w3-round-xlarge w3-margin-left w3-right w3-white w3-border w3-border-green" style="width: 8%;">Log-in</button>
+    </div>
+</body>
+</html>
