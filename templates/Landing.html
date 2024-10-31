@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Css/Landing.Css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Landing.css') }}">
     <title>Green Energy Consumption Monitoring App</title>
 </head>
 <body>
@@ -11,7 +11,7 @@
         <div class="Landing-BG">
             <div class="header-container">
                 <div class="logodiv">
-                    <img src="../Images/Energreen-logo.svg" alt="Logo" class="Energreen-logo">
+                    <img src="{{ url_for('static', filename='images/svg/Energreen-logo.svg') }}" alt="Logo" class="Energreen-logo">
                     <p id="App-Name"><span id="Name-Span">Ener</span>Green</p>
                 </div>
                 <div class="Log-Sign">
@@ -28,13 +28,13 @@
                     <button id="start-monitoring-button">Start Monitoring</button>
                 </div>
             </div>
-            <img src="../Images/landingBG 3.png" alt="">
+            <img src="{{ url_for('static', filename='images/png/landingBG 3.png') }}" alt="EnerGreen Background">
         </div>
 
         <div class="Second-landing">
             <div class="secdiv-container">
                 <div class="secdivimg-content">
-                    <img src="../Images/Saec-div-img.png" alt="sec-div img" width="700" height="600">
+                    <img src="{{ url_for('static', filename='images/png/Saec-div-img.png') }}" alt="sec-div img" width="700" height="600">
                 </div>
                 <div class="secdivtext-content">
                     <div id="secdiv-headline">
@@ -55,7 +55,7 @@
 
                 </div>
             </div>
-            <img src="../Images/Second-div-bg.png" alt="">
+            <img src="{{ url_for('static', filename='images/png/Second-div-bg.png') }}" alt="">
         </div>
         
 
@@ -67,7 +67,7 @@
                 <div class="real-timeDiv Division">
                     <div class="content">
                         <div>
-                            <img src="../Images/Real-time icon.svg" alt="Real - Time Icon" width="78" height="79">
+                            <img src="{{  url_for('static',filename='images/svg/Real-time icon.svg') }}" alt="Real - Time Icon" width="78" height="79">
                         </div>
                         <div id="Info">
                             <h2 id="content-heading"> Real - Time Monitoring</h2>
@@ -80,7 +80,7 @@
                             <p>Track Live energy Data top see exactly how much you're using and producing</p>
                         </div>
                         <div>
-                            <img src="../Images/content-1.png" alt="Image">
+                            <img src="{{ url_for('static',filename='images/png/content-1.png') }}" alt="Image">
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                 <div class="Data-AnalysisDiv Division">
                     <div class="content">
                         <div id="sec-img">
-                            <img src="../Images/Data-Anal.svg" alt="Real - Time Icon" id="info-img" width="78" height="79">
+                            <img src="{{ url_for('static',filename='images/svg/Data-Anal.svg') }}" alt="Real - Time Icon" id="info-img" width="78" height="79">
                         </div>
                         <div id="Info">
                             <h2 id="content-heading"> Data Analytics Report</h2>
@@ -100,14 +100,14 @@
                             <p> Access detailed insights into your energy consumption, solar production, and trends over time</p>
                         </div>
                         <div>
-                            <img src="../Images/Data-img.png" alt="Image">
+                            <img src="{{ url_for('static',filename='images/png/Data-img.png') }}" alt="Image">
                         </div>
                     </div>
                 </div>
                 <div class="Quick-EasyDiv Division">
                     <div class="content">
                         <div id="sec-img1">
-                            <img src="../Images/Quick.svg" alt="Real - Time Icon" width="78" height="79">
+                            <img src="{{ url_for('static', filename='images/svg/Quick.svg') }}" alt="Real - Time Icon" width="78" height="79">
                         </div>
                         <div id="Info">
                             <h2 id="content-heading">Quick and Easy Setup</h2>
@@ -120,7 +120,7 @@
                         </div>
                         <div>
                             <div>
-                                <img src="../Images/Quick -Ease.png" alt="Image">
+                                <img src="{{ url_for('static', filename='images/png/Quick -Ease.png') }}" alt="Image">
                             </div>
                         </div>
                     </div>
@@ -145,12 +145,11 @@
                     </div>
                 </div>
                 <div class="secdivimg-content">
-                    <img src="../Images/Fourth-land-img.png" alt="sec-div img" width="700" height="500">
+                    <img src="{{ url_for('static', filename='images/png/Fourth-land-img.png') }}" alt="sec-div img" width="700" height="500">
                 </div>
             </div>
-            <img src="../Images/Fourth-landing-BG.png" alt="">
+            <img src="{{ url_for('static',filename='images/png/Fourth-landing-BG.png') }}" alt="Real Time Monitoring">
         </div>
-          
         <div class="footer">
             <p>&copy; 2024 EnerGreen. All rights reserved.</p>
         </div>
