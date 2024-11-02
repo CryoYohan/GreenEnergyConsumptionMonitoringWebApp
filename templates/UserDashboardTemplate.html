@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/UserDashboardStyles.css">
+    <title>User Dasboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        html{
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="Container">
+        <div class="Side-Navigation">
+            <div class="logo-div">
+                <div class="img-logo">
+                    <img src="../static/images/logo/logo.svg" alt="">
+                </div>
+                <div class="webname">
+                    <h2><span id="Color">Ener</span>Green</h2>
+                </div>
+            </div>
+            <div class="Navigation-buttons">
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="Dashboard-btn">
+                            <img id="homeicon" src="../static/images/svg/Home-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Dashboard
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Appliances-btn">
+                            <img src="../static/images/svg/Appliances-Icon.svg" alt="Appliances Icon" width="24" height="24"> Appliances
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Estimation-btn">
+                            <img src="../static/images/svg/Cost-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Cost Estimation
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Energy-btn">
+                            <img src="../static/images/svg/Energy-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Green Energy
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="Emission-btn">
+                            <img src="../static/images/svg/Emission-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Carbon Emission
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Simulation-btn">
+                            <img id="button" src="../static/images/svg/Simulation-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Simulation Page
+                        </a>
+                    </li>
+                </div>
+            </div>
+        </div>
+        <div class="Top-Main-Content">
+            <div class="Top-Navigation">
+                <div class="page-title">
+                    <h2 id="dash-title">Weekly Energy Monitoring Statistics</h2>
+                </div>
+                <div class="profile-section">
+                    <a href="">
+                        <img src="../static/images/svg/Profile-Icon.svg" alt="">
+                    <span>Kobe Amaro</span>
+                    </a>
+                </div>
+            </div>
+            <div id="Main-Content">
+                Main Container
+            </div>
+        </div>
+    </div>
+    <script>
+        
+        window.onload = function() {
+            loadDashboard(); 
+            setTimeout(renderCostCharts, 100);
+            setTimeout(renderDoughnutChart, 100);
+            setTimeout(renderGreenChart, 100);
+            setTimeout(renderCarbonChart, 100);
+            
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.nav-button');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+            // Remove 'active' class from all buttons
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Add 'active' class to the clicked button
+            this.classList.add('active');
+            });
+        });
+        });
+
+        function loadDashboard() {
+            fetch('./UserDashboardContent.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
+                    document.getElementById("page-title").innerText = "Dashboard"; // Change the displayed title
+                    renderCharts();
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        }
+
+        document.getElementById("Dashboard-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./UserDashboardContent.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics";
+                    document.getElementById("dash-title").innerText = "Weekly Energy Monitoring Statistics";
+                    
+                    // Delay calling renderCharts to ensure myPieChart is loaded
+                    setTimeout(renderCostCharts, 100);
+                    setTimeout(renderDoughnutChart, 100);
+                    setTimeout(renderGreenChart, 100);
+                    setTimeout(renderCarbonChart, 100);
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        function renderCostCharts() {
+            const canvas = document.getElementById('myPieChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            const pieCtx = canvas.getContext('2d');
+            const pieData = {
+                labels: ['lorem ', 'lorem', 'lorem', 'lorem'],
+                datasets: [{
+                    data: [60, 20, 10, 10],
+                    backgroundColor: ['#F4BE37', '#5388D8', '#0D2535 ', '#FF9F40'],
+                    hoverBackgroundColor: ['#F4BE37', '#5388D8', '#0D2535 ', '#FF9F40'],
+                }]
+            };
+
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: pieData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Allows the chart to fill the entire container
+                    animation: {
+                        duration: 1000, // Animation duration in milliseconds (adjust as needed)
+                        easing: 'easeOutBounce' // Optional easing effect
+                    },
+                    plugins: {
+                        legend: {
+                            display: false, // Hide legend to save space if needed
+                            position: 'bottom'
+                        }
+                    },
+                    layout: {
+                        padding: 0 
+                    }
+                }
+            });
+        }
+        
+        function renderDoughnutChart() {
+            const canvas = document.getElementById('myDoughnutChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            setTimeout(() => {
+                // Set canvas width and height dynamically
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                const pieCtx = canvas.getContext('2d');
+                const pieData = {
+                    labels: ['lorem ', 'lorem', 'lorem', 'lorem'],
+                    datasets: [{
+                        data: [60, 20, 10, 10],
+                        backgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
+                        hoverBackgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
+                    }]
+                };
+
+                new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: pieData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                        duration: 1000, // Animation duration in milliseconds (adjust as needed)
+                        easing: 'easeOutBounce' // Optional easing effect
+                    },
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        layout: {
+                            padding: 0
+                        }
+                    }
+                });
+            }, 100); // Slight delay
+        }
+        function renderGreenChart() { 
+            const canvas = document.getElementById('myGreenChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            setTimeout(() => {
+                // Set canvas width and height dynamically
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                const polarCtx = canvas.getContext('2d');
+                const polarData = {
+                    labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4'], // Four labels for polar area chart
+                    datasets: [{
+                        data: [30, 20, 15, 35], // Data values
+                        backgroundColor: [
+                            'rgba(244, 190, 55, 0.5)', // Semi-transparent yellow
+                            'rgba(83, 136, 216, 0.5)', // Semi-transparent blue
+                            'rgba(255, 159, 64, 0.5)', // Semi-transparent orange
+                            'rgba(13, 37, 53, 0.5)' // Semi-transparent dark blue
+                        ],
+                        hoverBackgroundColor: [
+                            'rgba(244, 190, 55, 0.7)', // Slightly opaque yellow for hover
+                            'rgba(83, 136, 216, 0.7)', // Slightly opaque blue for hover
+                            'rgba(255, 159, 64, 0.7)', // Slightly opaque orange for hover
+                            'rgba(13, 37, 53, 0.7)' // Slightly opaque dark blue for hover
+                        ]
+                    }]
+                };
+
+                new Chart(polarCtx, {
+                    type: 'polarArea',
+                    data: polarData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000, // Animation duration in milliseconds
+                            easing: 'easeOutBounce' // Optional easing effect
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hide the legend beside the chart
+                            }
+                        },
+                        layout: {
+                            padding: 0
+                        }
+                    }
+                });
+            }, 100); // Slight delay
+        }
+        function renderCarbonChart() {
+            const canvas = document.getElementById('myCarbonChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            setTimeout(() => {
+                // Set canvas width and height dynamically
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                const radarCtx = canvas.getContext('2d');
+                const radarData = {
+                    labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7'], // Seven labels for heptagonal shape
+                    datasets: [
+                        {
+                            label: 'Dataset 1',
+                            data: [40, 50, 60, 70, 30, 80, 55], // Seven data points for the first dataset
+                            backgroundColor: 'rgba(244, 190, 55, 0.5)', // Semi-transparent fill color
+                            borderColor: '#F4BE37', // Border color
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Dataset 2',
+                            data: [20, 90, 30, 60, 40, 50, 65], // Seven data points for the second dataset
+                            backgroundColor: 'rgba(83, 136, 216, 0.5)', // Semi-transparent fill color
+                            borderColor: '#5388D8', // Border color
+                            borderWidth: 2,
+                        }
+                    ]
+                };
+
+                new Chart(radarCtx, {
+                    type: 'radar',
+                    data: radarData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000, // Animation duration in milliseconds
+                            easing: 'easeOutBounce' // Optional easing effect
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hide the legend (label on top)
+                            }
+                        },
+                        layout: {
+                            padding: 0
+                        },
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+            }, 100); // Slight delay
+        }
+
+
+
+        document.getElementById("Appliances-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./AppliancesDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
+                    document.getElementById("dash-title").innerText = "Appliances"; // Change the displayed title
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        document.getElementById("Estimation-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./CostEstimationDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; 
+                    document.getElementById("dash-title").innerText = "Cost Estimation"; 
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        document.getElementById("Energy-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./GreenEnergyDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; 
+                    document.getElementById("dash-title").innerText = "Green Energy"; 
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        document.getElementById("Emission-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./CarbonEmissionDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; 
+                    document.getElementById("dash-title").innerText = "Carbon Emission"; 
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+        
+        document.getElementById("Simulation-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./SimulationPage.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; 
+                    document.getElementById("dash-title").innerText = "Simulation Page"; 
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+    </script>
+</body>
+</html>

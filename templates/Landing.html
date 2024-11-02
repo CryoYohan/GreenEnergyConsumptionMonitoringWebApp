@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Landing.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
     <title>Green Energy Consumption Monitoring App</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    </style>
 </head>
 <body>
     <div class="Landing-Container">
         <div class="Landing-BG">
             <div class="header-container">
                 <div class="logodiv">
-                    <img src="{{ url_for('static', filename='images/svg/Energreen-logo.svg') }}" alt="Logo" class="Energreen-logo">
+                    <img src="../static/images/logo/logo.svg" alt="Logo" class="Energreen-logo">
                     <p id="App-Name"><span id="Name-Span">Ener</span>Green</p>
                 </div>
                 <div class="Log-Sign">
@@ -29,13 +33,13 @@
                     <button id="start-monitoring-button">Start Monitoring</button>
                 </div>
             </div>
-            <img src="{{ url_for('static', filename='images/png/landingBG 3.png') }}" alt="EnerGreen Background">
+            <img src="../static/images/png/landingBG 3.png" alt="">
         </div>
 
         <div class="Second-landing">
             <div class="secdiv-container">
                 <div class="secdivimg-content">
-                    <img src="{{ url_for('static', filename='images/png/Saec-div-img.png') }}" alt="sec-div img" width="700" height="600">
+                    <img src="../static/images/png/Saec-div-img.png" alt="sec-div img" width="700" height="600">
                 </div>
                 <div class="secdivtext-content">
                     <div id="secdiv-headline">
@@ -56,7 +60,7 @@
 
                 </div>
             </div>
-            <img src="{{ url_for('static', filename='images/png/Second-div-bg.png') }}" alt="">
+            <img src="../static/images/png/Second-div-bg.png" alt="">
         </div>
         
 
@@ -68,7 +72,7 @@
                 <div class="real-timeDiv Division">
                     <div class="content">
                         <div>
-                            <img src="{{  url_for('static',filename='images/svg/Real-time icon.svg') }}" alt="Real - Time Icon" width="78" height="79">
+                            <img src="../static/images/svg/Real-time icon.svg" alt="Real - Time Icon" width="78" height="79">
                         </div>
                         <div id="Info">
                             <h2 id="content-heading"> Real - Time Monitoring</h2>
@@ -81,7 +85,7 @@
                             <p>Track Live energy Data top see exactly how much you're using and producing</p>
                         </div>
                         <div>
-                            <img src="{{ url_for('static',filename='images/png/content-1.png') }}" alt="Image">
+                            <img src="../static/images/png/content-1.png" alt="Image">
                         </div>
                     </div>
                 </div>
@@ -89,7 +93,7 @@
                 <div class="Data-AnalysisDiv Division">
                     <div class="content">
                         <div id="sec-img">
-                            <img src="{{ url_for('static',filename='images/svg/Data-Anal.svg') }}" alt="Real - Time Icon" id="info-img" width="78" height="79">
+                            <img src="../static/images/svg/Data-Anal.svg" alt="Real - Time Icon" id="info-img" width="78" height="79">
                         </div>
                         <div id="Info">
                             <h2 id="content-heading"> Data Analytics Report</h2>
@@ -101,14 +105,14 @@
                             <p> Access detailed insights into your energy consumption, solar production, and trends over time</p>
                         </div>
                         <div>
-                            <img src="{{ url_for('static',filename='images/png/Data-img.png') }}" alt="Image">
+                            <img src="../static/images/png/Data-img.png" alt="Image">
                         </div>
                     </div>
                 </div>
                 <div class="Quick-EasyDiv Division">
                     <div class="content">
                         <div id="sec-img1">
-                            <img src="{{ url_for('static', filename='images/svg/Quick.svg') }}" alt="Real - Time Icon" width="78" height="79">
+                            <img src="../static/images/svg/Quick.svg" alt="Real - Time Icon" width="78" height="79">
                         </div>
                         <div id="Info">
                             <h2 id="content-heading">Quick and Easy Setup</h2>
@@ -121,7 +125,7 @@
                         </div>
                         <div>
                             <div>
-                                <img src="{{ url_for('static', filename='images/png/Quick -Ease.png') }}" alt="Image">
+                                <img src="../static/images/png/Quick -Ease.png" alt="Image">
                             </div>
                         </div>
                     </div>
@@ -146,14 +150,107 @@
                     </div>
                 </div>
                 <div class="secdivimg-content">
-                    <img src="{{ url_for('static', filename='images/png/Fourth-land-img.png') }}" alt="sec-div img" width="700" height="500">
+                    <img src="../static/images/png/Fourth-land-img.png" alt="sec-div img" width="700" height="500">
                 </div>
             </div>
-            <img src="{{ url_for('static',filename='images/png/Fourth-landing-BG.png') }}" alt="Real Time Monitoring">
+            <img src="../static/images/png/Fourth-landing-BG.png" alt="">
         </div>
+          
         <div class="footer">
             <p>&copy; 2024 EnerGreen. All rights reserved.</p>
         </div>
     </div>
+
+    <div id="overlay" class="overlay" style="display: none;"></div>
+
+    <div id="login-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <span class="close-btn" style="color: transparent;">&times;</span>
+            <div class="left-side">
+                <div id="green-logo">
+                    <div id="logodesu" >
+                        <img src="../static/images/png/Big-Logo.png" alt="Logo" class="Energreen-logo">
+                    </div>
+
+                    <div id="hello">
+                        <p id="welcome">welcome to</p>
+                        <p id="Namaewa" ><span id="Name-Span">Ener</span>Green</p>
+
+                        <div class="welcome-message">
+                            <p>Log in to start tracking your energy and start making a difference</p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <img id="left-partition" src="../static/images/png/login-partition.png" alt="left side" width="500" height="509" >
+            </div>
+
+            <div class="right-side">
+                <div class="logsign">
+
+                    <h1 id="login">Log in</h1>
+                    
+                    <div class="input-area">
+                        <input id="username-input" type="text" id="username" placeholder="Username" required>
+
+                        <div class="password-container">
+                            <input id="password-input" type="password" placeholder="Password" required>
+                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+                        </div>
+
+                    </div>
+                    <div class="button-area">
+                        <button>LOGIN</button>
+                    </div>
+                    <div class="signin">
+                        <p>Dont have and account yet? <span id="signin"><a id="signspan">Sign in</a></span></p>
+                    </div>
+        
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        const loginButton = document.querySelector('.login');
+        const popup = document.getElementById('login-popup');
+        const overlay = document.getElementById('overlay');
+        const closeButton = document.querySelector('.close-btn');
+
+        loginButton.onclick = function() {
+            popup.style.display = 'block';
+            overlay.style.display = 'block'; // Show overlay
+        }
+
+        closeButton.onclick = function() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none'; // Hide overlay
+        }
+
+        window.onclick = function(event) {
+            if (event.target === overlay) {
+                popup.style.display = 'none';
+                overlay.style.display = 'none'; // Hide overlay
+            }
+        }
+         
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById("password-input");
+            const icon = document.querySelector(".toggle-password");
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+
+    </script>
+
 </body>
 </html>

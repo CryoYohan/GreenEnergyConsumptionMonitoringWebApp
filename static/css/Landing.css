@@ -48,6 +48,8 @@ body {
   color: #110142;
   font-weight: bold;
   font-size: 32px;
+  margin: 0;
+  padding: 0;
 }
 
 #Name-Span {
@@ -164,7 +166,7 @@ body {
   padding: 10px;
 }
 #content-heading{
-  font-size: 40px;
+  font-size: 32px;
   font-weight: bold;
 }
 #def{
@@ -172,7 +174,7 @@ body {
   margin-top: -1.5em;
   color: #666666;
   width: 430px;
-  margin-bottom: 1em;
+  /* margin-bottom: 1em; */
 }
 #def-1{
   font-size: 24px;
@@ -235,11 +237,187 @@ body {
   margin-top: -2em;
 }
 .footer{
-  width: 100%;
+  width: 100vw;
   height:5vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #0D2535;
   color: #666666;
+}
+
+.popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 950px;
+  height: 550px;
+  background-color: transparent;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.60); /* Dark background with transparency */
+  z-index: 900; /* Below the popup */
+  display: none; /* Hide initially */
+}
+
+  /* .popup-content {
+  padding: 20px;
+}
+
+.close-btn {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+  color: #aaa;
+}  */
+
+.close-btn:hover {
+  color: black;
+  cursor: pointer;
+}
+.left-side, .right-side{
+  width: 450px;
+  height: 500px;
+
+}
+.popup-content{
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+}
+.left-side{
+  margin-left: 30px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#left-partition{
+  margin-top: 10px;
+}
+#green-logo{
+  display:  flex;
+  align-items: center;
+  position: absolute;
+  margin-left: 20px;
+  flex-direction: row;
+  margin-bottom: 8em;
+
+}
+#welcome{
+  margin: 0;
+  padding: 0;
+}
+.welcome-message {
+  width: 300px;
+}
+#logodesu{
+  position: relative;
+  bottom: 2em;
+}
+#logodesu img{
+  width: 120px;
+  height: 95px;
+  margin: 0;
+}
+#Namaewa{
+  color: #110142;
+  font-weight: bold;
+  font-size: 55px;
+  margin: 0;
+  padding: 0;
+}
+.right-side{
+  background-color: #0D2535;
+  border-radius: 0 20px 20px 0;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: #ffff;
+}
+.logsign{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-area{
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+}
+.input-area input{
+  flex-direction: column;
+  border-radius: 15px;
+  height: 35px;
+  padding: 15px;
+  margin: 15px;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+  width: 300px;
+}
+.button-area{
+ margin-top: 5em;
+}
+.button-area button{
+  width: 150px;
+  border-radius: 15px;
+  padding: 10px;
+  background-color: #30B938;
+  color: #ffff;
+  border: none;
+}
+.signin{
+  font-size: 14px;
+}
+#signin{
+  font-weight: bold;
+}
+#signspan{
+  text-decoration: none;
+  color: #ffff;
+  cursor: pointer;
+}
+#login{
+  font-size: 50px;
+  font-weight: 600;
+}
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+#password-input {
+    height: 35px;
+    width: 92%;
+    padding-right: 40px; /* Space for the eye icon */
+    border-radius: 15px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 48%;
+    right: 10%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
 }
