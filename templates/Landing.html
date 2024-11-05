@@ -29,7 +29,7 @@
                    <p> Together, small energy-saving actions lead to <br> a greener, healthier planet for all.</p>
                 </div>
                 <div class="start-monitoring">
-                    <button id="start-monitoring-button">Start Monitoring</button>
+                    <button class="start-monitoring-button">Start Monitoring</button>
                 </div>
             </div>
             <img src="../static/images/png/landingBG 3.png" alt="">
@@ -145,7 +145,7 @@
                         <p> Join a community of echo-concious users, track your impact, and make every <span id="Name-Span">watt</span> count</p>
                     </div>
                     <div class="start-monitoring">
-                        <button id="start-monitoring-button">Start Monitoring</button>
+                        <button class="start-monitoring-button2">Start Monitoring</button>
                     </div>
                 </div>
                 <div class="secdivimg-content">
@@ -164,7 +164,6 @@
 
     <div id="login-popup" class="popup" style="display: none;">
         <div class="popup-content">
-            <span class="close-btn" style="color: transparent;">&times;</span>
             <div class="left-side">
                 <div id="green-logo">
                     <div id="logodesu" >
@@ -195,12 +194,12 @@
 
                         <div class="password-container">
                             <input id="password-input" type="password" placeholder="Password" required>
-                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password-input', this)"></i>
                         </div>
 
                     </div>
                     <div class="button-area">
-                        <button>LOGIN</button>
+                        <button class="to-enter-btn">LOGIN</button>
                     </div>
                     <div class="signin">
                         <p>Dont have and account yet? <span id="signin"><a id="signspan">Sign in</a></span></p>
@@ -211,45 +210,301 @@
 
         </div>
     </div>
+
+
+    <div id="register-popup" class="regpopup" style="display: none;">
+        <div class="popup-content">
+            <div class="left-side">
+                <div id="green-logo">
+                    <div id="logodesu" >
+                        <img src="../static/images/png/Big-Logo.png" alt="Logo" class="Energreen-logo">
+                    </div>
+
+                    <div id="hello">
+                        <p id="welcome">welcome to</p>
+                        <p id="Namaewa" ><span id="Name-Span">Ener</span>Green</p>
+
+                        <div class="welcome-message">
+                            <p>Register now to start tracking your energy and making a difference</p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <img id="left-partition" src="../static/images/png/login-partition.png" alt="left side" width="500" height="509" >
+            </div>
+
+            <div class="rightside-reg">
+                <div class="logsign">
+
+                    <p id="register">Create Account</p>
+                    
+                    <div class="input-area">
+                            <input id="username-input" type="text" id="username" placeholder="Username" required>
+                            <input id="username-input" type="text" id="email" placeholder="Username" required>
+
+                            <div class="password-container">
+                                <input id="acc-password-input" type="password" placeholder="Password" required>
+                                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('acc-password-input', this)"></i>
+                            </div>
+                            
+                            <div class="password-container">
+                                <input id="confirm-password-input" type="password" placeholder="Confirm Password" required>
+                                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm-password-input', this)"></i>
+                            </div>                        
+                            
+                        <div  class="button-area" id="donebtn">
+                            <button class="done-btn" >DONE</button>
+                        </div>
+                        <div class="signin">
+                            <p>Already Have an Account? <span id="signin"><a id="logspan">Log in</a></span></p>
+                        </div>
+        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="register-popup" class="regpopup" style="display: none;">
+        <div class="popup-content">
+            <div class="left-side">
+                <div id="green-logo">
+                    <div id="logodesu" >
+                        <img src="../static/images/png/Big-Logo.png" alt="Logo" class="Energreen-logo">
+                    </div>
+
+                    <div id="hello">
+                        <p id="welcome">welcome to</p>
+                        <p id="Namaewa" ><span id="Name-Span">Ener</span>Green</p>
+
+                        <div class="welcome-message">
+                            <p>Register now to start tracking your energy and making a difference</p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <img id="left-partition" src="../static/images/png/login-partition.png" alt="left side" width="500" height="509" >
+            </div>
+
+            <div class="rightside-reg">
+                <div class="logsign">
+
+                    <p id="register">Create Account</p>
+                    
+                    <div class="input-area">
+                            <input id="username-input" type="text" id="username" placeholder="Username" required>
+                            <input id="username-input" type="text" id="email" placeholder="Username" required>
+
+                            <div class="password-container">
+                                <input id="acc-password-input" type="password" placeholder="Password" required>
+                                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('acc-password-input', this)"></i>
+                            </div>
+                            
+                            <div class="password-container">
+                                <input id="confirm-password-input" type="password" placeholder="Confirm Password" required>
+                                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm-password-input', this)"></i>
+                            </div>                        
+                            
+                        <div  class="button-area" id="donebtn">
+                            <button>DONE</button>
+                        </div>
+                        <div class="signin">
+                            <p>Already Have an Account? <span id="signin"><a id="logspan">Log in</a></span></p>
+                        </div>
+        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="setup-page-popup" class="setup-popup" style="display: none;">
+        <div class="setup-content">
+            <div class="setuphead">
+                <h1>Setup Virtual  Appliances</h1>
+                <p id="setuptext">"Select from a wide range of essential and innovative appliances used within your home to enhance comfort,
+                     convenience, and effecieny "</p>
+            </div>
+            <div class="sortbtn">
+                <button>Sort By <img src="../static/images/svg/sortvec.svg" alt=""> </button>
+            </div>
+            <div class="selectAppliances">
+                <div id="appliances-shelf">
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Air Conditioner</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">TV(Television)</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Amplifiers</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Celing Fan</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Rice Cooker</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Kettle</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Speakers</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lamp</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Refrigerator</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Desktop Computter</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Oven</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Laptop</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Stove</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electic Fan</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Clothes Iron</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Portabel Speakers</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Radio</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Washing Machine</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Samrt Phones</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lighting</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Water Dispencer</div></a>
+                    <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">RGB Lighting</div></a>
+                </div>
+
+            </div>
+           
+            <div class="confirmbtn">
+                <button class="confirm-btn">Confirm</button>
+            </div>
+            <img id="setupbg" src="../static/images/png/setUpPage-img.png" alt="set up page bg">
+        </div>
+    </div>
+    
+    <div id="panel-page-popup" class="panel-popup" style="display: none;">
+        <div class="setup-content">
+            <div class="setuphead">
+                <h1>Pick Your Desired Solar Panel</h1>
+                <p id="setuptext">"Select your ideal solar panel and watch you energy potential soar-let's simulate your journey 
+                    to sustainable power!"</p>
+            </div>
+
+            <div class="selectAppliances">
+
+
+            </div>
+           
+            <img id="setupbg" src="../static/images/png/setUpPage-img.png" alt="set up page bg">
+        </div>
+    </div>
     
     <script>
-        const loginButton = document.querySelector('.login');
-        const popup = document.getElementById('login-popup');
-        const overlay = document.getElementById('overlay');
-        const closeButton = document.querySelector('.close-btn');
+        // Existing code for buttons and popups
+        const loginButton = document.querySelector('.login'); // "Log In" button
+        const signUpButton = document.querySelector('.sign-up'); // "Sign Up" button
+        const startmonitoringButton = document.querySelector('.start-monitoring-button');
+        const startmonitoringButton2 = document.querySelector('.start-monitoring-button2');
+        const toEnterMonitoringSystem = document.querySelector('.to-enter-btn')
+        const DoneRegisterButton = document.querySelector('.done-btn')
+        const confirmButton = document.querySelector('.confirm-btn')
 
+        const loginPopup = document.getElementById('login-popup');
+        const registerPopup = document.getElementById('register-popup');
+        const setupPagePopup = document.getElementById('setup-page-popup');
+        const PanelsetupPagePopup = document.getElementById('panel-page-popup');
+        const overlay = document.getElementById('overlay');
+        const closeButtons = document.querySelectorAll('.close-btn');
+
+        // Event listener for "Log In" button
         loginButton.onclick = function() {
-            popup.style.display = 'block';
+            loginPopup.style.display = 'block';
             overlay.style.display = 'block'; // Show overlay
         }
 
-        closeButton.onclick = function() {
-            popup.style.display = 'none';
-            overlay.style.display = 'none'; // Hide overlay
+        // Event listener for "Sign Up" button
+        signUpButton.onclick = function() {
+            registerPopup.style.display = 'block';
+            overlay.style.display = 'block'; // Show overlay
         }
 
-        window.onclick = function(event) {
-            if (event.target === overlay) {
-                popup.style.display = 'none';
-                overlay.style.display = 'none'; // Hide overlay
+        startmonitoringButton.onclick = function() {
+            registerPopup.style.display = 'block';
+            overlay.style.display = 'block'; // Show overlay
+        }
+
+        startmonitoringButton2.onclick = function() {
+            registerPopup.style.display = 'block';
+            overlay.style.display = 'block'; // Show overlay
+        }
+        toEnterMonitoringSystem.onclick = function(){
+            setupPagePopup.style.display = 'block';
+            overlay.style.display = 'block';
+            if (loginPopup.style.display === 'block') {
+                loginPopup.style.display = 'none';
+            }if (registerPopup.style.display === 'block') {
+                registerPopup.style.display = 'none';
             }
         }
-         
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById("password-input");
-            const icon = document.querySelector(".toggle-password");
+        DoneRegisterButton.onclick = function(){
+            setupPagePopup.style.display = 'block';
+            overlay.style.display = 'block';
+            if (loginPopup.style.display === 'block') {
+                loginPopup.style.display = 'none';
+            }if (registerPopup.style.display === 'block') {
+                registerPopup.style.display = 'none';
+            }
+        }
+
+        confirmButton.onclick = function(){
+            PanelsetupPagePopup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Event listener for the Sign in link
+        document.getElementById('signspan').onclick = function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            // Hide the login popup if it's currently displayed
+            if (loginPopup.style.display === 'block') {
+                loginPopup.style.display = 'none';
+            }
+            // Show the register popup
+            registerPopup.style.display = 'block'; 
+            overlay.style.display = 'block'; // Show overlay
+        }
+
+        document.getElementById('logspan').onclick = function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            // Hide the login popup if it's currently displayed
+            if (registerPopup.style.display === 'block') {
+                registerPopup.style.display = 'none';
+            }
+            // Show the register popup
+            loginPopup.style.display = 'block'; 
+            overlay.style.display = 'block'; // Show overlay
+        }
+
+        // Close buttons event
+        closeButtons.forEach(button => {
+            button.onclick = function() {
+                loginPopup.style.display = 'none';
+                registerPopup.style.display = 'none';
+                overlay.style.display = 'none'; // Hide overlay
+            }
+        });
+
+        // Close popup when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target === overlay) {
+                loginPopup.style.display = 'none';
+                registerPopup.style.display = 'none';
+                setupPagePopup.style.display = 'none';
+                overlay.style.display = 'none';
+                PanelsetupPagePopup.style.display = 'none';
+            }
+        }
+
+        // Toggle password visibility for a specified input
+        function togglePasswordVisibility(inputId, iconElement) {
+            const passwordInput = document.getElementById(inputId);
             
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
-                icon.classList.replace("fa-eye", "fa-eye-slash");
+                iconElement.classList.replace("fa-eye", "fa-eye-slash");
             } else {
                 passwordInput.type = "password";
-                icon.classList.replace("fa-eye-slash", "fa-eye");
+                iconElement.classList.replace("fa-eye-slash", "fa-eye");
             }
         }
 
-
     </script>
-
+    
+    
 </body>
 </html>

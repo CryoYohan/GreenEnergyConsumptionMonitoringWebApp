@@ -8,6 +8,25 @@ body {
   padding: 0;
   margin: 0;
 }
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+  height: 5px; /* Height of the scrollbar for horizontal scrolling */
+}
+
+::-webkit-scrollbar-track {
+  background: #ffff; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30B938; /* Color of the scrollbar thumb */
+  border-radius: 5px; /* Round the corners of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar thumb on hover */
+}
+
 
 .Landing-Container {
   width: 100vw;
@@ -92,7 +111,7 @@ body {
   font-size: 80px;
 }
 
-#start-monitoring-button{
+.start-monitoring-button, .start-monitoring-button2{
   margin-top: 2em;
   width: 352px;
   padding: 20px;
@@ -245,8 +264,7 @@ body {
   background-color: #0D2535;
   color: #666666;
 }
-
-.popup {
+.popup, .regpopup {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -260,6 +278,7 @@ body {
   justify-content: center;
 }
 
+
 .overlay {
   position: fixed;
   top: 0;
@@ -271,16 +290,7 @@ body {
   display: none; /* Hide initially */
 }
 
-  /* .popup-content {
-  padding: 20px;
-}
 
-.close-btn {
-  float: right;
-  cursor: pointer;
-  font-size: 20px;
-  color: #aaa;
-}  */
 
 .close-btn:hover {
   color: black;
@@ -339,15 +349,19 @@ body {
   padding: 0;
 }
 .right-side{
+  display: flex;
+}
+.right-side,.rightside-reg{
   background-color: #0D2535;
   border-radius: 0 20px 20px 0;
-  display: flex;
   flex-direction: row;
   text-align: center;
   align-items: center;
   justify-content: center;
   color: #ffff;
+  width: 100%;
 }
+
 .logsign{
   display: flex;
   flex-direction: column;
@@ -374,6 +388,10 @@ body {
 .button-area{
  margin-top: 5em;
 }
+.btn-area{
+  margin-top: 1em;
+}
+
 .button-area button{
   width: 150px;
   border-radius: 15px;
@@ -382,13 +400,16 @@ body {
   color: #ffff;
   border: none;
 }
+#donebtn{
+  margin-top: 1em;
+}
 .signin{
   font-size: 14px;
 }
 #signin{
   font-weight: bold;
 }
-#signspan{
+#signspan, #logspan{
   text-decoration: none;
   color: #ffff;
   cursor: pointer;
@@ -396,13 +417,20 @@ body {
 #login{
   font-size: 50px;
   font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+#register{
+  font-size: 35px;
+  margin: 10px;
+  padding: 0;
 }
 .password-container {
     position: relative;
     width: 100%;
 }
 
-#password-input {
+#password-input, #acc-password-input, #confirm-password-input {
     height: 35px;
     width: 92%;
     padding-right: 40px; /* Space for the eye icon */
@@ -421,3 +449,121 @@ body {
     font-size: 18px;
     color: #888;
 }
+.setup-popup, .panel-popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  height: 650px;
+  background-color: transparent;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setup-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.setuphead {
+  position: absolute;
+  width: 50%;
+  top: 5%; 
+  left: 7%; 
+  z-index: 1;
+}
+
+
+.sortbtn {
+  position: absolute;
+  top: 28%; 
+  right: 7.5%; 
+  z-index: 1;
+}
+.sortbtn button{
+  display: flex;
+  width: 150px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background-color: #ffff;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  
+}
+.selectAppliances {
+  position: absolute;
+  top: 35%;
+  width: 85%;
+  height: 40vh; 
+  background-color: #0D2535;
+  z-index: 1;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+}
+
+.confirmbtn {
+  position: absolute;
+  top: 95%; 
+  left: 7.5%;
+  z-index: 1; 
+}
+.confirmbtn button{
+  display: flex;
+  width: 150px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background-color: #ffff;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 20px;
+  font-weight: 400;
+  cursor: pointer;
+}
+#setupbg {
+  width: 100%;
+  height: auto; 
+}
+#appliances-shelf{
+  width: 100%;
+  height: 35vh;
+  background-color: #0D2535;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* Allow divs to wrap onto the next line */
+}
+#appliances-shelf a{
+  text-decoration: none;
+  color: #110142;
+  font-weight: 600;
+}
+.app {
+  width: 139px;
+  height: 46px;
+  background-color: #ffff;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  font-size: 12px;
+  gap: 10px;
+  padding: 0 5px ;
+}
+
+
