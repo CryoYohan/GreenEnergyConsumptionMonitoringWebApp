@@ -8,9 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-        html{
-            overflow-y: hidden;
-        }
+
     </style>
 </head>
 <body>
@@ -91,6 +89,8 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         
         window.onload = function() {
@@ -99,6 +99,7 @@
             setTimeout(renderDoughnutChart, 100);
             setTimeout(renderGreenChart, 100);
             setTimeout(renderCarbonChart, 100);
+            setTimeout(renderBarChart, 100);
             
         };
         document.addEventListener('DOMContentLoaded', function() {
@@ -275,6 +276,7 @@
                 });
             }, 100); // Slight delay
         }
+
         function renderCarbonChart() {
             const canvas = document.getElementById('myCarbonChart');
             if (!canvas) return; // Ensure the canvas element exists before rendering the chart
@@ -338,7 +340,6 @@
         }
 
 
-
         document.getElementById("Appliances-btn").addEventListener("click", function(event) {
             event.preventDefault();
             fetch('./AppliancesDash.html')
@@ -347,9 +348,96 @@
                     document.getElementById("Main-Content").innerHTML = data;
                     document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
                     document.getElementById("dash-title").innerText = "Appliances"; // Change the displayed title
+                    setTimeout(renderBarChart, 100);
                 })
                 .catch(error => console.error('Error fetching content:', error));
         });
+        
+        function renderBarChart() {
+            const canvas = document.getElementById('myBarChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            const barCtx = canvas.getContext('2d');
+
+            // Create a linear gradient for the bar colors
+            const gradientMorning = barCtx.createLinearGradient(0, 0, 0, canvas.height);
+            gradientMorning.addColorStop(0, '#30B938'); // Lighter green at the top
+            gradientMorning.addColorStop(1, '#165319'); // Darker green at the bottom
+
+            const gradientAfternoon = barCtx.createLinearGradient(0, 0, 0, canvas.height);
+            gradientAfternoon.addColorStop(0, '#30B938'); // Lighter green at the top
+            gradientAfternoon.addColorStop(1, '#165319'); // Darker green at the bottom
+
+            const gradientEvening = barCtx.createLinearGradient(0, 0, 0, canvas.height);
+            gradientEvening.addColorStop(0, '#30B938'); // Lighter green at the top
+            gradientEvening.addColorStop(1, '#165319'); // Darker green at the bottom
+
+            const barData = {
+                labels: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+                datasets: [
+                    {
+                        label: 'Morning',
+                        data: [10, 20, 30, 40, 50, 60, 70],
+                        backgroundColor: gradientMorning, // Use gradient for Morning
+                        borderColor: 'darkgreen',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Afternoon',
+                        data: [15, 25, 35, 45, 55, 65, 75],
+                        backgroundColor: gradientMorning, // Use gradient for Afternoon
+                        borderColor: 'darkblue',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Evening',
+                        data: [5, 15, 25, 35, 45, 55, 65],
+                        backgroundColor: gradientMorning, // Use gradient for Evening
+                        borderColor: 'darkorange',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            new Chart(barCtx, {
+                type: 'bar',
+                data: barData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: 'white' },
+                            grid: { color: 'white' }
+                        },
+                        x: {
+                            ticks: { color: 'blue' },
+                            grid: { display: false },
+                            stacked: false // Set to false to avoid stacking
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: 'blue' }
+                        }
+                    },
+                    animation: {
+                        duration: 1000, // Animation duration in milliseconds
+                        easing: 'easeOutBounce' // Optional easing effect
+                    },
+                    layout: {
+                        padding: 0 
+                    },
+                    barPercentage: 0.4, // Adjust bar width (0.0 to 1.0)
+                    categoryPercentage: 0.5 // Adjust the space between categories
+                }
+            });
+        }
+
+
+
 
         document.getElementById("Estimation-btn").addEventListener("click", function(event) {
             event.preventDefault();
