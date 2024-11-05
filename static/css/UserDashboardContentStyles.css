@@ -9,12 +9,16 @@
     gap: 20px;
 }
 
+
 .day-kwh {
     width: 50px;
     height: 14vh;
     background-color: #ffff;
     border-radius: 10px;
+    display: flex;
     text-align: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .day {
@@ -26,9 +30,11 @@
 }
 
 .rotated-text {
-    writing-mode: vertical-lr;
+    transform: rotate(270deg);
     text-orientation: upright;
     font-weight: bold;
+    align-items: center;
+    font-size: 17px;
 }
 
 #numbers {

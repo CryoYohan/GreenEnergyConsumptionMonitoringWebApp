@@ -25,6 +25,9 @@ body {
     background-color: #ffff;
     border-radius: 20px;
 }
+.profile-section span{
+    color: #ffff;
+  }
 
 .Top-Navigation {
     position: relative; /* Enables absolute positioning within */
