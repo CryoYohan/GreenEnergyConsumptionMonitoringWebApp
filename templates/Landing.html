@@ -236,30 +236,28 @@
 
             <div class="rightside-reg">
                 <div class="logsign">
-
                     <p id="register">Create Account</p>
-                    
-                    <div class="input-area">
-                            <input id="username-input" type="text" id="username" placeholder="Username" required>
-                            <input id="username-input" type="text" id="email" placeholder="Username" required>
+                    <form class="input-area" action="#" method="POST">
+                        <input id="username-input" type="text" id="username" placeholder="Username" required>
+                        <input id="username-input" type="text" id="email" placeholder="Email" required>
 
-                            <div class="password-container">
-                                <input id="acc-password-input" type="password" placeholder="Password" required>
-                                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('acc-password-input', this)"></i>
-                            </div>
+                        <div class="password-container">
+                            <input id="acc-password-input" type="password" placeholder="Password" required>
+                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('acc-password-input', this)"></i>
+                        </div>
                             
-                            <div class="password-container">
-                                <input id="confirm-password-input" type="password" placeholder="Confirm Password" required>
-                                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm-password-input', this)"></i>
-                            </div>                        
+                        <div class="password-container">
+                            <input id="confirm-password-input" type="password" placeholder="Confirm Password" required>
+                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm-password-input', this)"></i>
+                        </div>                        
                             
                         <div  class="button-area" id="donebtn">
-                            <button class="done-btn" >DONE</button>
+                            <input class="done-btn" type="submit" value="DONE" name="doneregister">
                         </div>
                         <div class="signin">
                             <p>Already Have an Account? <span id="signin"><a id="logspan">Log in</a></span></p>
                         </div>
-        
+                    </form>
                     </div>
                 </div>
 
@@ -297,7 +295,7 @@
                     
                     <div class="input-area">
                             <input id="username-input" type="text" id="username" placeholder="Username" required>
-                            <input id="username-input" type="text" id="email" placeholder="Username" required>
+                            <input id="username-input" type="text" id="email" placeholder="email" required>
 
                             <div class="password-container">
                                 <input id="acc-password-input" type="password" placeholder="Password" required>
