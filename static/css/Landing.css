@@ -400,6 +400,17 @@ body {
   color: #ffff;
   border: none;
 }
+.donesolar-btn{
+  margin-bottom: 10px;
+}
+.donesolar-btn button{
+  width: 150px;
+  border-radius: 15px;
+  padding: 10px;
+  background-color: #30B938;
+  color: #ffff;
+  border: none;
+}
 #donebtn{
   margin-top: 1em;
 }
@@ -475,17 +486,20 @@ body {
 
 .setuphead {
   position: absolute;
-  width: 50%;
-  top: 5%; 
-  left: 7%; 
+  width: 60%;
+  top: -3%; 
+  left: -7%; 
   z-index: 1;
+}
+.setuphead h1{
+  font-size: 40px;
 }
 
 
 .sortbtn {
   position: absolute;
   top: 28%; 
-  right: 7.5%; 
+  right: -7%; 
   z-index: 1;
 }
 .sortbtn button{
@@ -505,20 +519,21 @@ body {
 .selectAppliances {
   position: absolute;
   top: 35%;
-  width: 85%;
-  height: 40vh; 
+  width: 115%;
+  height: 50vh; 
   background-color: #0D2535;
   z-index: 1;
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center; 
+  overflow: auto;
 }
 
 .confirmbtn {
   position: absolute;
-  top: 95%; 
-  left: 7.5%;
+  top: 102%; 
+  left: -7%;
   z-index: 1; 
 }
 .confirmbtn button{
@@ -535,9 +550,14 @@ body {
   font-weight: 400;
   cursor: pointer;
 }
+
 #setupbg {
-  width: 100%;
+  width: 1200px;
   height: auto; 
+}
+#solarbg {
+  width: 1300px;
+  height: 800px; 
 }
 #appliances-shelf{
   width: 100%;
@@ -565,5 +585,174 @@ body {
   gap: 10px;
   padding: 0 5px ;
 }
+.SelectSolarPanel{
+  position: absolute;
+  top: 30%;
+  background-color: transparent;
+  width: 115%;
+  height: 50vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
 
+}
 
+.solarpaneldiv{
+  width: 60vw;
+  height: 105%;
+  background-color: #ffff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  transition: height 0.4s ease; /* Smooth transition for height */
+  
+
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+/* Hidden Checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc ;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+/* Circle within Slider */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* When Checked */
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+.solarname-switch{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5em;
+  height: 50px;
+}
+#solardesc{
+  padding: 5px;
+  margin-left: 18px;
+  margin-right: 20px;
+  position: relative;
+  bottom: 20px;
+  font-size: 14px;
+  
+}
+.quandiv{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.solarname p{
+  margin:0;
+  padding: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+.solarinfo-specifications{
+  margin-top: -2em;
+  width: 95%;
+  height: 30vh;
+  background-color: #ffff;
+  border-radius: 10px;
+  border: 2px solid #d9d9d9;
+  display: flex;
+  flex-direction: column;
+}
+#sinf, #specs{
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  left: 1em;
+}
+#specs{
+  font-weight: bold;
+}
+#efficon{
+  position: relative;
+  top: 5px;
+}
+#watt, #efficiency, #tempt{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  font-size: 14px;
+  margin: 10px;
+}
+.watc{
+  margin-left: 2px;
+}
+#wattcap p{
+  margin: 0;
+  padding: 0;
+}
+#efficon{
+  margin-left: 2px;
+}
+#wew1{
+  font-weight: bold;
+}
+hr {
+  border: 1px solid #ccc; /* Adjust color and thickness as needed */
+  width: 90%; /* Ensure it spans the width of the container */
+  margin-left: 12px; /* Optional: Add some spacing above and below */
+}
+.quanimg{
+  margin-top: 5px;
+}
+.bottom {
+  display: none; /* Initially hidden */
+  transition: opacity 0.4s ease; /* Smooth transition for visibility */
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease; /* Smooth transition for visibility and height */
+
+}
+
+.solarpaneldiv.show .bottom {
+  display: flex;
+  opacity: 1;
+  flex-direction: column;
+}
