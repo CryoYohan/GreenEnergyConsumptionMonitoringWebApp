@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/UserDashboardStyles.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
     <title>User Dasboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -12,6 +13,7 @@
     </style>
 </head>
 <body>
+    {% import 'components.html' as components%}
     <div class="Container">
         <div class="Side-Navigation">
             <div class="logo-div">
@@ -33,7 +35,7 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="Appliances-btn">
+                        <a href="{{ url_for('AppliancesDash') }}" class="nav-button"  id="Appliances-btn">
                             <img src="../static/images/svg/Appliances-Icon.svg" alt="Appliances Icon" width="24" height="24"> Appliances
                         </a>
                     </li>
@@ -54,7 +56,6 @@
                         </a>
                     </li>
                 </div>
-
                 <div class="Dashbtn">
                     <li>
                         <a href="#" class="nav-button" id="Emission-btn">
@@ -74,6 +75,7 @@
         </div>
         <div class="Top-Main-Content">
             <div class="Top-Navigation">
+                {{ components.flash_messages()}}
                 <div class="page-title">
                     <h2 id="dash-title">Weekly Energy Monitoring Statistics</h2>
                 </div>
@@ -84,8 +86,9 @@
                     </a>
                 </div>
             </div>
-            <div id="Main-Content">
-                Main Container
+            <div>
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </div>

@@ -1,0 +1,49 @@
+{% extends 'Landing.html' %}
+{% block content %}
+<div id="login-popup" class="popup" style="display: none;">
+    <div class="popup-content">
+        <div class="left-side">
+            <div id="green-logo">
+                <div id="logodesu" >
+                    <img src="../static/images/png/Big-Logo.png" alt="Logo" class="Energreen-logo">
+                </div>
+
+                <div id="hello">
+                    <p id="welcome">Welcome to</p>
+                    <p id="Namaewa" ><span id="Name-Span">Ener</span>Green</p>
+
+                    <div class="welcome-message">
+                        <p>Log in to start tracking your energy and start making a difference</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <img id="left-partition" src="../static/images/png/login-partition.png" alt="left side" width="500" height="509" >
+        </div>
+
+        <div class="right-side">
+            <div class="logsign">
+
+                <h1 id="login">Log in</h1>
+                
+                <form class="input-area" action="/userlogin" method="POST">
+                    <input id="username-input" type="text" id="username" name="username" placeholder="Username" required>
+
+                    <div class="password-container">
+                        <input id="password-input" type="password" name="password" placeholder="Password" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password-input', this)"></i>
+                    </div>
+                    <div class="button-area">
+                        <button type="submit" class="to-enter-btn">LOGIN</button>
+                    </div>
+                    <div class="signin">
+                        <p>Don't have and account yet? <span id="signin"><a id="signspan">Sign in</a></span></p>
+                    </div>
+                </form> 
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

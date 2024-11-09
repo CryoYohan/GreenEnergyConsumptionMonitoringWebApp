@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/UserDashboardStyles.css">
+    <title>User Dasboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    </style>
+</head>
+<body>
+    <div class="Container">
+        <div class="Side-Navigation">
+            <div class="logo-div">
+                <div class="img-logo">
+                    <img src="../static/images/logo/logo.svg" alt="">
+                </div>
+                <div class="webname">
+                    <h2><span id="Color">Ener</span>Green</h2>
+                </div>
+            </div>
+            <div class="Navigation-buttons">
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="Dashboard-btn">
+                            <img id="homeicon" src="../static/images/svg/Home-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Dashboard
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="{{ url_for('AppliancesDash') }}" class="nav-button"  id="Appliances-btn">
+                            <img src="../static/images/svg/Appliances-Icon.svg" alt="Appliances Icon" width="24" height="24"> Appliances
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Estimation-btn">
+                            <img src="../static/images/svg/Cost-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Cost Estimation
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Energy-btn">
+                            <img src="../static/images/svg/Energy-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Green Energy
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="Emission-btn">
+                            <img src="../static/images/svg/Emission-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Carbon Emission
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Simulation-btn">
+                            <img id="button" src="../static/images/svg/Simulation-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Simulation Page
+                        </a>
+                    </li>
+                </div>
+            </div>
+        </div>
+        <div class="Top-Main-Content">
+            <div class="Top-Navigation">
+                <div class="page-title">
+                    <h2 id="dash-title">Weekly Energy Monitoring Statistics</h2>
+                </div>
+                <div class="profile-section">
+                    <a href="">
+                        <img src="../static/images/svg/Profile-Icon.svg" alt="">
+                    <span id="user-name">Kobe Amaro</span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

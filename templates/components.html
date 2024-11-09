@@ -1,0 +1,87 @@
+{% macro flash_messages() -%}
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'info' or category =='success' %}
+                    <div class="w3-panel w3-bar w3-large w3-green w3-display-center w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
+                        <span align="center">{{ message }}</span>
+                        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-small w3-display-topright">&times;</span>
+                    </div>
+                {% elif category == 'error' %}
+                    <div class="w3-panel w3-bar w3-large w3-red w3-display-center w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
+                        <span align="center">{{ message }}</span>
+                        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-small w3-display-topright">&times;</span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{%- endmacro %}
+
+{% macro showmodal(action) -%}
+<div id="{{action}}" class="w3-modal w3-mobile">
+    <div class="w3-modal-content w3-animate-zoom w3-mobile w3-round-xxlarge">
+        <div class="w3-container w3-mobile" style="margin:0;padding:0;height:65vh">
+            <div class="w3-half w3-left">
+                <div id="hello">
+                    <p id="welcome">Welcome to</p>              
+                    <div id="logodesu" >
+                        <img src="{{ url_for('static',filename='images/logo/logo-name.svg') }}" alt="Logo" class="Energreen-logo">
+                    </div> 
+                    <div class="welcome-message">
+                        <p>Log in to start tracking your energy and start making a difference</p>
+                    </div>
+                    <img src="{{ url_for('static',filename='images/png/greenElipseLogin.png') }}" alt="Green Elipse" style="width: 300px; height: 200px; object-fit: contain;">
+                </div>
+            </div>
+            <div class="w3-half w3-right w3-padding-large w3-round-xxlarge" style="background-color: #0D2535; color:white;height:65vh">
+                <span onclick="document.getElementById('{{action}}').style.display='none'"
+                class="w3-button w3-round-xxlarge w3-display-topright w3-xlarge">&times;</span>
+                <h1 class="w3-center" id="login" style="font-family: 'Poppins', sans-serif;">Log in</h1>
+                <form class="w3-row-padding" method='POST' action="/userlogin">
+                    <div>
+                        <p>
+                            <label>USERNAME</label>
+                            <input type="text" name="username" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <label>PASSWORD</label>
+                            <input type="password" name="password" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div class="w3-panel w3-center w3-padding-top w3-mobile">
+                        <p class="w3-center">
+                            <input type="submit" value="LOGIN" class="w3-button w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:50%;background-color:#30B938;color:white">
+                        </p>
+                    </div>
+                </form>
+                <div class="signin">
+                    <p class="w3-center">Don't have and account yet? <span id="signin"><a id="signspan">Sign in</a></span></p>
+                </div>
+            </div>
+        </div>
+    </div>     
+</div>
+{%- endmacro %}
+
+{% macro showdeletemodal(modal_name, id, student_idno) -%}
+<div id="{{ id }}" class="w3-modal w3-mobile">
+    <div class="w3-modal-content w3-animate-zoom w3-round" style="width: 45%;">
+        <header class="w3-container w3-2021-french-blue">
+            <span onclick="document.getElementById('{{ id }}').style.display='none'"
+            class="w3-button w3-display-topright w3-large">&times;</span>
+            <h2 class="w3-center">{{ modal_name }}</h2>
+        </header>
+        <div class="w3-container w3-mobile w3-center w3-mobile w3-padding-16">
+            <h2>Are you sure to delete this {{modal_name.split(' ')[1].lower()}}?</h2>
+        </div>
+        <div class="w3-bar w3-center w3-margin-top w3-margin-bottom w3-mobile w3-padding-64">
+            <a href="{{ url_for(modal_name.split(' ')[0].lower() + modal_name.split(' ')[1].lower(),student_idno=student_idno) }}" class="w3-button w3-ios-red w3-round-xlarge w3-xlarge w3-margin-left" style="width: 25%;">Yes</a>
+            <span onclick="document.getElementById('{{ id }}').style.display='none'" class="w3-button w3-round-xlarge w3-border w3-border-red w3-xlarge" style="width: 25%;">No</span>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+

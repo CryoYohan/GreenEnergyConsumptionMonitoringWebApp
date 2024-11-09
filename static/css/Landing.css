@@ -380,12 +380,12 @@ body {
 .input-area{
   display: flex;
   flex-direction: column;
-  height: 100px;
+  height: 10%;
 }
 .input-area input{
   flex-direction: column;
   border-radius: 15px;
-  height: 35px;
+  height: 15%;
   padding: 15px;
   margin: 15px;
   margin-bottom: 20px;
@@ -394,19 +394,23 @@ body {
   width: 300px;
 }
 .button-area{
- margin-top: 5em;
+ margin-top: 1em;
+ margin-bottom: 1em;
 }
 .btn-area{
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
 .button-area button{
-  width: 150px;
-  border-radius: 15px;
+  width: 50%;
+  border-radius: 25px;
   padding: 10px;
   background-color: #30B938;
   color: #ffff;
   border: none;
+  height: 3em;
+  font-size: 1em;
+  cursor:pointer;
 }
 .donesolar-btn{
   margin-bottom: 10px;

@@ -1,0 +1,408 @@
+{% extends 'Landing.html' %}
+{% block content %}
+<div id="register-popup" class="regpopup" style="display: none;">
+    <div class="popup-content">
+        <div class="left-side">
+            <div id="green-logo">
+                <div id="logodesu" >
+                    <img src="../static/images/png/Big-Logo.png" alt="Logo" class="Energreen-logo">
+                </div>
+
+                <div id="hello">
+                    <p id="welcome">welcome to</p>
+                    <p id="Namaewa" ><span id="Name-Span">Ener</span>Green</p>
+
+                    <div class="welcome-message">
+                        <p>Register now to start tracking your energy and making a difference</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <img id="left-partition" src="../static/images/png/login-partition.png" alt="left side" width="500" height="509" >
+        </div>
+
+        <div class="rightside-reg">
+            <div class="logsign">
+                <p id="register">Create Account</p>
+                <form class="input-area" action="/userreg" method="POST">
+                    <input id="username-input" type="text" id="username" name="username" placeholder="Username" required>
+                    <input id="username-input" type="text" id="email" name="email" placeholder="Email" required>
+
+                    <div class="password-container">
+                        <input id="acc-password-input" type="password" name="password" placeholder="Password" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('acc-password-input', this)"></i>
+                    </div>
+                        
+                    <div class="password-container">
+                        <input id="confirm-password-input" type="password" name="confirmpassword" placeholder="Confirm Password" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm-password-input', this)"></i>
+                    </div>                        
+                        
+                    <div class="button-area" id="donebtn">
+                        <button class="done-btn" type="submit">DONE</button>
+                    </div>
+                    <div class="signin">
+                        <p>Already Have an Account? <span id="signin"><a id="logspan">Log in</a></span></p>
+                    </div>
+                </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="register-popup" class="regpopup" style="display: none;">
+    <div class="popup-content">
+        <div class="left-side">
+            <div id="green-logo">
+                <div id="logodesu" >
+                    <img src="../static/images/png/Big-Logo.png" alt="Logo" class="Energreen-logo">
+                </div>
+
+                <div id="hello">
+                    <p id="welcome">welcome to</p>
+                    <p id="Namaewa" ><span id="Name-Span">Ener</span>Green</p>
+
+                    <div class="welcome-message">
+                        <p>Register now to start tracking your energy and making a difference</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <img id="left-partition" src="../static/images/png/login-partition.png" alt="left side" width="500" height="509" >
+        </div>
+
+        <div class="rightside-reg">
+            <div class="logsign">
+
+                <p id="register">Create Account</p>
+                
+                <div class="input-area">
+                        <input id="username-input" type="text" id="username" placeholder="Username" required>
+                        <input id="username-input" type="text" id="email" placeholder="email" required>
+
+                        <div class="password-container">
+                            <input id="acc-password-input" type="password" placeholder="Password" required>
+                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('acc-password-input', this)"></i>
+                        </div>
+                        
+                        <div class="password-container">
+                            <input id="confirm-password-input" type="password" placeholder="Confirm Password" required>
+                            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm-password-input', this)"></i>
+                        </div>                        
+                        
+                    <div  class="button-area" id="donebtn">
+                        <button>DONE</button>
+                    </div>
+                    <div class="signin">
+                        <p>Already Have an Account? <span id="signin"><a id="logspan">Log in</a></span></p>
+                    </div>
+    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="setup-page-popup" class="setup-popup" style="display: none;">
+    <div class="setup-content">
+        <div class="setuphead">
+            <h1>Setup Virtual  Appliances</h1>
+            <p id="setuptext">"Select from a wide range of essential and innovative appliances used within your home to enhance comfort,
+                 convenience, and effecieny "</p>
+        </div>
+        <div class="sortbtn">
+            <button>Sort By <img src="../static/images/svg/sortvec.svg" alt=""> </button>
+        </div>
+        <div class="selectAppliances">
+            <div id="appliances-shelf">
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Air Conditioner</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">TV(Television)</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Amplifiers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Celing Fan</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Rice Cooker</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Kettle</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Speakers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lamp</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Refrigerator</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Desktop Computter</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Oven</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Laptop</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Stove</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electic Fan</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Clothes Iron</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Portabel Speakers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Radio</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Washing Machine</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Samrt Phones</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lighting</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Water Dispencer</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">RGB Lighting</div></a>
+
+                
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Air Conditioner</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">TV(Television)</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Amplifiers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Celing Fan</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Rice Cooker</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Kettle</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Speakers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lamp</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Refrigerator</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Desktop Computter</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Oven</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Laptop</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Stove</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electic Fan</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Clothes Iron</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Portabel Speakers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Radio</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Washing Machine</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Samrt Phones</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lighting</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Water Dispencer</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">RGB Lighting</div></a>
+
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Air Conditioner</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">TV(Television)</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Amplifiers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Celing Fan</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Rice Cooker</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Kettle</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Speakers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lamp</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Refrigerator</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Desktop Computter</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Oven</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Laptop</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electric Stove</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Electic Fan</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Clothes Iron</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Portabel Speakers</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Radio</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Washing Machine</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Samrt Phones</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Lighting</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">Water Dispencer</div></a>
+                <a href=""> <div class="app"> <img src="../static/images/svg/addbtn.svg" alt="add button">RGB Lighting</div></a>
+            </div>
+
+        </div>
+       
+        <div class="confirmbtn">
+            <button class="confirm-btn">Confirm</button>
+        </div>
+        <img id="solarbg" src="../static/images/png/SolarPanelBg.png" alt="set up page bg">
+    </div>
+</div>
+
+<div id="panel-page-popup" class="panel-popup" style="display: none;">
+    <div class="setup-content">
+        <div class="setuphead">
+            <h1>Pick Your Desired Solar Panel</h1>
+            <p id="setuptext">"Select your ideal solar panel and watch you energy potential soar-let's simulate your journey 
+                to sustainable power!"</p>
+        </div>
+
+        <div class="SelectSolarPanel">
+            
+            <div class="solarpaneldiv" id="monocrystaline">
+                
+                <div class="solarname-switch">
+
+                    <div class="solarname">
+                        <p>Monocrystalline Solar Panels</p>
+                    </div>
+
+                    <div id="switch"> 
+                        <label class="switch">
+                            <input type="checkbox" class="solarSwitch">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                </div>
+                <div id="solardesc">
+                    <p>Higly efficient, sleek back panels with a single crystal structure</p>
+                </div>
+
+                <div class="solarinfo-specifications">
+                    <p id="sinf" >Solar Panel Information</p>
+                    <p id="specs" >Specifications</p>
+                    <hr>
+                    <div id="watt"> 
+                        <div id="watticon"><img src="../static/images/svg/watticon.svg" alt=""> </div>
+                        <div id="wattcap">
+                            <p id="wew1">Watt Capacity</p>
+                            <p id="wew">Maxmum of 400 Watts</p>
+                        </div>
+                    </div>
+                    
+                    <div id="efficiency"> 
+                        <div id="efficon"><img src="../static/images/svg/efficon.svg" width="22" height="20" alt="Effeciency Icon"></div>
+                        <div id="wattcap">
+                            <p id="wew1"> Efficiency</p>
+                            <p id="wew">Average Efficiency of 20%</p>
+                        </div>
+                    </div>
+
+                    <div id="tempt">
+                        <div id="watticon"><img src="../static/images/svg/opicon.svg" alt=""> </div>
+                        <div id="wattcap">
+                            <p id="wew1">Optimal Temperature</p>
+                            <p id="wew">Optimal Temperature of 25°c</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="quandiv">
+                        <div class="Q">
+                            <p>Quantity: <span>0</span> </p>
+                        </div>
+                        <div class="quanimg">
+                             <a href=""><img src="../static/images/svg/addbtn.svg" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="donesolar-btn">
+                        <button>DONE</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="solarpaneldiv" id="polycrystaline">
+                <div class="solarname-switch">
+
+                    <div class="solarname">
+                        <p>Polycyrstaline Solar Panels</p>
+                    </div>
+
+                    <div id="switch"> 
+                        <label class="switch">
+                            <input type="checkbox" class="solarSwitch">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                </div>
+                <div id="solardesc">
+                    <p>Cost-effective bluish panels mades from mutiple crystal structures</p>
+                </div>
+
+                <div class="solarinfo-specifications">
+                    <p id="sinf" >Solar Panel Information</p>
+                    <p id="specs" >Specifications</p>
+                    <hr>
+                    <div id="watt"> 
+                        <div id="watticon"><img src="../static/images/svg/watticon.svg" alt=""> </div>
+                        <div id="wattcap">
+                            <p id="wew1">Watt Capacity</p>
+                            <p id="wew">Maxmum of 360 Watts</p>
+                        </div>
+                    </div>
+                    
+                    <div id="efficiency"> 
+                        <div id="efficon"><img src="../static/images/svg/efficon.svg" width="22" height="20" alt="Effeciency Icon"></div>
+                        <div id="wattcap">
+                            <p id="wew1">Efficiency</p>
+                            <p id="wew">Average Efficiency of 16%</p>
+                        </div>
+                    </div>
+
+                    <div id="tempt">
+                        <div id="watticon"><img src="../static/images/svg/opicon.svg" alt=""> </div>
+                        <div id="wattcap">
+                            <p id="wew1">Optimal Temperature</p>
+                            <p id="wew">Optimal Temperature of 25°c</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="quandiv">
+                        <div class="Q">
+                            <p>Quantity: 0</p>
+                        </div>
+                        <div class="quanimg">
+                             <a href=""><img src="../static/images/svg/addbtn.svg" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="donesolar-btn">
+                        <button>DONE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="solarpaneldiv" id="thinfilm">
+                <div class="solarname-switch">
+
+                    <div class="solarname">
+                        <p>Thin-Film Solar Panels</p>
+                    </div>
+
+                    <div id="switch"> 
+                        <label class="switch">
+                            <input type="checkbox" class="solarSwitch">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                </div>
+                <div id="solardesc">
+                    <p>Lightweight and flexible panels, suitbale for various applications</p>
+                </div>
+
+                <div class="solarinfo-specifications">
+                    <p id="sinf" >Solar Panel Information</p>
+                    <p id="specs" >Specifications</p>
+                    <hr>
+                    <div id="watt"> 
+                        <div id="watticon"><img src="../static/images/svg/watticon.svg" alt=""> </div>
+                        <div id="wattcap">
+                            <p class="watc" id="wew1">Watt Capacity</p>
+                            <p id="wew">Maxmum of 300 Watts</p>
+                        </div>
+                    </div>
+                    
+                    <div id="efficiency"> 
+                        <div id="efficon"><img src="../static/images/svg/efficon.svg" width="22" height="20" alt="Effeciency Icon"></div>
+                        <div id="wattcap">
+                            <p id="wew1">Efficiency</p>
+                            <p id="wew">Average Efficiency of 11%</p>
+                        </div>
+                    </div>
+
+                    <div id="tempt">
+                        <div id="watticon"><img src="../static/images/svg/opicon.svg" alt=""> </div>
+                        <div id="wattcap">
+                            <p id="wew1">Optimal Temperature</p>
+                            <p id="wew">Optimal Temperature of 25°c</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="quandiv">
+                        <div class="Q">
+                            <p>Quantity: 0</p>
+                        </div>
+                        <div class="quanimg">
+                             <a id="addquanbtn" href=""><img src="../static/images/svg/addbtn.svg" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="donesolar-btn">
+                        <button>DONE</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       
+        <img id="solarbg" src="../static/images/png/SolarPanelBg.png" alt="set up page bg">
+    </div>
+</div>
+{% endblock %}
