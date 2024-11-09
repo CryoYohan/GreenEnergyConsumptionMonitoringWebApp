@@ -80,12 +80,21 @@
                 <div class="page-title">
                     <h2 id="dash-title">Weekly Energy Monitoring Statistics</h2>
                 </div>
-                <div class="profile-section">
-                    <a href="">
-                        <img src="../static/images/svg/Profile-Icon.svg" alt="">
-                    <span id="user-name">Kobe Amaro</span>
+
+                <div class="profile-section" onclick="toggleDropdown()">
+                    <a href="#">
+                        <img src="../static/images/svg/profilenako.svg" alt="">
+                        <div class="name-status">
+                            <span id="user-name">Kobe Amaro</span> <br>
+                            <p>User</p>
+                        </div>
                     </a>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a id="settings" href="#"> <img src="../static/images/svg/settingsicon.svg" alt="" width="10" height="10"> Settings</a>
+                        <a href="./Landing.html"> <img src="../static/images/svg/logouticon.svg" alt=""  width="24" height="24"> Logout</a>
+                    </div>
                 </div>
+                
             </div>
             <div id="Main-Content">
                 Main Container
@@ -105,6 +114,18 @@
             setTimeout(renderBarChart, 100);
             
         };
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.closest(".profile-section")) {
+                document.getElementById("profile-dropdown").style.display = "none";
+            }
+        }
         document.addEventListener('DOMContentLoaded', function() {
         const buttons = document.querySelectorAll('.nav-button');
 

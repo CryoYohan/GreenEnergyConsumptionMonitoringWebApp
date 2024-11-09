@@ -1,25 +1,34 @@
 .topdiv {
     width: 100%;
-    height: 15vh;
+    height: 10vh;
     background-color: transparent;
     margin: 10px;
     margin-top: 25px;
     display: flex;
-    align-items: center;
     gap: 20px;
+    display: flex;
+    flex-direction: column;
 }
-
-body{
-    position: absolute;
-}
-
-#numbers {
-    font-size: 30px;
-    font-weight: bold;
+.welcome h1{
+    color: #ffff;
+    padding: 0;
     margin: 0;
-    color: #4CAF50;
 }
-
+.date-time{
+    display: flex;
+    flex-direction: row;
+    margin-top: -2em;
+    padding: 0;
+    gap: 10px;
+    color: #ffff;
+}
+#date, #time{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 .statistics {
     width: 98.3%;
     height: 70vh;
@@ -27,31 +36,29 @@ body{
     margin: 10px;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
     gap: 10px;
-    overflow: hidden;
 }
 
-.Estimation-Appliances,
+.user-estimation,
 .Emissions {
+    width:35%;
     height: 100%;
-    background-color: transparent;
+    background-color: #002c4c;
     border-radius: 20px;
+    gap: 10px;
 }
 
-.Estimation-Appliances {
-    width: 35%;
-    height: 90%;
+.user-estimation {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 10px;
 }
 
-.Cost-Emission,
-.Appliances {
-    height: 49.2%;
+.total-users,
+.Cost-Emission{
+    height: 50%;
     width: 100%;
     background-color: #ffff;
     border-radius: 20px;
@@ -59,13 +66,10 @@ body{
     align-items: center;
     flex-direction: column;
 }
-.Appliances{
-    position: relative;
-}
 
 .Emissions {
     width: 65%;
-    height: 90%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -89,7 +93,7 @@ body{
 #myCarbonChart {
     width: 73% !important; /* Adjust based on your layout */
     margin-left: 0 !important;
-    height: 55% !important; /* Adjust based on your layout */
+    height: 60% !important; /* Adjust based on your layout */
     margin: 0 !important;
     padding-bottom: 5px;
 }
@@ -153,4 +157,10 @@ body{
     margin: 19px;
     padding: 0;
     margin-left: 10px;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffff;
 }
