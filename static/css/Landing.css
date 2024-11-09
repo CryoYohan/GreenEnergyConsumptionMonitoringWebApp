@@ -410,6 +410,24 @@ body {
   background-color: #30B938;
   color: #ffff;
   border: none;
+  cursor: pointer;
+}
+
+.donetariff-btn{
+  position: absolute;
+  z-index: 1;
+  margin-top: 30em;
+  
+}
+.donetariff-btn a{
+  width: 120px;
+  border-radius: 15px;
+  padding: 10px 45px;
+  background-color: #30B938;
+  color: #ffff;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 #donebtn{
   margin-top: 1em;
@@ -532,7 +550,7 @@ body {
 
 .confirmbtn {
   position: absolute;
-  top: 102%; 
+  top: 105%; 
   left: -7%;
   z-index: 1; 
 }
@@ -755,4 +773,86 @@ hr {
   display: flex;
   opacity: 1;
   flex-direction: column;
+}
+#tariff-page-popup{
+  align-items: center;
+}
+.TariffHead{
+  position: absolute;
+  z-index: 1;
+  left: 25%;
+  top: 10%;
+}
+.TariffHead h1{
+  font-size: 3.5em;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+.TariffHead p{
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+}
+.tariff-content .dropdown-section {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Adjust spacing between dropdowns */
+  margin-top: 15em;
+  border-radius: 15px;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  width: 25vw;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  border-radius: 15px;
+
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none; /* Remove default dropdown arrow */
+}
+
+.dropdown-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Prevent click on icon */
+  font-size: 16px;
+  color: #666;
+}
+.tariff-content{
+  display: flex;
+  justify-content: center;
+}
+#provider2, #provider1, #provider3{
+  
+  border-radius: 15px;
+  color: gray;
+  outline: none;
+}
+
+#lab{
+  position: relative;
+  bottom: 0.5em;
+}
+
+ option:hover {
+    background-color: #4CAF50 !important;
+    color: white;
 }

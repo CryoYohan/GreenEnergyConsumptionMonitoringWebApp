@@ -1,7 +1,7 @@
 .topdiv {
     width: 100%;
     height: 15vh;
-    background-color: #002c4c;
+    background-color: transparent;
     margin: 10px;
     margin-top: 25px;
     display: flex;
@@ -9,20 +9,8 @@
     gap: 20px;
 }
 
-.day {
-    width: 12.9%;
-    height: 14vh;
-    background-color: #ffff;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.rotated-text {
-    transform: rotate(270deg);
-    text-orientation: upright;
-    font-weight: bold;
-    align-items: center;
-    font-size: 17px;
+body{
+    position: absolute;
 }
 
 #numbers {
@@ -35,7 +23,7 @@
 .statistics {
     width: 98.3%;
     height: 70vh;
-    background-color: #002c4c;
+    background-color: transparent;
     margin: 10px;
     display: flex;
     flex-direction: row;
@@ -48,7 +36,7 @@
 .Estimation-Appliances,
 .Emissions {
     height: 100%;
-    background-color: #002c4c;
+    background-color: transparent;
     border-radius: 20px;
 }
 

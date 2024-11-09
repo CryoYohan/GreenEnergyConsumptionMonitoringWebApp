@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/AdminDashTemplateStyle.css">
+    <title>Admin Dasboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    </style>
+</head>
+<body>
+    <div class="Container">
+        <div class="Side-Navigation">
+            <img id="sidetopimg" src="../static/images/png/sideimg2.png" alt="">
+
+            <div class="logo-div">
+                <div class="img-logo">
+                    <img src="../static/images/logo/logo.svg" alt="">
+                </div>
+                <div class="webname">
+                    <h2><span id="Color">Ener</span>Green</h2>
+                </div>
+            </div>
+            <div class="Navigation-buttons">
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="Dashboard-btn">
+                            <img id="homeicon" src="../static/images/svg/Home-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Dashboard
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Appliances-btn">
+                            <img src="../static/images/svg/Energy-Icon.svg" alt="Appliances Icon" width="24" height="24"> Green Energy
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Estimation-btn">
+                            <img src="../static/images/svg/Emission-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Carbon Emission
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button"  id="Energy-btn">
+                            <img src="../static/images/svg/Databaseic.svg" alt="Dashboard Icon" width="24" height="24"> Data Analytics
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="Emission-btn">
+                            <img src="../static/images/svg/useric.svg" alt="Dashboard Icon" width="24" height="24"> User Management
+                        </a>
+                    </li>
+                </div>
+
+            </div>
+            <img id="side-img" src="../static/images/png/sidebotimg.png" alt="" width="208">
+        </div>
+        <div class="Top-Main-Content">
+            <div class="Top-Navigation">
+                <div class="page-title">
+                    <h2 id="dash-title">Admin Dashboard</h2>
+                </div>
+                <div class="profile-section">
+                    <a href="">
+                        <img src="../static/images/svg/Profile-Icon.svg" alt="">
+                    <span id="user-name">Nicholai</span>
+                    </a>
+                </div>
+            </div>
+            <div id="Main-Content">
+
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("Dashboard-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./AdminDashboardContent.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Dashboard";
+                    
+                    // Delay calling renderCharts to ensure myPieChart is loaded
+                    setTimeout(renderCostCharts, 100);
+                    setTimeout(renderDoughnutChart, 100);
+                    setTimeout(renderGreenChart, 100);
+                    setTimeout(renderCarbonChart, 100);
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+    </script>
+</body>
+</html>
