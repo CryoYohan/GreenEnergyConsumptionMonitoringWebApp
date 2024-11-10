@@ -1,0 +1,110 @@
+.settings-container{
+    width: 97%;
+    height: auto;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+.user-settings{
+    display: flex;
+    width: 50%;
+    height: 80vh;
+    background-color: #ffff;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-direction: column;
+}
+.footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #ffff;
+}
+
+#settings-section img{
+    width: 90px;
+    height: 90px;
+}
+#settings-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 10vh;
+    width: 100%;
+    gap: 20px;
+    background-color: #ffff;
+    margin: 20px;
+}
+.settings-status {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the gap as needed */
+}
+
+.settings-status img {
+    width: 30px; /* Adjust width as needed */
+    height: 30px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#settings-name {
+    font-weight: bold;
+    margin: 0;
+    font-size: 20px;
+}
+
+.settings-status p {
+    margin: 0;
+    font-size: 0.9em; /* Slightly smaller to distinguish "Admin" */
+}
+
+.change-pp button{
+    border: none;
+    background-color: #30B938;
+    color: #ffff;
+    padding: 12px 25px;
+    margin-top: 2em;
+    margin-right: 4em;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+
+}
+hr {
+    border: 1px solid #ccc; /* Adjust color and thickness as needed */
+    width: 90%; /* Ensure it spans the width of the container */
+  }
+.fname-mname {
+    width: 100%;
+    display: flex;
+    gap: 20px; /* Adjust spacing between input groups as needed */
+    flex-direction: row;
+    margin: 0 40px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 5px; /* Space between label and input */
+    font-weight: bold;
+}
+.input-group input{
+    width: 35vh;
+    height: 3vh;
+}
+#save-cancelbtn{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

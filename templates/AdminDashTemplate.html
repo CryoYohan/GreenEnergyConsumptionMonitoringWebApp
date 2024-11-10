@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/UserDashboardStyles.css">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
-    <title>User Dasboard</title>
+    <link rel="stylesheet" href="../static/css/AdminDashTemplateStyle.css">
+    <title>Admin Dasboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -13,7 +12,6 @@
     </style>
 </head>
 <body>
-    {% import 'components.html' as components%}
     <div class="Container">
         <div class="Side-Navigation">
             <img id="sidetopimg" src="../static/images/png/sideimg2.png" alt="">
@@ -38,7 +36,7 @@
                 <div class="Dashbtn">
                     <li>
                         <a href="#" class="nav-button"  id="Appliances-btn">
-                            <img src="../static/images/svg/Appliances-Icon.svg" alt="Appliances Icon" width="24" height="24"> Appliances
+                            <img src="../static/images/svg/Energy-Icon.svg" alt="Appliances Icon" width="24" height="24"> Green Energy
                         </a>
                     </li>
                 </div>
@@ -46,21 +44,6 @@
                 <div class="Dashbtn">
                     <li>
                         <a href="#" class="nav-button"  id="Estimation-btn">
-                            <img src="../static/images/svg/Cost-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Cost Estimation
-                        </a>
-                    </li>
-                </div>
-
-                <div class="Dashbtn">
-                    <li>
-                        <a href="#" class="nav-button"  id="Energy-btn">
-                            <img src="../static/images/svg/Energy-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Green Energy
-                        </a>
-                    </li>
-                </div>
-                <div class="Dashbtn">
-                    <li>
-                        <a href="#" class="nav-button" id="Emission-btn">
                             <img src="../static/images/svg/Emission-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Carbon Emission
                         </a>
                     </li>
@@ -68,27 +51,35 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="Simulation-btn">
-                            <img id="button" src="../static/images/svg/Simulation-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Simulation Page
+                        <a href="#" class="nav-button"  id="Energy-btn">
+                            <img src="../static/images/svg/Databaseic.svg" alt="Dashboard Icon" width="24" height="24"> Data Analytics
                         </a>
                     </li>
                 </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="#" class="nav-button" id="management-btn">
+                            <img src="../static/images/svg/useric.svg" alt="Dashboard Icon" width="24" height="24"> User Management
+                        </a>
+                    </li>
+                </div>
+
             </div>
             <img id="side-img" src="../static/images/png/sidebotimg.png" alt="" width="208">
         </div>
         <div class="Top-Main-Content">
             <div class="Top-Navigation">
-                {{ components.flash_messages()}}
                 <div class="page-title">
-                    <h2 id="dash-title">Weekly Energy Monitoring Statistics</h2>
+                    <h2 id="dash-title">Admin Dashboard</h2>
                 </div>
 
                 <div class="profile-section" onclick="toggleDropdown()">
                     <a href="#">
                         <img src="../static/images/svg/profilenako.svg" alt="">
                         <div class="name-status">
-                            <span id="user-name">Kobe Amaro</span> <br>
-                            <p>User</p>
+                            <span id="user-name">Nicholai</span> <br>
+                            <p>Admin</p>
                         </div>
                     </a>
                     <div class="dropdown-menu" id="profile-dropdown">
@@ -97,27 +88,29 @@
                     </div>
                 </div>
                 
+
             </div>
-            <div>
-                {% block content %}
-                {% endblock %}
+            <div id="Main-Content">
+
+            </div>
+            <div class="footer">
+                <footer>© Copyright 2024 EnerGreen</footer>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     <script>
-        
+
         window.onload = function() {
             loadDashboard(); 
-            setTimeout(renderCostCharts, 100);
-            setTimeout(renderDoughnutChart, 100);
-            setTimeout(renderGreenChart, 100);
-            setTimeout(renderCarbonChart, 100);
-            setTimeout(renderBarChart, 100);
+             setTimeout(renderCostCharts, 100);
+            // setTimeout(renderDoughnutChart, 100);
+             setTimeout(renderGreenChart, 100);
+             setTimeout(renderCarbonChart, 100);
+            // setTimeout(renderBarChart, 100);
             
         };
-
+        
         function toggleDropdown() {
             const dropdown = document.getElementById("profile-dropdown");
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
@@ -129,50 +122,71 @@
                 document.getElementById("profile-dropdown").style.display = "none";
             }
         }
-        document.addEventListener('DOMContentLoaded', function() {
-        const buttons = document.querySelectorAll('.nav-button');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-            // Remove 'active' class from all buttons
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Add 'active' class to the clicked button
-            this.classList.add('active');
-            });
-        });
-        });
 
         function loadDashboard() {
-            fetch('./UserDashboardContent.html')
+            fetch('./AdminDashboardContent.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
                     document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
                     document.getElementById("page-title").innerText = "Dashboard"; // Change the displayed title
-                    renderCharts();
                 })
                 .catch(error => console.error('Error fetching content:', error));
         }
 
+
         document.getElementById("Dashboard-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./UserDashboardContent.html')
+            fetch('./AdminDashboardContent.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics";
-                    document.getElementById("dash-title").innerText = "Weekly Energy Monitoring Statistics";
-                    
-                    // Delay calling renderCharts to ensure myPieChart is loaded
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Dashboard";
+
                     setTimeout(renderCostCharts, 100);
-                    setTimeout(renderDoughnutChart, 100);
                     setTimeout(renderGreenChart, 100);
                     setTimeout(renderCarbonChart, 100);
 
                 })
                 .catch(error => console.error('Error fetching content:', error));
         });
+
+        document.getElementById("management-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./UserManagement.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "User Management";
+
+                    setTimeout(renderCostCharts, 100);
+                    setTimeout(renderGreenChart, 100);
+                    setTimeout(renderCarbonChart, 100);
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        document.getElementById("settings").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./Settings.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Manage Settings";
+
+                    setTimeout(renderCostCharts, 100);
+                    setTimeout(renderGreenChart, 100);
+                    setTimeout(renderCarbonChart, 100);
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+
 
         function renderCostCharts() {
             const canvas = document.getElementById('myPieChart');
@@ -210,48 +224,7 @@
                 }
             });
         }
-        
-        function renderDoughnutChart() {
-            const canvas = document.getElementById('myDoughnutChart');
-            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
 
-            setTimeout(() => {
-                // Set canvas width and height dynamically
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-
-                const pieCtx = canvas.getContext('2d');
-                const pieData = {
-                    labels: ['lorem ', 'lorem', 'lorem', 'lorem'],
-                    datasets: [{
-                        data: [60, 20, 10, 10],
-                        backgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
-                        hoverBackgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
-                    }]
-                };
-
-                new Chart(pieCtx, {
-                    type: 'doughnut',
-                    data: pieData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: {
-                        duration: 1000, // Animation duration in milliseconds (adjust as needed)
-                        easing: 'easeOutBounce' // Optional easing effect
-                    },
-                        plugins: {
-                            legend: {
-                                display: false,
-                            }
-                        },
-                        layout: {
-                            padding: 0
-                        }
-                    }
-                });
-            }, 100); // Slight delay
-        }
         function renderGreenChart() { 
             const canvas = document.getElementById('myGreenChart');
             if (!canvas) return; // Ensure the canvas element exists before rendering the chart
@@ -304,6 +277,7 @@
             }, 100); // Slight delay
         }
 
+        
         function renderCarbonChart() {
             const canvas = document.getElementById('myCarbonChart');
             if (!canvas) return; // Ensure the canvas element exists before rendering the chart
@@ -366,153 +340,6 @@
             }, 100); // Slight delay
         }
 
-
-        document.getElementById("Appliances-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./AppliancesDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
-                    document.getElementById("dash-title").innerText = "Appliances"; // Change the displayed title
-                    setTimeout(renderBarChart, 100);
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-        
-        function renderBarChart() {
-            const canvas = document.getElementById('myBarChart');
-            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
-
-            const barCtx = canvas.getContext('2d');
-
-            // Create a linear gradient for the bar colors
-            const gradientMorning = barCtx.createLinearGradient(0, 0, 0, canvas.height);
-            gradientMorning.addColorStop(0, '#30B938'); // Lighter green at the top
-            gradientMorning.addColorStop(1, '#165319'); // Darker green at the bottom
-
-            const gradientAfternoon = barCtx.createLinearGradient(0, 0, 0, canvas.height);
-            gradientAfternoon.addColorStop(0, '#30B938'); // Lighter green at the top
-            gradientAfternoon.addColorStop(1, '#165319'); // Darker green at the bottom
-
-            const gradientEvening = barCtx.createLinearGradient(0, 0, 0, canvas.height);
-            gradientEvening.addColorStop(0, '#30B938'); // Lighter green at the top
-            gradientEvening.addColorStop(1, '#165319'); // Darker green at the bottom
-
-            const barData = {
-                labels: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
-                datasets: [
-                    {
-                        label: 'Morning',
-                        data: [10, 20, 30, 40, 50, 60, 70],
-                        backgroundColor: gradientMorning, // Use gradient for Morning
-                        borderColor: 'darkgreen',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Afternoon',
-                        data: [15, 25, 35, 45, 55, 65, 75],
-                        backgroundColor: gradientMorning, // Use gradient for Afternoon
-                        borderColor: 'darkblue',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Evening',
-                        data: [5, 15, 25, 35, 45, 55, 65],
-                        backgroundColor: gradientMorning, // Use gradient for Evening
-                        borderColor: 'darkorange',
-                        borderWidth: 1
-                    }
-                ]
-            };
-
-            new Chart(barCtx, {
-                type: 'bar',
-                data: barData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { color: 'white' },
-                            grid: { color: 'white' }
-                        },
-                        x: {
-                            ticks: { color: 'blue' },
-                            grid: { display: false },
-                            stacked: false // Set to false to avoid stacking
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: { color: 'blue' }
-                        }
-                    },
-                    animation: {
-                        duration: 1000, // Animation duration in milliseconds
-                        easing: 'easeOutBounce' // Optional easing effect
-                    },
-                    layout: {
-                        padding: 0 
-                    },
-                    barPercentage: 0.4, // Adjust bar width (0.0 to 1.0)
-                    categoryPercentage: 0.5 // Adjust the space between categories
-                }
-            });
-        }
-
-
-
-
-        document.getElementById("Estimation-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./CostEstimationDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics"; 
-                    document.getElementById("dash-title").innerText = "Cost Estimation"; 
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
-        document.getElementById("Energy-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./GreenEnergyDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics"; 
-                    document.getElementById("dash-title").innerText = "Green Energy"; 
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
-        document.getElementById("Emission-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./CarbonEmissionDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics"; 
-                    document.getElementById("dash-title").innerText = "Carbon Emission"; 
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-        
-        document.getElementById("Simulation-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./SimulationPage.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics"; 
-                    document.getElementById("dash-title").innerText = "Simulation Page"; 
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
 
     </script>
 </body>
