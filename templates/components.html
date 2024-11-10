@@ -18,10 +18,10 @@
     {% endwith %}
 {%- endmacro %}
 
-{% macro showmodal(action) -%}
-<div id="{{action}}" class="w3-modal w3-mobile">
+{% macro showloginmodal() -%}
+<div id="loginmodal" class="w3-modal w3-mobile">
     <div class="w3-modal-content w3-animate-zoom w3-mobile w3-round-xxlarge">
-        <div class="w3-container w3-mobile" style="margin:0;padding:0;height:65vh">
+        <div class="w3-container w3-mobile" style="margin:0;padding:0;height:75vh">
             <div class="w3-half w3-left">
                 <div id="hello">
                     <p id="welcome">Welcome to</p>              
@@ -31,34 +31,94 @@
                     <div class="welcome-message">
                         <p>Log in to start tracking your energy and start making a difference</p>
                     </div>
-                    <img src="{{ url_for('static',filename='images/png/greenElipseLogin.png') }}" alt="Green Elipse" style="width: 300px; height: 200px; object-fit: contain;">
+                    <img src="{{ url_for('static',filename='images/png/greenElipseLogin.png') }}" alt="Green Elipse" style="width: 350px; height: 350px; object-fit: contain;padding-right:1em">
                 </div>
             </div>
-            <div class="w3-half w3-right w3-padding-large w3-round-xxlarge" style="background-color: #0D2535; color:white;height:65vh">
-                <span onclick="document.getElementById('{{action}}').style.display='none'"
+            <div class="w3-half w3-right w3-padding-large w3-round-xxlarge" style="background-color: #0D2535; color:white;height:75vh">
+                <span onclick="document.getElementById('loginmodal').style.display='none'"
                 class="w3-button w3-round-xxlarge w3-display-topright w3-xlarge">&times;</span>
-                <h1 class="w3-center" id="login" style="font-family: 'Poppins', sans-serif;">Log in</h1>
+                <h1 class="w3-center w3-padding-top" id="login" style="font-family: 'Poppins', sans-serif;">Log in</h1>
                 <form class="w3-row-padding" method='POST' action="/userlogin">
                     <div>
                         <p>
-                            <label>USERNAME</label>
+                            <label style="font-size: 0.9em;">USERNAME</label>
                             <input type="text" name="username" class="w3-input w3-border w3-round-large" required>
                         </p>
                     </div>
                     <div>
                         <p>
-                            <label>PASSWORD</label>
+                            <label style="font-size: 0.9em;">PASSWORD</label>
                             <input type="password" name="password" class="w3-input w3-border w3-round-large" required>
                         </p>
                     </div>
                     <div class="w3-panel w3-center w3-padding-top w3-mobile">
                         <p class="w3-center">
-                            <input type="submit" value="LOGIN" class="w3-button w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:50%;background-color:#30B938;color:white">
+                            <input type="submit" value="LOGIN" class="w3-button w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:73%;background-color:#30B938;color:white">
+                        </p>
+                    </div>
+                    <div class="w3-center w3-mobile">
+                        <p class="w3-center">
+                            <span class="w3-button w3-white w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:70%;"><img src="{{ url_for('static', filename='images/png/googleLogo30by30NBG.png') }}" alt="Google Logo" style="max-width:30px;height:30px;color:#30B938"><a href="{{ url_for('login') }}" style="text-decoration: none;color:#0D2535">  Sign-in using Google</a></span>
                         </p>
                     </div>
                 </form>
                 <div class="signin">
-                    <p class="w3-center">Don't have and account yet? <span id="signin"><a id="signspan">Sign in</a></span></p>
+                    <p class="w3-center">Don't have an account? <span id="signin" onclick="document.getElementById('loginmodal').style.display='none'"><a id="signspan" onclick="showModal('registermodal')">Sign in</a></span></p>
+                </div>
+            </div>
+        </div>
+    </div>     
+</div>
+{%- endmacro %}
+
+
+{% macro showregistermodal() -%}
+<div id="registermodal" class="w3-modal w3-mobile">
+    <div class="w3-modal-content w3-animate-zoom w3-mobile w3-round-xxlarge">
+        <div class="w3-container w3-mobile" style="margin:0;padding:0;height:75vh">
+            <div class="w3-half w3-left">
+                <div id="hello">
+                    <p id="welcome">Welcome to</p>              
+                    <div id="logodesu" >
+                        <img src="{{ url_for('static',filename='images/logo/logo-name.svg') }}" alt="Logo" class="Energreen-logo">
+                    </div> 
+                    <div class="welcome-message">
+                        <p>Register now to start tracking your energy and start making a difference</p>
+                    </div>
+                    <img src="{{ url_for('static',filename='images/png/greenElipseLogin.png') }}" alt="Green Elipse" style="width: 350px; height: 350px; object-fit: contain;padding-right:2em">
+                </div>
+            </div>
+            <div class="w3-half w3-right w3-padding-large w3-round-xxlarge" style="background-color: #0D2535; color:white;height:75vh">
+                <span onclick="document.getElementById('registermodal').style.display='none'"
+                class="w3-button w3-round-xxlarge w3-display-topright w3-xlarge">&times;</span>
+                <p class="w3-center w3-padding-top" id="login" style="font-family: 'Poppins', sans-serif;font-size:2em">Create Account</p>
+                <form class="w3-row-padding" method='POST' action="/userregister">
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">FULL NAME</label>
+                            <input type="text" name="fullname" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">EMAIL</label>
+                            <input type="text" name="email" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">PASSWORD</label>
+                            <input type="password" name="password" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div class="w3-panel w3-center w3-padding-top w3-mobile">
+                        <p class="w3-center">
+                            <input type="submit" value="SIGN-UP" class="w3-button w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:73%;background-color:#30B938;color:white">
+                        </p>
+                    </div>
+                </form>
+                <div class="signin">
+                    <p class="w3-center">Already have an account? <span id="signin" onclick="document.getElementById('registermodal').style.display='none'"><a id="signspan" onclick="showModal('loginmodal')">Log in</a></span></p>
                 </div>
             </div>
         </div>
@@ -84,4 +144,6 @@
     </div>
 </div>
 {%- endmacro %}
+
+
 
