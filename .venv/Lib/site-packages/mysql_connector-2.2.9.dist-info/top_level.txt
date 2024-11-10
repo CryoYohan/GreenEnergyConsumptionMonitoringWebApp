@@ -1,3 +1,0 @@
-_mysql_connector
-mysql
-mysqlx
