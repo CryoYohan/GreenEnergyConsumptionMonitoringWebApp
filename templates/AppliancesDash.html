@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/AppliancesDashStyles.css">
-    <title>Dashboard</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-            
-        }
-
-    </style>
-</head>
-<body>
-    <div class="topdiv">
-       
-    </div>
-
-    <div class="statistics">
-        <div style="width: 98.3%; height: 70vh;">
-            <canvas id="myBarChart" style="width: 98.3%; height: 70vh;"></canvas>
-        </div>
-    </div>
-</body>
-</html>
+{% extends 'UserDashboardTemplate.html' %}
+{% block content %}
+<h1>Appliances </h1>
+{% endblock %}

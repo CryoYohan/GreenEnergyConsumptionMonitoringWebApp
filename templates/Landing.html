@@ -4,13 +4,789 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../static/css/Landing.css">
-    <title>Green Energy Consumption Monitoring App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
     </style>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Green Energy Consumption Monitoring App</title>
+    <style>
+        html{
+            scroll-behavior: smooth;
+          }
+          
+          body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            padding: 0;
+            margin: 0;
+          }
+          /* For WebKit browsers (Chrome, Safari) */
+          ::-webkit-scrollbar {
+            width: 5px; /* Width of the scrollbar */
+            height: 5px; /* Height of the scrollbar for horizontal scrolling */
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: #ffff; /* Background of the scrollbar track */
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: #30B938; /* Color of the scrollbar thumb */
+            border-radius: 5px; /* Round the corners of the scrollbar thumb */
+          }
+          
+          ::-webkit-scrollbar-thumb:hover {
+            background: #555; /* Color of the scrollbar thumb on hover */
+          }
+          
+          
+          .Landing-Container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+          }
+          
+          .Landing-BG img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .header-container {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2em;
+          }
+          
+          .logodiv {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+          }
+          
+          .Energreen-logo {
+            height: 40px;
+            margin-right: 10px;
+          }
+          
+          #App-Name {
+            color: #110142;
+            font-weight: bold;
+            font-size: 32px;
+            margin: 0;
+            padding: 0;
+          }
+          
+          #Name-Span {
+            color: #30B938;
+          }
+          
+          .Log-Sign {
+            display: flex;
+            gap: 40px;
+          }
+          
+          .sign-up {
+            background-color: #4CAF50;
+            border-radius:20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+          }
+          
+          .Log-Sign, .login, .sign-up {
+            padding: 8px 40px;
+            cursor: pointer;
+            font-size: 22px;
+            
+          }
+          .login{
+            background-color: #ffff;
+            border: none;
+            border-radius: 20px;
+            color: #30B938;
+            cursor: pointer;
+            border: 1px solid #30B938;
+          }
+          .tagline{
+            position: absolute;
+            top: 5em;
+            left: 6em;
+            font-size: 1.5em;
+          }
+          #headline{
+            font-size: 80px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+          }
+          
+          .start-monitoring-button, .start-monitoring-button2{
+            margin-top: 2em;
+            width: 352px;
+            padding: 20px;
+            background-color: #4CAF50;
+            border-radius:20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 30px;
+            font-weight: bold;
+          }
+          #mini-tagline{
+            margin-top: 1.2em;
+          }
+          .Second-landing, .Fourth-landing{
+            width: 100%;
+            height: auto;
+          } 
+          .Third-Landing{
+            width: 100vw;
+            height: auto;
+            background: linear-gradient(to bottom, #4CAF50, #002c4c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+          }
+          .The-How{
+            width: 100%;
+            font-weight: bold;
+            color: #ffff;
+            font-size: 75px
+          }
+          .how-container{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 90vw;
+            height: 80vh;
+            gap: 20px;
+          }
+          .Division{
+            width: 700px;
+            height: 650px;
+            background-color: #ffff;
+            border-radius: 20px;
+          }
+          .content{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1em;
+            gap: 10px;
+            
+          }
+          .definition{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+            padding: 10px;
+          }
+          #content-heading{
+            font-size: 32px;
+            font-weight: bold;
+          }
+          #def{
+            font-size: 24px;
+            margin-top: -1.5em;
+            color: #666666;
+            width: 430px;
+            /* margin-bottom: 1em; */
+          }
+          #def-1{
+            font-size: 24px;
+            margin-top: -1.5em;
+            color: #666666;
+            width: 415px;
+          }
+          #Info{
+            width: 300px;
+          }
+          #info-img{
+            margin-top: 1em;
+          }
+          #sec-img{
+            position: relative;
+            bottom: 5px;
+          }
+          #sec-img1{
+            position: relative;
+            top: 5px;
+          }
+          .Second-landing{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+          .secdiv-container{
+            position: absolute;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 40px;
+            width: 90%;
+          }
+          .secdivtext-content{
+            width: 100%;
+          }
+          .secdiv-headline h1{
+            font-size: 5em;
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            
+          }
+          .secondiv-span{
+            font-weight: bold;
+          }
+          #secdiv-miniline{
+            font-size: 25px;
+          }
+          .Fourth-landing{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+          .fourth-headline{
+            margin-top: -2em;
+          }
+          .fourth-headline h1{
+            font-family: 'Poppins', sans-serif;
+            font-size: 5em;
+            font-weight: bold;
+          }
+          .footer{
+            width: 100vw;
+            height:5vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0D2535;
+            color: #666666;
+          }
+          .popup, .regpopup {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 950px;
+            height: 550px;
+            background-color: transparent;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          
+          .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.60); /* Dark background with transparency */
+            z-index: 900; /* Below the popup */
+            display: none; /* Hide initially */
+          }
+          
+          
+          
+          .close-btn:hover {
+            color: black;
+            cursor: pointer;
+          }
+          .left-side, .right-side{
+            width: 450px;
+            height: 500px;
+          
+          }
+          .popup-content{
+            display: flex;
+            flex-direction: row;
+            gap: 0;
+          }
+          .left-side{
+            margin-left: 30px;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          #left-partition{
+            margin-top: 10px;
+          }
+          #green-logo{
+            display:  flex;
+            align-items: center;
+            position: absolute;
+            margin-left: 20px;
+            flex-direction: row;
+            margin-bottom: 8em;
+          
+          }
+          #welcome{
+            margin: 0;
+            padding: 0;
+            padding-top:4em;
+            padding-left: 6em;
+          }
+          .welcome-message {
+            width: 90%;
+          }
+          
+          .welcome-message p {
+            font-size: 1.1em;
+            padding-left: 5em;
+          }
+          
+          #logodesu{
+            top:2em;
+            bottom: 1em;
+          }
+          #logodesu img{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+          }
+          #Namaewa{
+            color: #110142;
+            font-weight: bold;
+            font-size: 2.5em;
+            margin: 0;
+            padding: 0;
+            padding-left: 2em;
+          }
+          .right-side{
+            display: flex;
+          }
+          .right-side,.rightside-reg{
+            background-color: #0D2535;
+            border-radius: 0 20px 20px 0;
+            flex-direction: row;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            color: #ffff;
+            width: 100%;
+          }
+          
+          .logsign{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .input-area{
+            display: flex;
+            flex-direction: column;
+            height: 10%;
+          }
+          .input-area input{
+            flex-direction: column;
+            border-radius: 15px;
+            height: 15%;
+            padding: 15px;
+            margin: 15px;
+            margin-bottom: 20px;
+            border: none;
+            outline: none;
+            width: 300px;
+          }
+          .button-area{
+           margin-top: 1em;
+           margin-bottom: 1em;
+          }
+          .btn-area{
+            margin-top: 0.5em;
+          }
+          
+          .button-area button{
+            width: 50%;
+            border-radius: 25px;
+            padding: 10px;
+            background-color: #30B938;
+            color: #ffff;
+            border: none;
+            height: 3em;
+            font-size: 1em;
+            cursor:pointer;
+          }
+          .donesolar-btn{
+            margin-bottom: 10px;
+          }
+          .donesolar-btn button{
+            width: 150px;
+            border-radius: 15px;
+            padding: 10px;
+            background-color: #30B938;
+            color: #ffff;
+            border: none;
+          }
+          #donebtn{
+            margin-top: 1em;
+          }
+          .signin{
+            font-size: 14px;
+          }
+          #signin{
+            font-weight: bold;
+          }
+          #signspan, #logspan{
+            text-decoration: none;
+            color: #ffff;
+            cursor: pointer;
+          }
+          #login{
+            font-size: 50px;
+            font-weight: 600;
+            margin: 0;
+            padding: 0;
+          }
+          #register{
+            font-size: 35px;
+            margin: 10px;
+            padding: 0;
+          }
+          .password-container {
+              position: relative;
+              width: 100%;
+          }
+          
+          #password-input, #acc-password-input, #confirm-password-input {
+              height: 35px;
+              width: 92%;
+              padding-right: 40px; /* Space for the eye icon */
+              border-radius: 15px;
+              padding: 20px;
+              box-sizing: border-box;
+          }
+          
+          .toggle-password {
+              position: absolute;
+              right: 15px;
+              top: 48%;
+              right: 10%;
+              transform: translateY(-50%);
+              cursor: pointer;
+              font-size: 18px;
+              color: #888;
+          }
+          .setup-popup, .panel-popup {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 650px;
+            background-color: transparent;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .setup-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .setuphead {
+            position: absolute;
+            width: 60%;
+            top: -3%; 
+            left: -7%; 
+            z-index: 1;
+          }
+          .setuphead h1{
+            font-size: 40px;
+          }
+          
+          
+          .sortbtn {
+            position: absolute;
+            top: 28%; 
+            right: -7%; 
+            z-index: 1;
+          }
+          .sortbtn button{
+            display: flex;
+            width: 150px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #ffff;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 400;
+            cursor: pointer;
+            
+          }
+          .selectAppliances {
+            position: absolute;
+            top: 35%;
+            width: 115%;
+            height: 50vh; 
+            background-color: #0D2535;
+            z-index: 1;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            overflow: auto;
+          }
+          
+          .confirmbtn {
+            position: absolute;
+            top: 102%; 
+            left: -7%;
+            z-index: 1; 
+          }
+          .confirmbtn button{
+            display: flex;
+            width: 150px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #ffff;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-size: 20px;
+            font-weight: 400;
+            cursor: pointer;
+          }
+          
+          #setupbg {
+            width: 1200px;
+            height: auto; 
+          }
+          #solarbg {
+            width: 1300px;
+            height: 800px; 
+          }
+          #appliances-shelf{
+            width: 100%;
+            height: 35vh;
+            background-color: #0D2535;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow divs to wrap onto the next line */
+          }
+          #appliances-shelf a{
+            text-decoration: none;
+            color: #110142;
+            font-weight: 600;
+          }
+          .app {
+            width: 139px;
+            height: 46px;
+            background-color: #ffff;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            border-radius: 20px;
+            font-size: 12px;
+            gap: 10px;
+            padding: 0 5px ;
+          }
+          .SelectSolarPanel{
+            position: absolute;
+            top: 30%;
+            background-color: transparent;
+            width: 115%;
+            height: 50vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+          
+          }
+          
+          .solarpaneldiv{
+            width: 60vw;
+            height: 105%;
+            background-color: #ffff;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            transition: height 0.4s ease; /* Smooth transition for height */
+            
+          
+          }
+          
+          .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+          }
+          
+          /* Hidden Checkbox */
+          .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          /* Slider */
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc ;
+            transition: 0.4s;
+            border-radius: 34px;
+          }
+          
+          /* Circle within Slider */
+          .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+          }
+          
+          /* When Checked */
+          input:checked + .slider {
+            background-color: #4CAF50;
+          }
+          
+          input:checked + .slider:before {
+            transform: translateX(26px);
+          }
+          .solarname-switch{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5em;
+            height: 50px;
+          }
+          #solardesc{
+            padding: 5px;
+            margin-left: 18px;
+            margin-right: 20px;
+            position: relative;
+            bottom: 20px;
+            font-size: 14px;
+            
+          }
+          .quandiv{
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+          }
+          .solarname p{
+            margin:0;
+            padding: 0;
+            font-weight: bold;
+            font-size: 14px;
+          }
+          .solarinfo-specifications{
+            margin-top: -2em;
+            width: 95%;
+            height: 30vh;
+            background-color: #ffff;
+            border-radius: 10px;
+            border: 2px solid #d9d9d9;
+            display: flex;
+            flex-direction: column;
+          }
+          #sinf, #specs{
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            left: 1em;
+          }
+          #specs{
+            font-weight: bold;
+          }
+          #efficon{
+            position: relative;
+            top: 5px;
+          }
+          #watt, #efficiency, #tempt{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            font-size: 14px;
+            margin: 10px;
+          }
+          .watc{
+            margin-left: 2px;
+          }
+          #wattcap p{
+            margin: 0;
+            padding: 0;
+          }
+          #efficon{
+            margin-left: 2px;
+          }
+          #wew1{
+            font-weight: bold;
+          }
+          hr {
+            border: 1px solid #ccc; /* Adjust color and thickness as needed */
+            width: 90%; /* Ensure it spans the width of the container */
+            margin-left: 12px; /* Optional: Add some spacing above and below */
+          }
+          .quanimg{
+            margin-top: 5px;
+          }
+          .bottom {
+            display: none; /* Initially hidden */
+            transition: opacity 0.4s ease; /* Smooth transition for visibility */
+            opacity: 0;
+            overflow: hidden;
+            transition: opacity 0.3s ease, max-height 0.3s ease; /* Smooth transition for visibility and height */
+          
+          }
+          
+          .solarpaneldiv.show .bottom {
+            display: flex;
+            opacity: 1;
+            flex-direction: column;
+          }
+    </style>
 </head>
 <body>
+    {% import 'components.html' as components%}
     <div class="Landing-Container">
         <div class="Landing-BG">
             <div class="header-container">
@@ -19,8 +795,10 @@
                     <p id="App-Name"><span id="Name-Span">Ener</span>Green</p>
                 </div>
                 <div class="Log-Sign">
-                    <button class="login">Log in</button>
-                    <button class="sign-up">Sign Up</button>
+                    <button onclick="showModal('loginmodal')"class="login">Log in</button>
+                    {{components.showloginmodal()}}
+                    <button class="sign-up" onclick="showModal('registermodal')">Sign Up</button>
+                    {{components.showregistermodal()}}
                 </div>
             </div>
             <div class="tagline">
@@ -41,7 +819,7 @@
                     <img src="../static/images/png/Saec-div-img.png" alt="sec-div img" width="700" height="600">
                 </div>
                 <div class="secdivtext-content">
-                    <div id="secdiv-headline">
+                    <div class="secdiv-headline">
                         <h1>Why Use <span id="Name-Span">Ener</span>Green? </h1>
                     </div>
                     <div id="secdiv-secheadline">
@@ -81,7 +859,7 @@
 
                     <div class="definition">
                         <div id="def">
-                            <p>Track Live energy Data top see exactly how much you're using and producing</p>
+                            <p>Track Live energy Data to see exactly how much you're using and producing</p>
                         </div>
                         <div>
                             <img src="../static/images/png/content-1.png" alt="Image">
@@ -120,7 +898,7 @@
                     </div>
                     <div class="definition">
                         <div id="def">
-                            <p>Start monitoring in a few simple steps and explore realictic energy simulations</p>
+                            <p>Start monitoring in a few simple steps and explore realistic energy simulations</p>
                         </div>
                         <div>
                             <div>
@@ -135,11 +913,11 @@
         <div class="Fourth-landing">
             <div class="secdiv-container">
                 <div class="secdivtext-content">
-                    <div class="fourth-headline" id="secdiv-headline">
-                        <h1>Ready to <span class="secondiv-span" id="Name-Span">Make </span> a Difference? Start <span>Monitoring</span>Today! </h1>
+                    <div class="fourth-headline">
+                        <h1>Ready to <span class="secondiv-span" id="Name-Span">Make </span> a Difference? Start <span id="Name-Span">Monitoring</span> Today! </h1>
                     </div>
                     <div id="secdiv-miniline">
-                        <p> Take Control of your energy usage and contribute to a<span id="Name-Span">Greener</span>planet</p>
+                        <p> Take Control of your energy usage and contribute to a <span id="Name-Span">Greener</span> planet</p>
                     </div>
                     <div id="secdiv-miniline">
                         <p> Join a community of echo-concious users, track your impact, and make every <span id="Name-Span">watt</span> count</p>
@@ -161,7 +939,7 @@
     </div>
 
     <div id="overlay" class="overlay" style="display: none;"></div>
-
+  
     <div id="login-popup" class="popup" style="display: none;">
         <div class="popup-content">
             <div class="left-side">
@@ -861,8 +1639,14 @@
             }
         }
 
+    {{ components.flash_messages() }}
+    {%block content%}
+    {% endblock %}
+    <script>
+        function showModal(action) {
+            const modalId = action;
+            document.getElementById(modalId).style.display = 'block';
+        }
     </script>
-    
-    
 </body>
 </html>

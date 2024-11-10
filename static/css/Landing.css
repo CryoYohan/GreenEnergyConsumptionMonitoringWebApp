@@ -104,8 +104,9 @@ body {
 }
 .tagline{
   position: absolute;
-  top: 10em;
-  left: 7em;
+  top: 5em;
+  left: 6em;
+  font-size: 1.5em;
 }
 #headline{
   font-size: 80px;
@@ -328,25 +329,32 @@ body {
 #welcome{
   margin: 0;
   padding: 0;
+  padding-left: 0.9em;
 }
 .welcome-message {
   width: 300px;
 }
+
+.welcome-message p {
+  font-size: 1.5em;
+}
+
 #logodesu{
   position: relative;
-  bottom: 2em;
+  bottom: 4em;
 }
 #logodesu img{
-  width: 120px;
-  height: 95px;
+  width: 6.5em;
+  height: 5em;
   margin: 0;
 }
 #Namaewa{
   color: #110142;
   font-weight: bold;
-  font-size: 55px;
+  font-size: 3em;
   margin: 0;
   padding: 0;
+  padding-left: 0.2em;
 }
 .right-side{
   display: flex;
@@ -372,12 +380,12 @@ body {
 .input-area{
   display: flex;
   flex-direction: column;
-  height: 100px;
+  height: 10%;
 }
 .input-area input{
   flex-direction: column;
   border-radius: 15px;
-  height: 35px;
+  height: 15%;
   padding: 15px;
   margin: 15px;
   margin-bottom: 20px;
@@ -386,19 +394,23 @@ body {
   width: 300px;
 }
 .button-area{
- margin-top: 5em;
+ margin-top: 1em;
+ margin-bottom: 1em;
 }
 .btn-area{
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
 .button-area button{
-  width: 150px;
-  border-radius: 15px;
+  width: 50%;
+  border-radius: 25px;
   padding: 10px;
   background-color: #30B938;
   color: #ffff;
   border: none;
+  height: 3em;
+  font-size: 1em;
+  cursor:pointer;
 }
 .donesolar-btn{
   margin-bottom: 10px;
