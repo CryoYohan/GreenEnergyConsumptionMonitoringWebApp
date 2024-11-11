@@ -1,9 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests
 import os
 from dotenv import load_dotenv
+from appliances import appliances as appliancesdict
 
 load_dotenv()
 
@@ -12,6 +13,8 @@ app.secret_key = '@#@#@#@'
 fullname:str = ''
 email:str = ''
 password:str = ''
+
+
 
 # Configurations
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # For local testing only
@@ -87,9 +90,19 @@ def userlogin():
         flash('Invalid Credentials!', 'error')
         return redirect(url_for('Landing'))
 
-# User Registration Route
 @app.route('/userregister', methods=['POST'])
 def userregister():
+    fullname = request.form.get('fullname')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    flash('Registration successful', 'success')
+    return redirect(url_for('setup'))
+
+
+
+# User Registration Route
+@app.route('/userregister1', methods=['POST'])
+def userregister1():
     global fullname, email, password
     fullname = request.form['fullname']
     email = request.form['email']
@@ -97,7 +110,20 @@ def userregister():
     flash('Registration successful. Please log in.', 'success')
     return redirect(url_for('UserDashboardTemplate'))
 
+@app.route('/panelsetup')
+def panelsetup():
+    return render_template('panelsetup.html')
 
+@app.route('/setupAppliances', methods=['POST'])
+def setupAppliances():
+    if request.method == 'POST':
+        print(request.form.getlist('mycheckbox'))
+        return redirect(url_for('panelsetup'))
+    return redirect(url_for('panelsetup'))
+
+@app.route('/setup')
+def setup():
+    return render_template('setup.html', appliances=appliancesdict)
 # Landing Page
 @app.route('/')
 def landing():
