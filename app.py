@@ -73,10 +73,18 @@ def oauth2callback():
 # Dashboard Template Route
 @app.route('/UserDashboardTemplate')
 def UserDashboardTemplate():
-    if 'name' in session:
-        return render_template('UserDashboardTemplate.html', name=session['name'])
-    flash("Please log in first.", 'warning')
-    return redirect(url_for('Landing'))
+    return redirect(url_for('landing')) if not session.get("name") else render_template('UserDashboardTemplate.html')
+
+@app.after_request
+def after_request(response):
+    response.headers['Cache-Control'] = 'no-cache,no-store,must-revalidate'
+    #response.headers['Pragma'] = 'no-cache'
+    return response 
+
+@app.route("/logout")
+def logout():
+    session['name'] = None
+    return redirect(url_for("landing"))
 
 # Manual Login Route
 @app.route('/userlogin', methods=['POST'])
@@ -84,20 +92,20 @@ def userlogin():
     username = request.form.get('username')
     password = request.form.get('password')
     if username == 'admin' and password == 'user':
-        flash('Login Success!', 'success')
+        session['name'] = username
+        flash("LOGIN SUCCESSFUL!", "info")
         return redirect(url_for('UserDashboardTemplate'))
     else:
         flash('Invalid Credentials!', 'error')
-        return redirect(url_for('Landing'))
+        return redirect(url_for('landing'))
+
 
 @app.route('/userregister', methods=['POST'])
 def userregister():
     fullname = request.form.get('fullname')
     email = request.form.get('email')
     password = request.form.get('password')
-    flash('Registration successful', 'success')
     return redirect(url_for('setup'))
-
 
 
 # User Registration Route
@@ -110,9 +118,21 @@ def userregister1():
     flash('Registration successful. Please log in.', 'success')
     return redirect(url_for('UserDashboardTemplate'))
 
+@app.route('/setupTariff')
+def setupTariff():
+    return render_template('setupTariff.html')
+
+
 @app.route('/panelsetup')
 def panelsetup():
     return render_template('panelsetup.html')
+
+@app.route('/setupPanels', methods=['POST'])
+def setupPanels():
+    if request.method == 'POST':
+        print(request.form.get('solarpanels'))
+        print(request.form['quantity'])
+    return redirect(url_for('setupTariff'))
 
 @app.route('/setupAppliances', methods=['POST'])
 def setupAppliances():

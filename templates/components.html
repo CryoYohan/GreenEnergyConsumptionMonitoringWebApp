@@ -3,12 +3,12 @@
         {% if messages %}
             {% for category, message in messages %}
                 {% if category == 'info' or category =='success' %}
-                    <div class="w3-panel w3-bar w3-large w3-green w3-display-center w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
+                    <div class="w3-panel w3-bar w3-large w3-green w3-display-topmiddle w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
                         <span align="center">{{ message }}</span>
                         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-small w3-display-topright">&times;</span>
                     </div>
                 {% elif category == 'error' %}
-                    <div class="w3-panel w3-bar w3-large w3-red w3-display-center w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
+                    <div class="w3-panel w3-bar w3-large w3-red w3-display-topmiddle w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
                         <span align="center">{{ message }}</span>
                         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-small w3-display-topright">&times;</span>
                     </div>
@@ -230,8 +230,7 @@
                 </div>
                 <div class="SelectSolarPanel">
                 
-                    <div class="solarpaneldiv" id="monocrystaline">
-                        
+                    <form class="solarpaneldiv" action='/setupPanels' method='POST' id="monocrystaline">
                         <div class="solarname-switch">
     
                             <div class="solarname">
@@ -240,7 +239,7 @@
     
                             <div id="switch"> 
                                 <label class="switch">
-                                    <input type="checkbox" class="solarSwitch">
+                                    <input type="checkbox" name="solarpanels" value="monocrystalline" class="solarSwitch">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -282,28 +281,30 @@
                         <div class="bottom">
                             <div class="quandiv">
                                 <div class="Q">
-                                    <p>Quantity: <span>0</span> </p>
-                                </div>
-                                <div class="quanimg">
-                                     <a href=""><img src="../static/images/svg/addbtn.svg" alt=""></a>
+                                    <p>Quantity:</p>
+                                    <input type="text" value="1" name="quantity" id="quantity1" style="width: 20%;" class="w3-bar-item w3-input w3-border" readonly>
+                                    <button type="button" onclick="increaseQuantity('quantity1')" class="w3-bar-item w3-margin-right w3-margin-left w3-button w3-circle w3-green">+</button>
+                                    <button type="button" onclick="decreaseQuantity('quantity1')" class="w3-bar-item w3-button w3-circle w3-border w3-border-green">-</button>
                                 </div>
                             </div>
-                            <div class="donesolar-btn">
-                                <button  class="donesetsolar-btn">DONE</button>
+                            <div class="w3-center w3-margin-top">
+                                <button type="submit" class="w3-round-xlarge w3-padding" style="background-color: #30B938;color:white;width:50%">
+                                    CONFIRM
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    </form>
     
-                    <div class="solarpaneldiv" id="polycrystaline">
+                    <form class="solarpaneldiv" action='/setupPanels' method='POST' id="polycrystaline">
                         <div class="solarname-switch">
     
                             <div class="solarname">
-                                <p>Polycyrstaline Solar Panels</p>
+                                <p>Polycrystalline Solar Panels</p>
                             </div>
     
                             <div id="switch"> 
                                 <label class="switch">
-                                    <input type="checkbox" class="solarSwitch">
+                                    <input type="checkbox" name="solarpanels" value="polycrystalline" class="solarSwitch">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -345,19 +346,21 @@
                         <div class="bottom">
                             <div class="quandiv">
                                 <div class="Q">
-                                    <p>Quantity: 0</p>
-                                </div>
-                                <div class="quanimg">
-                                     <a href=""><img src="../static/images/svg/addbtn.svg" alt=""></a>
+                                    <p>Quantity:</p>
+                                    <input type="text" value="1" name="quantity" id="quantity2" style="width: 20%;" class="w3-bar-item w3-input w3-border" readonly>
+                                    <button type="button" onclick="increaseQuantity('quantity2')" class="w3-bar-item w3-margin-right w3-margin-left w3-button w3-circle w3-green">+</button>
+                                    <button type="button" onclick="decreaseQuantity('quantity2')" class="w3-bar-item w3-button w3-circle w3-border w3-border-green">-</button>
                                 </div>
                             </div>
-                            <div class="donesolar-btn">
-                                <button  class="donesetsolar-btn">DONE</button>
+                            <div class="w3-center w3-margin-top">
+                                <button type="submit" class="w3-round-xlarge w3-padding" style="background-color: #30B938;color:white;width:50%">
+                                    CONFIRM
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    </form>
     
-                    <div class="solarpaneldiv" id="thinfilm">
+                    <form class="solarpaneldiv" action='/setupPanels' method='POST' id="thinfilm">
                         <div class="solarname-switch">
     
                             <div class="solarname">
@@ -366,11 +369,10 @@
     
                             <div id="switch"> 
                                 <label class="switch">
-                                    <input type="checkbox" class="solarSwitch">
+                                    <input type="checkbox" name="solarpanels" value="thin-film" class="solarSwitch">
                                     <span class="slider"></span>
                                 </label>
-                            </div>
-    
+                            </div>    
                         </div>
                         <div id="solardesc">
                             <p>Lightweight and flexible panels, suitbale for various applications</p>
@@ -408,20 +410,20 @@
                         <div class="bottom">
                             <div class="quandiv">
                                 <div class="Q">
-                                    <p>Quantity: 0</p>
-                                </div>
-                                <div class="quanimg">
-                                     <a id="addquanbtn" href=""><img src="../static/images/svg/addbtn.svg" alt=""></a>
+                                    <p>Quantity:</p>
+                                    <input type="text" value="1" name="quantity" id="quantity3" style="width: 20%;" class="w3-bar-item w3-input w3-border" readonly>
+                                    <button type="button" onclick="increaseQuantity('quantity3')" class="w3-bar-item w3-margin-right w3-margin-left w3-button w3-circle w3-green">+</button>
+                                    <button type="button" onclick="decreaseQuantity('quantity3')" class="w3-bar-item w3-button w3-circle w3-border w3-border-green">-</button>
                                 </div>
                             </div>
-                           <!-- Confirm Button -->
-                            <div class="confirmbtn">
-                                <button type="button" id="submit-btn" class="confirm-btn">CONFIRM</button>
+                            <div class="w3-center w3-margin-top">
+                                <button type="submit" class="w3-round-xlarge w3-padding" style="background-color: #30B938;color:white;width:50%">
+                                    CONFIRM
+                                </button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                
+                    </form>
+                </div>            
                 <img id="solarbg" src="../static/images/png/SolarPanelBg.png" alt="set up page bg">
             </div>
         </div>

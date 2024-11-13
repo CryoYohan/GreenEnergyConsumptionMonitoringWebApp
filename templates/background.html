@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    </style>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Green Energy Consumption Monitoring App</title>
+    <style>
+        html{
+            scroll-behavior: smooth;
+          }
+          
+          body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            padding: 0;
+            margin: 0;
+          }
+          /* For WebKit browsers (Chrome, Safari) */
+          ::-webkit-scrollbar {
+            width: 5px; /* Width of the scrollbar */
+            height: 5px; /* Height of the scrollbar for horizontal scrolling */
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: #ffff; /* Background of the scrollbar track */
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: #30B938; /* Color of the scrollbar thumb */
+            border-radius: 5px; /* Round the corners of the scrollbar thumb */
+          }
+          
+          ::-webkit-scrollbar-thumb:hover {
+            background: #555; /* Color of the scrollbar thumb on hover */
+          }
+          
+          
+          .Landing-Container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+          }
+          
+          .Landing-BG img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .header-container {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2em;
+          }
+          
+          .logodiv {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+          }
+          
+          .Energreen-logo {
+            height: 40px;
+            margin-right: 10px;
+          }
+          
+          #App-Name {
+            color: #110142;
+            font-weight: bold;
+            font-size: 32px;
+            margin: 0;
+            padding: 0;
+          }
+          
+          #Name-Span {
+            color: #30B938;
+          }
+          
+          .Log-Sign {
+            display: flex;
+            gap: 40px;
+          }
+          
+          .sign-up {
+            background-color: #4CAF50;
+            border-radius:20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+          }
+          
+          .Log-Sign, .login, .sign-up {
+            padding: 8px 40px;
+            cursor: pointer;
+            font-size: 22px;
+            
+          }
+          .login{
+            background-color: #ffff;
+            border: none;
+            border-radius: 20px;
+            color: #30B938;
+            cursor: pointer;
+            border: 1px solid #30B938;
+          }
+          .tagline{
+            position: absolute;
+            top: 5em;
+            left: 6em;
+            font-size: 1.5em;
+          }
+          #headline{
+            font-size: 80px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+          }
+          
+          .start-monitoring-button, .start-monitoring-button2{
+            margin-top: 2em;
+            width: 352px;
+            padding: 20px;
+            background-color: #4CAF50;
+            border-radius:20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 30px;
+            font-weight: bold;
+          }
+          #mini-tagline{
+            margin-top: 1.2em;
+          }
+          .setup-popup, .panel-popup {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 650px;
+            background-color: transparent;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .setup-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .setuphead {
+            position: absolute;
+            width: 60%;
+            top: -8%; 
+            left: -7%; 
+            z-index: 1;
+          }
+
+          .setuphead h1{
+            font-size: 2.5em;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+
+          }
+          
+          #setuptext {
+            font-size: 1.3em;
+          }
+          
+          .sortbtn {
+            position: absolute;
+            top: 20%; 
+            right: -7%; 
+            z-index: 1;
+          }
+          
+          .sortbtn button{
+            display: flex;
+            width: 150px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #ffff;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 400;
+            cursor: pointer;
+            
+          }
+          .selectAppliances {
+            position: absolute;
+            top: 30%;
+            width: 115%;
+            height: 50vh; 
+            background-color: #0D2535;
+            z-index: 1;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            overflow: auto;
+          }
+          
+          .confirmbtn {
+            position: absolute;
+            top: 102%; 
+            left: -7%;
+            z-index: 1; 
+          }
+          .confirmbtn button{
+            display: flex;
+            width: 150px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #ffff;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-size: 20px;
+            font-weight: 400;
+            cursor: pointer;
+          }
+          
+          #setupbg {
+            width: 1200px;
+            height: auto; 
+          }
+          #solarbg {
+            width: 1300px;
+            height: 800px; 
+          }
+          #appliances-shelf{
+            width: 100%;
+            height: 35vh;
+            background-color: #0D2535;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow divs to wrap onto the next line */
+          }
+          #appliances-shelf a{
+            text-decoration: none;
+            color: #110142;
+            font-weight: 600;
+          }
+          /* Hidden class for sorting */
+        .hidden {
+            display: none !important;
+        }
+          .app {
+            width:30%;
+            height: 5em;
+            background-color: #ffff;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            border-radius: 20px;
+            font-size: 12px;
+            gap: 10px;
+            padding: 0 3em ;
+          }
+          .app p{
+            font-size: 2em;
+          }
+          .app input[type="checkbox"] {
+            transform: scale(2);  
+          }
+          .SelectSolarPanel{
+            position: absolute;
+            top: 15%;
+            background-color: transparent;
+            width: 115%;
+            height: 50vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+          
+          }
+          
+          .solarpaneldiv{
+            width: 60vw;
+            height: 110%;
+            padding: 20px 20px;
+            background-color: #ffff;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            transition: height 0.4s ease; /* Smooth transition for height */
+            
+          
+          }
+          
+          .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+          }
+          
+          /* Hidden Checkbox */
+          .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          /* Slider */
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc ;
+            transition: 0.4s;
+            border-radius: 34px;
+          }
+          
+          /* Circle within Slider */
+          .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+          }
+          
+          /* When Checked */
+          input:checked + .slider {
+            background-color: #4CAF50;
+          }
+          
+          input:checked + .slider:before {
+            transform: translateX(26px);
+          }
+          .solarname-switch{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5em;
+            height: 50px;
+          }
+          #solardesc{
+            padding: 5px;
+            margin-left: 18px;
+            margin-right: 20px;
+            position: relative;
+            bottom: 20px;
+            font-size: 1em;
+            
+          }
+          .quandiv .Q{ 
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            align-items: center;
+            gap: 5px;
+            padding-top:0.5em;
+          }
+          .solarname p{
+            margin:0;
+            padding: 0;
+            font-weight: bold;
+            font-size: 1.1em;
+          }
+          .solarinfo-specifications{
+            margin-top: -2em;
+            width: 95%;
+            height: 35vh;
+            background-color: #ffff;
+            border-radius: 10px;
+            border: 2px solid #d9d9d9;
+            display: flex;
+            flex-direction: column;
+          }
+          #sinf, #specs{
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            left: 1em;
+          }
+          #specs{
+            font-weight: bold;
+          }
+          #efficon{
+            position: relative;
+            top: 5px;
+          }
+          #watt, #efficiency, #tempt{
+            display: flex;
+            flex-direction: row;
+            gap: 2em;
+            font-size: 14px;
+            margin: 10px;
+          }
+          .watc{
+            margin-left: 2px;
+          }
+
+          #wattcap p{
+            margin: 0;
+            padding: 0;
+          }
+          #efficon{
+            margin-left: 2px;
+            padding-right: 10px;
+          }
+          #wew1{
+            font-weight: bold;
+          }
+          hr {
+            border: 1px solid #ccc; /* Adjust color and thickness as needed */
+            width: 90%; /* Ensure it spans the width of the container */
+            margin-left: 12px; /* Optional: Add some spacing above and below */
+          }
+          .quanimg{
+            margin-top: 5px;
+          }
+          .bottom {
+            display: none; /* Initially hidden */
+            transition: opacity 0.4s ease; /* Smooth transition for visibility */
+            opacity: 0;
+            overflow: hidden;
+            transition: opacity 0.3s ease, max-height 0.3s ease; /* Smooth transition for visibility and height */
+          
+          }
+          
+          .solarpaneldiv.show .bottom {
+            display: flex;
+            opacity: 1;
+            flex-direction: column;
+          }
+          #tariff-page-popup{
+            align-items: center;
+          }
+          .TariffHead{
+            position: absolute;
+            z-index: 1;
+            left: 25%;
+            top: 10%;
+          }
+          .TariffHead h1{
+            font-size: 3.5em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+          }
+          .TariffHead p{
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+          }
+          .tariff-content .dropdown-section {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Adjust spacing between dropdowns */
+            margin-top: 15em;
+            border-radius: 15px;
+          }
+          
+          .dropdown {
+            display: flex;
+            flex-direction: column;
+            width: 25vw;
+          }
+          
+          .select-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            border-radius: 15px;
+          
+          }
+          
+          select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            appearance: none; /* Remove default dropdown arrow */
+          }
+          
+          .dropdown-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none; /* Prevent click on icon */
+            font-size: 16px;
+            color: #666;
+          }
+          .tariff-content{
+            display: flex;
+            justify-content: center;
+          }
+          #provider2, #provider1, #provider3{
+            
+            border-radius: 15px;
+            color: gray;
+            outline: none;
+          }
+          
+          #lab{
+            position: relative;
+            bottom: 0.5em;
+          }
+          
+           option:hover {
+              background-color: #4CAF50 !important;
+              color: white;
+          }
+    </style>
+</head>
+<body>
+    {% import 'components.html' as components%}
+    <div class="Landing-Container">
+        <div class="Landing-BG">
+            <div class="header-container">
+                {% block content %}
+                {% endblock %}
+                <div class="logodiv">
+                    <img src="../static/images/logo/logo.svg" alt="Logo" class="Energreen-logo">
+                    <p id="App-Name"><span id="Name-Span">Ener</span>Green</p>
+                </div>
+                <div class="Log-Sign">
+                    <button class="login">Log in</button>
+                    <button class="sign-up" >Sign Up</button>
+                </div>
+            </div>
+            <div class="tagline">
+                <h1 id="headline">Every <span id="Name-Span" >watt</span> you spare, <br> brings <span id="Name-Span" >cleaner</span> skies and <br><span id="Name-Span">fresher air.</span> </h1>
+                <div id="mini-tagline">
+                   <p> Together, small energy-saving actions lead to <br> a greener, healthier planet for all.</p>
+                </div>
+                <div class="start-monitoring">
+                    <button class="start-monitoring-button">Start Monitoring</button>
+                </div>
+            </div>
+            <img src="../static/images/png/landingBG 3.png" alt="">
+        </div>
+</body>
+</html>
