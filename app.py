@@ -73,7 +73,11 @@ def oauth2callback():
 # Dashboard Template Route
 @app.route('/UserDashboardTemplate')
 def UserDashboardTemplate():
-    return redirect(url_for('landing')) if not session.get("name") else render_template('UserDashboardTemplate.html')
+    if not session.get("name"):
+        flash("Please log in first.", "error")
+        return redirect(url_for('landing'))
+    return render_template('UserDashboardTemplate.html')
+
 
 @app.after_request
 def after_request(response):
@@ -105,18 +109,37 @@ def userregister():
     fullname = request.form.get('fullname')
     email = request.form.get('email')
     password = request.form.get('password')
+
+    session['name'] = email
+
+    flash(f"Welcome {fullname}, please complete the setup.", "success")
     return redirect(url_for('setup'))
 
 
-# User Registration Route
-@app.route('/userregister1', methods=['POST'])
-def userregister1():
-    global fullname, email, password
-    fullname = request.form['fullname']
-    email = request.form['email']
-    password = request.form['password']
-    flash('Registration successful. Please log in.', 'success')
-    return redirect(url_for('UserDashboardTemplate'))
+
+@app.route('/submit_tariff', methods=['POST'])
+def submit_tariff():
+    # Retrieve JSON data from request
+    data = request.get_json()
+    provider = data.get('provider')
+    tariff_rate = data.get('tariff_rate')
+    tariff_type = data.get('tariff_type')
+
+    # Debug print statements
+    print(f"Provider: {provider}")
+    print(f"Tariff Rate: {tariff_rate} kWh")
+    print(f"Tariff Type: {tariff_type}")
+
+    # Check if session['email'] is set
+    if not session.get('name'):
+        flash("Session expired or invalid. Please log in again.", "error")
+        return jsonify({"redirect": url_for('landing')})
+
+    # Confirm user session before redirecting to the dashboard
+    session['registered_user'] = session['email']
+    flash("Setup completed successfully!", "success")
+    return jsonify({"redirect": url_for('UserDashboardTemplate')})
+
 
 @app.route('/setupTariff')
 def setupTariff():

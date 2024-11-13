@@ -96,19 +96,19 @@
                     <div>
                         <p>
                             <label style="font-size: 0.9em;">FULL NAME</label>
-                            <input id="fullname" type="text" class="w3-input w3-border w3-round-large" required>
+                            <input id="fullname" type="text" name="fullname" class="w3-input w3-border w3-round-large" required>
                         </p>
                     </div>
                     <div>
                         <p>
                             <label style="font-size: 0.9em;">EMAIL</label>
-                            <input id="email" type="text" class="w3-input w3-border w3-round-large" required>
+                            <input id="email" type="text" name="email" class="w3-input w3-border w3-round-large" required>
                         </p>
                     </div>
                     <div>
                         <p>
                             <label style="font-size: 0.9em;">PASSWORD</label>
-                            <input id="password" type="password" class="w3-input w3-border w3-round-large" required>
+                            <input id="password" type="password" name="password" class="w3-input w3-border w3-round-large" required>
                         </p>
                     </div>
                     <div class="w3-panel w3-center w3-padding-top w3-mobile">
@@ -431,4 +431,108 @@
 </div>
 {%- endmacro %}
 
+{% macro showTariffModal()-%}
+<div  class="w3-modal" style="display: block;">
+    <div class="w3-modal-content w3-round-xxlarge w3-animate-zoom" style="width:35%;background-image:url('../static/images/png/TariffPage.png');object-fit:contain;">
+        <div class="tariff-content">
+            <div class="TariffHead">
+                <h1>Energy Tariffs</h1>
+            </div>
+            <div id="tariffCaption" class="w3-center">
+                <p>Input Energy Providers and their respective rates</p>
+            </div>
+            <!-- Dropdowns section -->
+            <form id="tariffForm" class="dropdown-section">
+                <div class="dropdown">
+                    <label id="lab" for="provider1">Energy Provider</label>
+                    <div class="select-wrapper">
+                        <select id="provider1">
+                            <option value="" disabled selected>Select Energy Provider</option>
+                            <option value="MERALCO" >MERALCO (Manila Electric)</option>
+                            <option value="VECO" >VECO (Visayan Electric Company)</option>
+                            <option value="TORECO" >TORECO (Toledo City Electric Company)</option>
+                            <option value="CEBECO" >CEBECO (Cebu Electric Cooperative)</option>
+                            <option value="Aboitiz" >Aboitiz Power Corporation</option>
+                        </select>
+                        <span class="dropdown-icon"> <img src="../static/images/svg/drdown-icon.svg"  alt=""> </span>
+                    </div>
+                </div>
 
+                <div class="dropdown">
+                    <label id="lab" for="provider2">Tariff Rate</label>
+                    <div class="select-wrapper">
+                        <select id="provider2">
+                            <option value="" disabled selected>Select Tariff Rate</option>
+                            <option value="10" >₱ 10/kwH (average)</option>
+                            <option value="12" >₱ 12/kwH (highest)</option>
+                            <option value="8" >₱ 8/kwH (lowest)</option>
+                        </select>
+                        <span class="dropdown-icon"> <img src="../static/images/svg/drdown-icon.svg" alt=""> </span>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <label id="lab" for="provider3">Type of Tariff</label>
+                    <div class="select-wrapper">
+                        <select id="provider3">
+                            <option value="" disabled selected>Select Type of Tariff</option>
+                            <option value="residential" >Residential Tariff (Tiered Rate)</option>
+                            <option value="timeofuse" >Time of Use Tariff (Peak/Off-Peak)</option>
+                        </select>
+                        <span class="dropdown-icon"> <img src="../static/images/svg/drdown-icon.svg" alt=""> </span>
+                    </div>
+                </div>
+            </form>  
+        </div>
+        <div class="w3-center w3-padding w3-padding-bottom" id="doneTariffBTN">
+            <button id="submitBtn" class="w3-green w3-round-xxlarge w3-padding-large w3-xlarge" style="width: 35%;cursor:pointer">
+                DONE
+            </button>
+        </div>  
+    </div>   
+</div>
+<script>
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+        // Get form values
+        const provider1 = document.getElementById('provider1').value;
+        const provider2 = document.getElementById('provider2').value;
+        const provider3 = document.getElementById('provider3').value;
+
+         // Validate if all dropdowns are selected
+         if (!provider1 || !provider2 || !provider3) {
+            alert("Please select options for all fields before submitting.");
+            return; // Stop execution if validation fails
+        }
+
+        // Prepare the data to send
+        const data = {
+            provider: provider1,
+            tariff_rate: provider2,
+            tariff_type: provider3
+        };
+
+        // Send data to the Flask backend
+        try {
+            const response = await fetch('/submit_tariff', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            // Check for the redirect URL in the response and navigate
+            if (result.redirect) {
+                window.location.href = result.redirect;
+            } else {
+                alert("An error occurred. Please try again.");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to submit the form');
+        }
+    });
+</script>
+{%- endmacro %}
