@@ -136,7 +136,7 @@ def submit_tariff():
         return jsonify({"redirect": url_for('landing')})
 
     # Confirm user session before redirecting to the dashboard
-    session['registered_user'] = session['email']
+    session['registered_user'] = email
     flash("Setup completed successfully!", "success")
     return jsonify({"redirect": url_for('UserDashboardTemplate')})
 
