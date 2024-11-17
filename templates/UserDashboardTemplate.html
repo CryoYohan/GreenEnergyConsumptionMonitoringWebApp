@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/UserDashboardStyles.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>User Dasboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -78,7 +79,6 @@
         </div>
         <div class="Top-Main-Content">
             <div class="Top-Navigation">
-                {{ components.flash_messages()}}
                 <div class="page-title">
                     <h2 id="dash-title">Weekly Energy Monitoring Statistics</h2>
                 </div>
@@ -98,8 +98,9 @@
                 </div>
                 
             </div>
-            <div>
+            <div id="Main-Content">
                 {% block content %}
+                <!--{{ components.flash_messages()}}-->
                 {% endblock %}
             </div>
         </div>
@@ -107,14 +108,17 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        
+        function renderCharts(){
+            var time = 700
+            setTimeout(renderCostCharts, time);
+            setTimeout(renderDoughnutChart, time);
+            setTimeout(renderGreenChart, time);
+            setTimeout(renderCarbonChart, time);
+            setTimeout(renderBarChart, time);
+        }
         window.onload = function() {
             loadDashboard(); 
-            setTimeout(renderCostCharts, 100);
-            setTimeout(renderDoughnutChart, 100);
-            setTimeout(renderGreenChart, 100);
-            setTimeout(renderCarbonChart, 100);
-            setTimeout(renderBarChart, 100);
+            renderCharts();
             
         };
 
@@ -144,20 +148,21 @@
         });
 
         function loadDashboard() {
-            fetch('./UserDashboardContent.html')
+            fetch("{{ url_for('UserDashboardContent') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
                     document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
                     document.getElementById("page-title").innerText = "Dashboard"; // Change the displayed title
                     renderCharts();
+
                 })
                 .catch(error => console.error('Error fetching content:', error));
         }
 
         document.getElementById("Dashboard-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./UserDashboardContent.html')
+            fetch("{{ url_for('UserDashboardContent') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
@@ -165,10 +170,7 @@
                     document.getElementById("dash-title").innerText = "Weekly Energy Monitoring Statistics";
                     
                     // Delay calling renderCharts to ensure myPieChart is loaded
-                    setTimeout(renderCostCharts, 100);
-                    setTimeout(renderDoughnutChart, 100);
-                    setTimeout(renderGreenChart, 100);
-                    setTimeout(renderCarbonChart, 100);
+                    renderCharts();
 
                 })
                 .catch(error => console.error('Error fetching content:', error));
@@ -180,7 +182,7 @@
 
             const pieCtx = canvas.getContext('2d');
             const pieData = {
-                labels: ['lorem ', 'lorem', 'lorem', 'lorem'],
+                labels: ['scooby doo ', 'lorem', 'lorem', 'lorem'],
                 datasets: [{
                     data: [40, 20, 10, 10],
                     backgroundColor: ['#F4BE37', '#5388D8', '#0D2535 ', '#FF9F40'],
@@ -222,7 +224,7 @@
 
                 const pieCtx = canvas.getContext('2d');
                 const pieData = {
-                    labels: ['lorem ', 'lorem', 'lorem', 'lorem'],
+                    labels: ['Scooby Doo ', 'Scooby', 'Dooby', 'Doo'],
                     datasets: [{
                         data: [60, 20, 10, 10],
                         backgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
@@ -263,7 +265,7 @@
 
                 const polarCtx = canvas.getContext('2d');
                 const polarData = {
-                    labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4'], // Four labels for polar area chart
+                    labels: ['Scooby Doo ', 'Scooby', 'Dooby', 'Doo'], // Four labels for polar area chart
                     datasets: [{
                         data: [30, 20, 15, 35], // Data values
                         backgroundColor: [
@@ -315,7 +317,7 @@
 
                 const radarCtx = canvas.getContext('2d');
                 const radarData = {
-                    labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7'], // Seven labels for heptagonal shape
+                    labels: ['Scooby Doo ', 'Scooby', 'Dooby', 'Doo'], // Seven labels for heptagonal shape
                     datasets: [
                         {
                             label: 'Dataset 1',
@@ -369,7 +371,7 @@
 
         document.getElementById("Appliances-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./AppliancesDash.html')
+            fetch("{{ url_for('AppliancesDash') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
@@ -468,7 +470,7 @@
 
         document.getElementById("Estimation-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./CostEstimationDash.html')
+            fetch("{{ url_for('CostEstimationDash') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
@@ -480,7 +482,7 @@
 
         document.getElementById("Energy-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./GreenEnergyDash.html')
+            fetch("{{ url_for('GreenEnergyDash') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
@@ -492,7 +494,7 @@
 
         document.getElementById("Emission-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./CarbonEmissionDash.html')
+            fetch("{{ url_for('CarbonEmission') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
@@ -504,7 +506,7 @@
         
         document.getElementById("Simulation-btn").addEventListener("click", function(event) {
             event.preventDefault();
-            fetch('./SimulationPage.html')
+            fetch("{{ url_for('SimulationPage') }}")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("Main-Content").innerHTML = data;
@@ -513,6 +515,17 @@
                 })
                 .catch(error => console.error('Error fetching content:', error));
         });
+        function successLogin(){
+            if (success_login){ 
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: "Login Sucessful!",
+                    showConfirmButton: false,
+                    timer: 2500
+                  });
+            }
+        }
 
     </script>
 </body>

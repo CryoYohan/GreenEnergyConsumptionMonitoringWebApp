@@ -40,31 +40,57 @@ flow = Flow.from_client_config(
     redirect_uri=REDIRECT_URI
 )
 
+@app.route('/SimulationPage')
+def SimulationPage():
+    return render_template('SimulationPage.html')
+
+@app.route('/CarbonEmission')
+def CarbonEmission():
+    return render_template('CarbonEmissionDash.html')
+
+@app.route('/GreenEnergyDash')
+def GreenEnergyDash():
+    return render_template('GreenEnergyDash.html')
+
+@app.route('/CostEstimationDash')
+def CostEstimationDash():
+    return render_template('CostEstimationDash.html')
+
+@app.route('/AppliancesDash')
+def AppliancesDash():
+    return render_template('AppliancesDash.html')
+
+@app.route('/UserDashboardContent')
+def UserDashboardContent():
+    return render_template('UserDashboardContent.html')
+
 # Google Login Route
 @app.route("/login")
 def login():
     authorization_url, state = flow.authorization_url(prompt='consent')
     session["state"] = state
     return redirect(authorization_url)
-
+    
 # OAuth 2.0 Callback
 @app.route("/oauth2callback")
 def oauth2callback():
     try:
-        flow.fetch_token(authorization_response=request.url)
+        flow.fetch_token(authorization_response=request.url, verify=False)
+
 
         credentials = flow.credentials
         request_session = google.auth.transport.requests.Request()
         id_info = id_token.verify_oauth2_token(
             credentials.id_token, request_session, CLIENT_ID
-        )
+        )   
 
         # Retrieve user information
         session['email'] = id_info.get("email")
         session['name'] = id_info.get("name")
+        successful_login = True
 
         flash(f"Welcome, {session['name']}!", 'success')
-        return redirect(url_for("UserDashboardTemplate"))
+        return redirect(url_for("UserDashboardTemplate"),successful_login = successful_login)
     
     except ValueError as e:
         flash("Token verification failed. Please try again.", 'error')
