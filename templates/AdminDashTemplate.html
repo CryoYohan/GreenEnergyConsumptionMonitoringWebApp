@@ -35,7 +35,7 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="Appliances-btn">
+                        <a href="#" class="nav-button"  id="AdEnergy-btn">
                             <img src="../static/images/svg/Energy-Icon.svg" alt="Appliances Icon" width="24" height="24"> Green Energy
                         </a>
                     </li>
@@ -43,7 +43,7 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="Estimation-btn">
+                        <a href="#" class="nav-button"  id="Emission-btn">
                             <img src="../static/images/svg/Emission-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Carbon Emission
                         </a>
                     </li>
@@ -51,7 +51,7 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="Energy-btn">
+                        <a href="#" class="nav-button"  id="Analytics-btn">
                             <img src="../static/images/svg/Databaseic.svg" alt="Dashboard Icon" width="24" height="24"> Data Analytics
                         </a>
                     </li>
@@ -98,7 +98,8 @@
             </div>
         </div>
     </div>
-    
+
+
     <script>
 
         window.onload = function() {
@@ -107,10 +108,25 @@
             // setTimeout(renderDoughnutChart, 100);
              setTimeout(renderGreenChart, 100);
              setTimeout(renderCarbonChart, 100);
+
             // setTimeout(renderBarChart, 100);
             
         };
-        
+
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.parentElement.querySelector('.toggle-password');
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
         function toggleDropdown() {
             const dropdown = document.getElementById("profile-dropdown");
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
@@ -152,6 +168,49 @@
                 .catch(error => console.error('Error fetching content:', error));
         });
 
+        document.getElementById("AdEnergy-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./AdminGreenEnergyDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Green Energy";
+                    setTimeout(renderGreenEnergyChart, 100)
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        document.getElementById("Emission-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./AdminCarbonEmissionDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Carbon Emission";
+                    setTimeout(renderGreenEnergyChart, 100)
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        document.getElementById("Analytics-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./DataAnalyticsDash.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Data Analytics";
+                    setTimeout(renderAnalhart, 100)
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+
         document.getElementById("management-btn").addEventListener("click", function(event) {
             event.preventDefault();
             fetch('./UserManagement.html')
@@ -160,10 +219,6 @@
                     document.getElementById("Main-Content").innerHTML = data;
                     document.title = "Admin Dashboard";
                     document.getElementById("dash-title").innerText = "User Management";
-
-                    setTimeout(renderCostCharts, 100);
-                    setTimeout(renderGreenChart, 100);
-                    setTimeout(renderCarbonChart, 100);
 
                 })
                 .catch(error => console.error('Error fetching content:', error));
@@ -177,10 +232,6 @@
                     document.getElementById("Main-Content").innerHTML = data;
                     document.title = "Admin Dashboard";
                     document.getElementById("dash-title").innerText = "Manage Settings";
-
-                    setTimeout(renderCostCharts, 100);
-                    setTimeout(renderGreenChart, 100);
-                    setTimeout(renderCarbonChart, 100);
 
                 })
                 .catch(error => console.error('Error fetching content:', error));
@@ -340,7 +391,163 @@
             }, 100); // Slight delay
         }
 
+        function renderGreenEnergyChart() {
+            const canvas = document.getElementById('greenEnergyChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
 
+            setTimeout(() => {
+                // Set canvas width and height dynamically
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                const ctx = canvas.getContext('2d');
+                const barData = {
+                    labels: ['7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'], // Hourly labels
+                    datasets: [{
+                        label: 'kWh',
+                        data: [1, 2, 3, 3.5, 4.5, 4.2, 5, 4.8, 3, 2], // Energy consumption data points
+                        backgroundColor: {
+                            type: 'linear',
+                            x0: 0,
+                            y0: 0,
+                            x1: 0,
+                            y1: 1,
+                            colorStops: [
+                                { offset: 0, color: '#2D972B' }, // Light green
+                                { offset: 1, color: '#0C4109' }  // Dark green
+                            ]
+                        },
+                        borderColor: '#2D972B', // Border color (green)
+                        borderWidth: 2
+                    }]
+                };
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: barData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000, // Animation duration in milliseconds
+                            easing: 'easeOutBounce' // Optional easing effect
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hide the legend (label on top)
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    // Customizing tooltip to show kWh first, then time
+                                    label: function(tooltipItem) {
+                                        const kWh = tooltipItem.raw + ' kWh'; // Show kWh value
+                                        const time = barData.labels[tooltipItem.dataIndex]; // Get corresponding time label
+                                        return `${kWh}\n${time}`; // Display kWh on top, time below
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        return value + ' kWh'; // Customize x-axis labels to show kWh
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 10, // Adjust the max value if needed
+                                ticks: {
+                                    stepSize: 2
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 100); // Slight delay
+        }
+
+        function renderAnalhart() {
+            const canvas = document.getElementById('AnalyticsChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            setTimeout(() => {
+                // Set canvas width and height dynamically
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                const ctx = canvas.getContext('2d');
+                const barData = {
+                    labels: ['7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'], // Hourly labels
+                    datasets: [{
+                        label: 'kWh',
+                        data: [1, 2, 3, 3.5, 4.5, 4.2, 5, 4.8, 3, 2], // Energy consumption data points
+                        backgroundColor: {
+                            type: 'linear',
+                            x0: 0,
+                            y0: 0,
+                            x1: 0,
+                            y1: 1,
+                            colorStops: [
+                                { offset: 0, color: '#2D972B' }, // Light green
+                                { offset: 1, color: '#0C4109' }  // Dark green
+                            ]
+                        },
+                        borderColor: '#2D972B', // Border color (green)
+                        borderWidth: 2
+                    }]
+                };
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: barData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000, // Animation duration in milliseconds
+                            easing: 'easeOutBounce' // Optional easing effect
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hide the legend (label on top)
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    // Customizing tooltip to show kWh first, then time
+                                    label: function(tooltipItem) {
+                                        const kWh = tooltipItem.raw + ' kWh'; // Show kWh value
+                                        const time = barData.labels[tooltipItem.dataIndex]; // Get corresponding time label
+                                        return `${kWh}\n${time}`; // Display kWh on top, time below
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        return value + ' kWh'; // Customize x-axis labels to show kWh
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 10, // Adjust the max value if needed
+                                ticks: {
+                                    stepSize: 2
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 100); // Slight delay
+        }
     </script>
 </body>
 </html>
