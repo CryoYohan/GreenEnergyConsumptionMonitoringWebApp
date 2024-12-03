@@ -41,8 +41,8 @@
                 <form class="w3-row-padding" method='POST' action="/userlogin">
                     <div>
                         <p>
-                            <label style="font-size: 0.9em;">USERNAME</label>
-                            <input type="text" name="username" class="w3-input w3-border w3-round-large" required>
+                            <label style="font-size: 0.9em;">EMAIL</label>
+                            <input type="text" name="email" class="w3-input w3-border w3-round-large" required>
                         </p>
                     </div>
                     <div>
@@ -209,13 +209,31 @@
             }
         });
     }
-     
 
-    // Trigger form submission on button click
-    document.getElementById('submit-btn').addEventListener('click', function () {
-        document.getElementById('appliances-shelf').submit();
+    // Trigger form submission on button click with error-trapping
+    document.getElementById('submit-btn').addEventListener('click', function (event) {
+        // Prevent default form submission
+        event.preventDefault();
+        
+        // Count the number of checked checkboxes
+        const checkedCount = document.querySelectorAll('input[name="mycheckbox"]:checked').length;
+        
+        // If less than 10 checkboxes are selected, show SweetAlert error
+        if (checkedCount < 10) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Selection Error',
+                text: 'Please select at least 10 appliances before proceeding.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            // If 10 or more checkboxes are selected, submit the form
+            document.getElementById('appliances-shelf').submit();
+        }
     });
-</script> 
+</script>
+
 {%- endmacro %}
 
 {% macro showPanelsModal() -%}
@@ -500,7 +518,13 @@
 
          // Validate if all dropdowns are selected
          if (!provider1 || !provider2 || !provider3) {
-            alert("Please select options for all fields before submitting.");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Selection Error',
+                text: 'Please select all fields before proceeding.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
             return; // Stop execution if validation fails
         }
 

@@ -5,14 +5,18 @@ import google.auth.transport.requests
 import os
 from dotenv import load_dotenv
 from appliances import appliances as appliancesdict
+from dbhelper import Databasehelper
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = '@#@#@#@'
+db = Databasehelper()
 fullname:str = ''
 email:str = ''
 password:str = ''
+user_table = 'user'
+
 
 
 
@@ -75,7 +79,7 @@ def login():
 @app.route("/oauth2callback")
 def oauth2callback():
     try:
-        flow.fetch_token(authorization_response=request.url, verify=False)
+        flow.fetch_token(authorization_response=request.url)
 
 
         credentials = flow.credentials
@@ -84,13 +88,18 @@ def oauth2callback():
             credentials.id_token, request_session, CLIENT_ID
         )   
 
+        email = id_info.get("email")
+        fullname = id_info.get("name")
         # Retrieve user information
-        session['email'] = id_info.get("email")
-        session['name'] = id_info.get("name")
-        successful_login = True
+        session['email'] = email
+        session['name'] = fullname
+        print(email, fullname)
+        user_record_exist = db.find_user(table=user_table,email= id_info.get("email"))
+        if not user_record_exist:
+            db.add_user(table=user_table,email=email,fullname=fullname)
 
         flash(f"Welcome, {session['name']}!", 'success')
-        return redirect(url_for("UserDashboardTemplate"),successful_login = successful_login)
+        return redirect(url_for("UserDashboardTemplate"))
     
     except ValueError as e:
         flash("Token verification failed. Please try again.", 'error')
@@ -99,10 +108,17 @@ def oauth2callback():
 # Dashboard Template Route
 @app.route('/UserDashboardTemplate')
 def UserDashboardTemplate():
+    global fullname
     if not session.get("name"):
         flash("Please log in first.", "error")
         return redirect(url_for('landing'))
-    return render_template('UserDashboardTemplate.html')
+    pie_data = {
+        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
+        'values': [50, 20, 15, 15],
+    }
+
+
+    return render_template('UserDashboardTemplate.html',fullname=fullname,pie_data=pie_data)
 
 
 @app.after_request
@@ -114,17 +130,28 @@ def after_request(response):
 @app.route("/logout")
 def logout():
     session['name'] = None
+    session['email'] = None
     return redirect(url_for("landing"))
+# Validate email 
+def email_exists(email:str):
+    record = db.find_user(table=user_table, email=email)
+    return True if record else False
+
 
 # Manual Login Route
 @app.route('/userlogin', methods=['POST'])
 def userlogin():
-    username = request.form.get('username')
+    global fullname
+    email = request.form.get('email')
     password = request.form.get('password')
-    if username == 'admin' and password == 'user':
-        session['name'] = username
-        flash("LOGIN SUCCESSFUL!", "info")
-        return redirect(url_for('UserDashboardTemplate'))
+    records = db.getall_users(table=user_table)
+    print(records)
+    for record in records:
+        if record['email'] == email and record['password'] == password:
+            session['name'] = email
+            fullname = record['fullname'].split(' ')[0] + ' ' + record['fullname'].split(' ')[-1]
+            flash("LOGIN SUCCESSFUL!", "info")
+            return redirect(url_for('UserDashboardTemplate'))
     else:
         flash('Invalid Credentials!', 'error')
         return redirect(url_for('landing'))
@@ -132,9 +159,14 @@ def userlogin():
 
 @app.route('/userregister', methods=['POST'])
 def userregister():
+    global fullname
     fullname = request.form.get('fullname')
     email = request.form.get('email')
     password = request.form.get('password')
+    if email_exists(email=email):
+        flash('This email has already been registered!')
+    else:
+        db.add_user(table=user_table,email=email,fullname=fullname, password=password)
 
     session['name'] = email
 
@@ -162,7 +194,7 @@ def submit_tariff():
         return jsonify({"redirect": url_for('landing')})
 
     # Confirm user session before redirecting to the dashboard
-    session['registered_user'] = email
+    session['registered_user'] = email  
     flash("Setup completed successfully!", "success")
     return jsonify({"redirect": url_for('UserDashboardTemplate')})
 
@@ -186,7 +218,8 @@ def setupPanels():
 @app.route('/setupAppliances', methods=['POST'])
 def setupAppliances():
     if request.method == 'POST':
-        print(request.form.getlist('mycheckbox'))
+        picked_appliances:list = request.form.getlist('mycheckbox')
+        print(picked_appliances)
         return redirect(url_for('panelsetup'))
     return redirect(url_for('panelsetup'))
 

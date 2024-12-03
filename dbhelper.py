@@ -4,8 +4,7 @@ class Databasehelper:
         self.host = 'localhost'
         self.user = 'root'
         self.password = ''
-        self.database = 'users'
-        self.table = "students"
+        self.database = 'energreen'
 
     def getdb_connection(self):
         connection = mariadb.connect(
@@ -33,24 +32,24 @@ class Databasehelper:
         cursor.close()
         connection.close() 
 
-    def getall_students(self)->list:
-        query = f"SELECT * FROM {self.table}"
+    def getall_users(self, table:str)->list:
+        query = f"SELECT * FROM {table}"
         users:list = self.getprocess(query)
         return users
     
-    def find_students(self,idno:str):
-        sql:str = f"SELECT * FROM users WHERE `idno` = {idno}"
+    def find_user(self,email:str, table:str):
+        sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)
     
-    def add_students(self,**kwargs):
+    def add_user(self,table,**kwargs):
         keys:list = kwargs.keys()
         values:list=kwargs.values()
         columns:str = ",".join(keys)
         formatted_values = ",".join([f"'{v}'" if isinstance(v, str) else str(v) for v in values])
-        sql:str = f"INSERT INTO {self.table} ({columns}) VALUES({formatted_values})"
+        sql:str = f"INSERT INTO {table} ({columns}) VALUES({formatted_values})"
         return self.postprocess(sql)
     
-    def update_student(self,**kwargs):
+    def update_user(self,table,**kwargs):
         keys:list = list(kwargs.keys())
         values:list = list(kwargs.values())
         flds:list = []
@@ -60,5 +59,5 @@ class Databasehelper:
         #transform the list of string with "," as delimiter
         fld:str = ",".join(flds)
         #create sql statement
-        sql:str = f"UPDATE `{self.table}` SET {fld} WHERE `{keys[0]}`= '{values[0]}'"
+        sql:str = f"UPDATE `{table}` SET {fld} WHERE `{keys[0]}`= '{values[0]}'"
         return self.postprocess(sql)
