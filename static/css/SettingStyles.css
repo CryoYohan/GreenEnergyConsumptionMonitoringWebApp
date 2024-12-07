@@ -81,6 +81,8 @@
 hr {
     border: 1px solid #ccc; /* Adjust color and thickness as needed */
     width: 90%; /* Ensure it spans the width of the container */
+    margin-top: 20px;
+    margin-bottom: 15px;
   }
 .fname-mname {
     width: 100%;
@@ -90,21 +92,100 @@ hr {
     margin: 0 40px;
 }
 
-.input-group {
+.input-group, .addressinput-group, .confirminput-group {
     display: flex;
     flex-direction: column;
 }
 
-.input-group label {
+.input-group, .addressinput-group, .confirminput-group label {
     margin-bottom: 5px; /* Space between label and input */
-    font-weight: bold;
+    font-weight: 500;
+   
 }
 .input-group input{
-    width: 35vh;
+    width: 29.5vh;
     height: 3vh;
+    border-radius: 5px;
+    border: 1px solid black;
 }
-#save-cancelbtn{
+.addressinput-group input{
+    width: 73vh;
+    height: 3vh;
+    border-radius: 5px;
+    border: 1px solid black;
+
+}
+.confirminput-group input{
+    width: 73vh;
+    height: 3vh;
+    border-radius: 5px;
+    border: 1px solid black;
+
+}
+.save-cancelbtn{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    gap: 20px;
+    margin-right: 2.3em;
+}
+
+
+.save-cancelbtn button{
+    padding: 12px 25px;
+    margin-top: 2em;
+    width: 100px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.save button{
+    background-color: #30B938;
+    color: #ffff;
+    border: none;
+}
+.cancel button{
+    background-color: #ffff;
+    color: #30B938;
+    border: 1px solid #30B938;
+}
+
+
+.input-icon i {
+    position: absolute;
+    left: 10px; /* Adjust the position */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999; /* Icon color */
+}
+
+.input-icon input {
+    padding-left: 30px; /* Adjust padding to fit the icon */
+}
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    color: #999;
+}
+
+.input-icon i:first-of-type {
+    position: absolute;
+    left: 10px; /* Left icon (field type) */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input-icon input {
+    padding-left: 30px; /* Space for the left icon */
+    padding-right: 30px; /* Space for the right eye icon */
+}
+
+.input-icon i.toggle-password {
+    position: absolute;
+    left: 90%; 
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/SettingStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>User Management</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -32,67 +33,108 @@
             <div class="fname-mname">
                 <div class="input-group">
                     <label for="fname-input">First Name</label>
-                    <input type="text" id="fname-input" placeholder="eg. Kobe">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fname-input" placeholder="Nicholai">
+                    </div>
                 </div>
                 <div class="input-group">
                     <label for="mname-input">Middle Name</label>
-                    <input type="text" id="mname-input" placeholder="eg. Bean">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="mname-input" placeholder="B.">
+                    </div>
                 </div>
             </div>
+            
             <div class="fname-mname">
                 <div class="input-group">
-                    <label for="fname-input">Last Name</label>
-                    <input type="text" id="fname-input" placeholder="eg. Kobe">
+                    <label for="lname-input">Last Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="lname-input" placeholder="Koblashnicov">
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label for="mname-input">User Name</label>
-                    <input type="text" id="mname-input" placeholder="eg. Bean">
+                    <label for="uname-input">User Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="uname-input" placeholder="Nicholai">
+                    </div>
                 </div>
             </div>
             <hr>
+            
             <div class="fname-mname">
                 <div class="input-group">
-                    <label for="fname-input">Email Address</label>
-                    <input type="text" id="fname-input" placeholder="eg. Kobe">
+                    <label for="email-input">Email Address</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" id="email-input" placeholder="Nicholai@gmail.com">
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label for="mname-input">Phone Number</label>
-                    <input type="text" id="mname-input" placeholder="eg. Bean">
+                    <label for="phone-input">Phone Number</label>
+                    <div class="input-icon">
+                        <i class="fas fa-phone"></i>
+                        <input type="text" id="phone-input" placeholder="09214684512">
+                    </div>
                 </div>
             </div>
             <hr>
+            
             <div class="fname-mname">
                 <div class="input-group">
-                    <label for="fname-input">Address</label>
-                    <input type="text" id="fname-input" placeholder="eg. Kobe">
+                    <label for="address-input">Address</label>
+                    <div class="input-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" id="address-input" placeholder="Volgograd, Russia">
+                    </div>
                 </div>
             </div>
             <hr>
+            
             <div class="fname-mname">
                 <div class="input-group">
-                    <label for="fname-input">Current Password</label>
-                    <input type="text" id="fname-input" placeholder="eg. Kobe">
+                    <label for="current-password">Current Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="current-password" placeholder="Nicho123">
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword('current-password')"></i>
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label for="mname-input">New Password</label>
-                    <input type="text" id="mname-input" placeholder="eg. Bean">
+                    <label for="new-password">New Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="new-password" placeholder="">
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword('new-password')"></i>
+                    </div>
                 </div>
             </div>
+            
             <div class="fname-mname">
                 <div class="input-group">
-                    <label for="fname-input">Confirm Password</label>
-                    <input type="text" id="fname-input" placeholder="eg. Kobe">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-check-circle"></i>
+                        <input type="password" id="confirm-password" placeholder="">
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword('confirm-password')"></i>
+                    </div>
                 </div>
             </div>
-            <div class="change-pp" id="save-cancelbtn">
-                <div id="save">
-                    <button>Upload New Photo</button>
+
+            <div class="save-cancelbtn">
+                <div class="save">
+                    <button>Save</button>
                 </div>  
-                <div id="save">
-                    <button>Upload New Photo</button>
+                <div class="cancel">
+                    <button>Cancel</button>
                 </div>  
             </div>
         </div>
     </div>
+    <script>
+    </script>
 </body>
 </html>
