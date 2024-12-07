@@ -10,7 +10,175 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+        .topdiv {
+            width: 100%;
+            height: 15vh;
+            background-color: #002c4c;
+            margin: 10px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .day {
+            width: 12.9%;
+            height: 14vh;
+            background-color: #ffff;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .rotated-text {
+            transform: rotate(270deg);
+            text-orientation: upright;
+            font-weight: bold;
+            align-items: center;
+            font-size: 17px;
+        }
+        
+        #numbers {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0;
+            color: #30B938;
+        }
+        
+        .statistics {
+            width: 98.3%;
+            height: 70vh;
+            background-color: #002c4c;
+            margin: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+        
+        .Estimation-Appliances,
+        .Emissions {
+            height: 100%;
+            background-color: #002c4c;
+            border-radius: 20px;
+        }
+        
+        .Estimation-Appliances {
+            width: 35%;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+        
+        .Cost-Emission,
+        .Appliances {
+            height: 49.2%;
+            width: 100%;
+            background-color: #ffff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .Appliances{
+            position: relative;
+        }
+        
+        .Emissions {
+            width: 65%;
+            height: 90%;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        
+        .Energy-Emission,
+        .Carbon-Emission {
+            width: 50%;
+            height: 100%;
+            background-color: #ffff;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #myPieChart, 
+        #myDoughnutChart,
+        #myGreenChart,
+        #myCarbonChart {
+            width: 90% !important; /* Adjust based on your layout */
+            margin-left: 0 !important;
+            height: 75% !important; /* Adjust based on your layout */
+            margin: 0 !important;
+            padding-bottom: 5px;
+        }
+        
+        .labels ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            padding: 0;
+            margin-top: 1em;
+            position: relative;
+            bottom: 15%;
+        }
+        
+        .label-item {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+        
+        .label-item li {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-size: 15px;
+            margin: 0;
+        }
+        
+        .bullet {
+            font-size: 20px;
+            padding-right: 5px;
+        }
+        
+        .orange {
+            color: #F4BE37;
+        }
+        
+        .blue {
+            color: #FF9F40;
+        }
+        
+        .orange-red {
+            color: #0D2535;
+        }
+        
+        .red {
+            color: #5388D8;
+        }
+        
+        .percentage {
+            font-weight: bold;
+            font-size: 15px;
+            padding-left: 5px;
+        }
+        #App-sect, #Cost-sect{
+            margin-right: 20em;
+        }
+        #emit{
+            height: 19px;
+            margin: 19px;
+            padding: 0;
+            margin-left: 10px;
+        }
+        
     </style>
 </head>
 <body>
@@ -18,7 +186,6 @@
     <div class="Container">
         <div class="Side-Navigation">
             <img id="sidetopimg" src="../static/images/png/sideimg2.png" alt="">
-
             <div class="logo-div">
                 <div class="img-logo">
                     <img src="../static/images/logo/logo.svg" alt="">
@@ -30,7 +197,7 @@
             <div class="Navigation-buttons">
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button" id="Dashboard-btn">
+                        <a href="{{url_for('UserDashboardContent')}}" class="nav-button">
                             <img id="homeicon" src="../static/images/svg/Home-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Dashboard
                         </a>
                     </li>
@@ -46,7 +213,7 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="Estimation-btn">
+                        <a href="{{url_for('CostEstimation')}}" class="nav-button">
                             <img src="../static/images/svg/Cost-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Cost Estimation
                         </a>
                     </li>
@@ -100,7 +267,6 @@
             </div>
             <div id="Main-Content">
                 {% block content %}
-                <!--{{ components.flash_messages()}}-->
                 {% endblock %}
             </div>
         </div>
@@ -117,7 +283,6 @@
             setTimeout(renderBarChart, time);
         }
         window.onload = function() {
-            loadDashboard(); 
             renderCharts();
             
         };
@@ -147,34 +312,7 @@
         });
         });
 
-        function loadDashboard() {
-            fetch("{{ url_for('UserDashboardContent') }}")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
-                    document.getElementById("page-title").innerText = "Dashboard"; // Change the displayed title
-                    renderCharts();
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        }
-
-        document.getElementById("Dashboard-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch("{{ url_for('UserDashboardContent') }}")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Weekly Energy Monitoring Statistics";
-                    document.getElementById("dash-title").innerText = "Weekly Energy Monitoring Statistics";
-                    
-                    // Delay calling renderCharts to ensure myPieChart is loaded
-                    renderCharts();
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
+    
 
         function renderCostCharts() {
             const canvas = document.getElementById('myPieChart');
@@ -258,55 +396,29 @@
             }, 100); // Slight delay
         }
         function renderGreenChart() { 
-            const canvas = document.getElementById('myGreenChart');
-            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+            const xValues = [50,60,70,80,90,100,110,120,130,140,150];
+            const yValues = [7,8,8,9,9,9,10,11,14,14,15];
 
-            setTimeout(() => {
-                // Set canvas width and height dynamically
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-
-                const polarCtx = canvas.getContext('2d');
-                const polarData = {
-                    labels: ['Scooby Doo ', 'Scooby', 'Dooby', 'Doo'], // Four labels for polar area chart
-                    datasets: [{
-                        data: [30, 20, 15, 35], // Data values
-                        backgroundColor: [
-                            'rgba(244, 190, 55, 0.5)', // Semi-transparent yellow
-                            'rgba(83, 136, 216, 0.5)', // Semi-transparent blue
-                            'rgba(255, 159, 64, 0.5)', // Semi-transparent orange
-                            'rgba(13, 37, 53, 0.5)' // Semi-transparent dark blue
-                        ],
-                        hoverBackgroundColor: [
-                            'rgba(244, 190, 55, 0.7)', // Slightly opaque yellow for hover
-                            'rgba(83, 136, 216, 0.7)', // Slightly opaque blue for hover
-                            'rgba(255, 159, 64, 0.7)', // Slightly opaque orange for hover
-                            'rgba(13, 37, 53, 0.7)' // Slightly opaque dark blue for hover
-                        ]
-                    }]
-                };
-
-                new Chart(polarCtx, {
-                    type: 'polarArea',
-                    data: polarData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: {
-                            duration: 1000, // Animation duration in milliseconds
-                            easing: 'easeOutBounce' // Optional easing effect
-                        },
-                        plugins: {
-                            legend: {
-                                display: false // Hide the legend beside the chart
-                            }
-                        },
-                        layout: {
-                            padding: 0
-                        }
-                    }
-                });
-            }, 100); // Slight delay
+            new Chart("myGreenChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(48,185,56,1.0)",
+                borderColor: "rgba(0,255,0,0.1)",
+                data: yValues
+                }]
+            },
+            options: {
+                responsive:true,
+                legend: {display: false},
+                scales: {
+                yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+            });
         }
 
         function renderCarbonChart() {

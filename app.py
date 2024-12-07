@@ -64,9 +64,6 @@ def CostEstimationDash():
 def AppliancesDash():
     return render_template('AppliancesDash.html')
 
-@app.route('/UserDashboardContent')
-def UserDashboardContent():
-    return render_template('UserDashboardContent.html')
 
 # Google Login Route
 @app.route("/login")
@@ -78,6 +75,7 @@ def login():
 # OAuth 2.0 Callback
 @app.route("/oauth2callback")
 def oauth2callback():
+    global fullname
     try:
         flow.fetch_token(authorization_response=request.url)
 
@@ -99,27 +97,33 @@ def oauth2callback():
             db.add_user(table=user_table,email=email,fullname=fullname)
 
         flash(f"Welcome, {session['name']}!", 'success')
-        return redirect(url_for("UserDashboardTemplate"))
+        return redirect(url_for("UserDashboardContent"))
     
     except ValueError as e:
         flash("Token verification failed. Please try again.", 'error')
         return redirect(url_for("Landing"))
 
 # Dashboard Template Route
-@app.route('/UserDashboardTemplate')
-def UserDashboardTemplate():
+@app.route('/UserDashboardContent')
+def UserDashboardContent():
     global fullname
-    if not session.get("name"):
-        flash("Please log in first.", "error")
-        return redirect(url_for('landing'))
     pie_data = {
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
-    }
+        }
+    if not session.get("name"):
+        flash("Please log in first.", "error")
+        return redirect(url_for('landing'))
+    else:
+        return render_template('UserDashboardContent.html',fullname=fullname, pie_data=pie_data)
 
-
-    return render_template('UserDashboardTemplate.html',fullname=fullname,pie_data=pie_data)
-
+@app.route('/CostEstimation')
+def CostEstimation():
+    pie_data = {
+        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
+        'values': [50, 20, 15, 15],
+        }
+    return render_template('CostEstimationDash.html',pie_data=pie_data) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.after_request
 def after_request(response):
@@ -134,8 +138,11 @@ def logout():
     return redirect(url_for("landing"))
 # Validate email 
 def email_exists(email:str):
-    record = db.find_user(table=user_table, email=email)
-    return True if record else False
+    records = db.getall_users(table=user_table)
+    for record in records:
+        if record['email'] == email:
+            return True  
+    return False
 
 
 # Manual Login Route
@@ -151,7 +158,7 @@ def userlogin():
             session['name'] = email
             fullname = record['fullname'].split(' ')[0] + ' ' + record['fullname'].split(' ')[-1]
             flash("LOGIN SUCCESSFUL!", "info")
-            return redirect(url_for('UserDashboardTemplate'))
+            return redirect(url_for('UserDashboardContent'))
     else:
         flash('Invalid Credentials!', 'error')
         return redirect(url_for('landing'))
@@ -163,10 +170,12 @@ def userregister():
     fullname = request.form.get('fullname')
     email = request.form.get('email')
     password = request.form.get('password')
-    if email_exists(email=email):
-        flash('This email has already been registered!')
-    else:
-        db.add_user(table=user_table,email=email,fullname=fullname, password=password)
+    records = db.getall_users(table=user_table)
+    for record in records:
+        if record['email'] == email:
+            flash('Account already registered! Sign in now.', 'success')
+            return redirect(url_for('landing'))
+    db.add_user(table=user_table,email=email,fullname=fullname, password=password)
 
     session['name'] = email
 
@@ -188,15 +197,17 @@ def submit_tariff():
     print(f"Tariff Rate: {tariff_rate} kWh")
     print(f"Tariff Type: {tariff_type}")
 
+
     # Check if session['email'] is set
     if not session.get('name'):
         flash("Session expired or invalid. Please log in again.", "error")
         return jsonify({"redirect": url_for('landing')})
 
+
     # Confirm user session before redirecting to the dashboard
     session['registered_user'] = email  
     flash("Setup completed successfully!", "success")
-    return jsonify({"redirect": url_for('UserDashboardTemplate')})
+    return jsonify({"redirect": url_for('UserDashboardContent')})
 
 
 @app.route('/setupTariff')

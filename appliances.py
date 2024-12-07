@@ -1,37 +1,34 @@
 appliances = {
     "Heating": [
-        "Air Conditioner",
         "Electric Stove",
         "Heater",
-        "Rice Cooker",
         "Electric Kettle",
-        "Blender",
-        "Induction Cooker",
-        "Toaster",
         "Coffee Maker",
         "Water Heater"
     ],
     "Lighting": [
         "Lamp",
-        "Lighting",
-        "RGB Lighting"
+        "House Lighting",
+        "RGB Lighting",
+        "Christmas Lights"
     ],
     "Entertainment": [
-        "TV (Television)",
+        "OLED TV (Television)",
         "Amplifiers",
         "Speakers",
-        "Portable Speakers",
+        "Portable Bluetooth Speakers",
         "Radio",
         "Desktop Computer",
         "Laptop",
         "Smartphones",
-        "Smartwatch"
+        "Smartwatch",
+        "PS5 Console"
     ],
     "Cooling": [
+        "Inverter Air Conditioner",
         "Ceiling Fan",
         "Electric Fan",
-        "Air Purifier",
-        "Dehumidifier"
+        "Air Purifier"
     ],
     "Household": [
         "Washing Machine",
@@ -42,7 +39,7 @@ appliances = {
         "Freezer",
         "Water Dispenser"
     ],
-    "Personal Care": [
+    "PersonalCare": [
         "Hair Dryer",
         "Electric Toothbrush"
     ],
@@ -51,6 +48,8 @@ appliances = {
         "Electric Stove",
         "Rice Cooker",
         "Blender",
-        "Microwave"
+        "Microwave",
+        "Induction Cooker",
+        "Toaster",
     ]
 }

@@ -663,7 +663,7 @@
         const quantityInput = document.getElementById(quantity);
         let currentQuantity = parseInt(quantityInput.value, 10);
         
-        if (currentQuantity > 0) {
+        if (currentQuantity > 0 && currentQuantity != 1) {
             quantityInput.value = currentQuantity - 1;
         }
     }
