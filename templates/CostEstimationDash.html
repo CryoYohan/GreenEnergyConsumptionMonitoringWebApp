@@ -1,29 +1,55 @@
 {%extends 'UserDashboardTemplate.html'%}
 {% block content %}
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-<h1>COST Estimation</h1>
+<div id="appliance-page-container" style="height:700px;background-color:white">
+    <canvas id="costLineChart"></canvas>
+</div>
 <script>
-const xValues = [50,60,70,80,90,100,110,120,130,140,150];
-const yValues = [7,8,8,9,9,9,10,11,14,14,15];
+const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
+const yValues = [31, 45, 36, 24, 48, 59, 64];
+const yValuesGreen = [25, 31, 30, 19, 34, 42, 51];
 
-new Chart("myChart", {
-  type: "line",
-  data: {
-    labels: xValues,
-    datasets: [{
-      fill: false,
-      lineTension: 0,
-      backgroundColor: "rgba(0,0,255,1.0)",
-      borderColor: "rgba(0,0,255,0.1)",
-      data: yValues
-    }]
-  },
-  options: {
-    legend: {display: false},
-    scales: {
-      yAxes: [{ticks: {min: 6, max:16}}],
+new Chart("costLineChart", {
+    type: "line",
+    data: {
+        labels: xValues,
+        datasets: [
+            {
+                label: "Cost in Pesos", // First line
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(244,190,55,1)",
+                borderColor: "rgba(244,190,55,0.8)",
+                borderWidth: 2,
+                data: yValues
+            },
+            {
+                label: "Cost with Green Energy", // Second line
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(46,156,53,1)",
+                borderColor: "rgba(0,255,155,0.8)",
+                borderWidth: 2,
+                data: yValuesGreen
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true, // Ensure the legend is displayed
+                position: 'left', // Position of the legend
+            }
+        },
+        scales: {
+            y: {
+                ticks: {
+                    stepSize: 10 // Optional: set step size for y-axis ticks
+                }
+            }
+        }
     }
-  }
 });
 </script>
+    
 {% endblock %}

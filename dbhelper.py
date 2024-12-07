@@ -40,6 +40,10 @@ class Databasehelper:
     def find_user(self,email:str, table:str):
         sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)
+
+    def find_simrecord(self,userid:int, table:str):
+        sql:str = f"SELECT * FROM {table} WHERE `userid` = {userid}"
+        return self.getprocess(sql)
     
     def add_user(self,table,**kwargs):
         keys:list = kwargs.keys()

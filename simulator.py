@@ -1,4 +1,5 @@
 from dbhelper import Databasehelper
+from random import uniform
 class Simulator:
     def __init__(self):
         self.temperatures:list = [31,34,36,35,32]
@@ -20,7 +21,40 @@ class Simulator:
         
 
     def getTotalSolarKWH_Production(self,type,quantity):
-        pass
+        days_list = []
+        watts: int = 0
+        efficiency: float = 0.0
+        optimal_temp: float = 0.0
+        temp_coefficient: float = 0.0
+        hours_of_use: float = 0.0
+        totalKWH: float = 0.0
+        solarpanels = self.db.getall_users(table='solarpanel')
+        
+        # Get solar panel specs from the database
+        for panel in solarpanels:
+            if panel['panelname'] == type:
+                watts = panel['wattcapacity']
+                efficiency = panel['efficiency']
+                optimal_temp = panel['optimal_temp']
+                temp_coefficient = panel['temp_coef']
+                hours_of_use = panel['hours_use']
+        
+        # Simulate energy production over 7 days
+        for _ in range(7):
+            totalwattcapacity = watts * int(quantity)
+            wattefficiency = totalwattcapacity * efficiency
+
+            # Generate a random temperature within a realistic range
+            random_temp = uniform(30, 40)  # e.g., temperatures between 20°C and 40°C
+            temp_effect = 1 + (float(temp_coefficient)) * (random_temp - float(optimal_temp))
+            adjusted_output = (float(wattefficiency) * temp_effect) * float(hours_of_use)
+            days_list.append(round(adjusted_output / 1000,2))  # Convert to kWh
+
+        # Print energy production for each day
+        # days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+        # for day, kwh in enumerate(days_list):
+        #     print(f'{days[day]} - {kwh:.2f} KWH Produced')
+        return days_list
 
     def getTotalCarbonEmissions(self,tariff_company,totalConsumption):
         pass
@@ -32,4 +66,4 @@ if __name__ == "__main__":
     from simulator import Simulator
     sim = Simulator()
     appliances = ['Heater','PS5']
-    sim.getTotalConsumption(appliances)
+    sim.getTotalSolarKWH_Production('monocrystalline',20)

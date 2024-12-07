@@ -1,2 +1,70 @@
+{% extends 'UserDashboardTemplate.html'%}
+{% block content %}
+<div id="appliance-page-container" style="height:700px;background-color:white">
+    <canvas id="appliancesBarChart"></canvas>
+</div>
+<script>
+    window.onload = function() {
+        renderApplianceCharts();      
+    };
 
-<h1>Appliances </h1>
+    function renderApplianceCharts() {
+        const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
+        const yValues1 = [1524,1563,1254,1534,1453,1622,1752];
+        const yValues2 = [1324,1263,1654,1564,1353,1692,1852];
+        const yValues3 = [1624,1763,1554,1634,1363,1692,1782];
+    
+        new Chart("appliancesBarChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [
+                    {
+                        label: "Cooking",
+                        data: yValues1,
+                        backgroundColor: "rgba(48,185,56,0.7)", // Green color
+                        borderColor: "rgba(48,185,56,1)",
+                        borderWidth: 1,
+                    },
+                    {
+                        label: "Heating",
+                        data: yValues2,
+                        backgroundColor: "rgba(75,192,192,0.7)", // Blue color
+                        borderColor: "rgba(75,192,192,1)",
+                        borderWidth: 1,
+                    },
+                    {
+                        label: "Lighting",
+                        data: yValues3,
+                        backgroundColor: "rgba(255,99,132,0.7)", // Red color
+                        borderColor: "rgba(255,99,132,1)",
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Prevent distortion during resizing
+                plugins: {
+                    legend: {
+                        display: true, // Ensure the legend is displayed
+                        position: "top", // Position of the legend
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: false, // Change to true if you want stacked bars
+                    },
+                    y: {
+                        stacked: false, // Change to true if you want stacked bars
+                        ticks: {
+                            min: 0,
+                            max: 20,
+                        },
+                    },
+                },
+            },
+        });
+    }    
+</script>
+{% endblock %}

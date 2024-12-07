@@ -1,1 +1,54 @@
-<h1>Green Energy Production</h1>
+{% extends 'UserDashboardTemplate.html'%}
+{% block content %}
+<div id="appliance-page-container" style="height:700px;background-color:white">
+    <canvas id="greenEnBarChart"></canvas>
+</div>
+<script>
+    window.onload = function() {
+        renderGreenEnCharts();      
+    };
+
+    function renderGreenEnCharts() {
+        const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
+        const yValues1 = [2.56,5.15,3.14,8.15,9.5,10.8,12.5];
+    
+        new Chart("greenEnBarChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [
+                    {
+                        label: "Green Energy in KWH",
+                        data: yValues1,
+                        backgroundColor: "rgba(48,185,56,0.7)", // Green color
+                        borderColor: "rgba(48,185,56,1)",
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Prevent distortion during resizing
+                plugins: {
+                    legend: {
+                        display: true, // Ensure the legend is displayed
+                        position: "top", // Position of the legend
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: false, // Change to true if you want stacked bars
+                    },
+                    y: {
+                        stacked: false, // Change to true if you want stacked bars
+                        ticks: {
+                            min: 0,
+                            max: 20,
+                        },
+                    },
+                },
+            },
+        });
+    }    
+</script>
+{% endblock %}

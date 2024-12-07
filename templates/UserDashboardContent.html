@@ -2,145 +2,28 @@
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="topdiv">
-    <div class="day" id="Monday">
-        <p>Monday</p>
-        <div id="numbers">
-            <p>20 <span>kWh</span> </p>
+    {% for i in range(7) %}
+        <div class="day" id="{{days_in_week[i]}}">
+            <p>{{days_in_week[i]}}</p>
+            <div id="numbers">
+                <p>{{ kwhdata[i]}}<span>kWh</span></p>
+            </div>
         </div>
-    </div>
-    <div class="day" id="Tuesday">
-        <p>Tuesday</p>
-        <div id="numbers">
-            <p>23 <span>kWh</span></p>
-        </div>
-    </div>
-    <div class="day" id="Wednesday">
-        <p>Wednesday</p>
-        <div id="numbers">
-            <p>12 <span>kWh</span></p>
-        </div>
-    </div>
-    <div class="day" id="Thursday">
-        <p>Thursday</p>
-        <div id="numbers">
-            <p>15 <span>kWh</span></p>
-        </div>
-    </div>
-    <div class="day" id="Friday">
-        <p>Friday</p>
-        <div id="numbers">
-            <p>14 <span>kWh</span></p>
-        </div>
-    </div>
-    <div class="day" id="Saturday">
-        <p>Saturday</p>
-        <div id="numbers">
-            <p>16.5 <span>kWh</span></p>
-        </div>
-    </div>
-    <div class="day" id="Sunday">
-        <p>Sunday</p>
-        <div id="numbers">
-            <p>19 <span>kWh</span></p>
-        </div>
-    </div>
+    {% endfor %}
 </div>
 <div class="statistics">
     <div class="Estimation-Appliances">
         
         <div class="Cost-Emission">
-            <p id="Cost-sect">Cost Estimation</p>
+            <p id="Cost-sect">Green vs. Electricity</p>
 
             <canvas id="myPieChart"></canvas>
-
-            <div class="labels">
-                <ul>
-                    <div class="label-item">
-                        <li>
-                            <div class="label-text">
-                                <span class="bullet orange">●</span> 
-                                Apples
-                            </div>
-                            <div class="percentage">50%</div>
-                        </li>
-                    </div>
-                    <div class="label-item">
-                        <li>
-                            <div class="label-text">
-                                <span class="bullet blue">●</span> 
-                                Oranges
-                            </div>
-                            <div class="percentage">20%</div>
-                        </li>
-                    </div>
-                    <div class="label-item">
-                        <li>
-                            <div class="label-text">
-                                <span class="bullet orange-red">●</span> 
-                                Bananas
-                            </div>
-                            <div class="percentage">15%</div>
-                        </li>
-                    </div>
-                    <div class="label-item">
-                        <li>
-                            <div class="label-text">
-                                <span class="bullet red">●</span> 
-                                Grapes
-                            </div>
-                            <div class="percentage">15%</div>
-                        </li>
-                    </div>
-                </ul>
-            </div>
         </div>            
         
         
-        <div class="Appliances">
-                <p id="App-sect">Appliances</p>
-                
+        <div class="Appliances" style="width: 100%; height: 300px;">
+                <p id="App-sect">Appliances Consumption</p>
                 <canvas id="myDoughnutChart"></canvas>
-
-                <div class="labels">
-                    <ul>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">60%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet blue">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange-red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">20%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
         </div>
     </div>
     
@@ -179,4 +62,275 @@
         </div>
     </div>
 </div>
+<script>
+    function renderCharts(){
+        var time = 700
+        setTimeout(renderCostCharts, time);
+        setTimeout(renderDoughnutChart, time);
+        setTimeout(renderGreenChart, time);
+        setTimeout(renderCarbonChart, time);
+        setTimeout(renderBarChart, time);
+    }
+    window.onload = function() {
+        renderCharts();
+        
+    };
+
+    function renderCostCharts() {
+        const canvas = document.getElementById('myPieChart');
+        if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+        const pieLabels = {{ pie_data['labels'] | tojson }};
+        const pieValues = {{ pie_data['values'] | tojson }};
+
+        const pieCtx = canvas.getContext('2d');
+        const pieData = {
+            labels: pieLabels,
+            datasets: [{
+                data: pieValues,
+                backgroundColor: ['#F4BE37', '#30B938',],
+                hoverBackgroundColor: ['orange', '#0EEE1B',],
+            }]
+        }; 
+
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: pieData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows the chart to fill the entire container
+                animation: {
+                    duration: 1000, // Animation duration in milliseconds (adjust as needed)
+                    easing: 'easeOutBounce' // Optional easing effect
+                },
+                plugins: {
+                    legend: {
+                        display: true, // Hide legend to save space if needed
+                        position: 'right'
+                    }
+                },
+                layout: {
+                    padding: 0 
+                }
+            }
+        });
+    }
+    
+    function renderDoughnutChart() {
+        const canvas = document.getElementById('myDoughnutChart');
+        if (!canvas) return; // Ensure the canvas element exists
+    
+        // Create a new doughnut chart
+        new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: ['Heating', 'Cooling', 'Cooking', 'Lighting'],
+                datasets: [{
+                    data: [60, 20, 10, 10],
+                    backgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
+                    hoverBackgroundColor: ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40'],
+                }]
+            },
+            options: {
+                responsive: true, // Automatically resizes to the container
+                maintainAspectRatio: false, // Allows flexibility in height/width ratio
+                animation: {
+                    duration: 1000, // Animation duration
+                    easing: 'easeOutBounce', // Optional bounce effect
+                },
+                plugins: {
+                    legend: {
+                        display: true, // Show legend (set to true if needed)
+                        position: 'left', // Position legend at the top (optional)
+                    }
+                },
+                layout: {
+                    padding: 10 // Adds padding around the chart
+                }
+            }
+        });
+    }
+    
+    
+    function renderGreenChart() { 
+        const xValues = {{ days_in_week | tojson }};
+        const yValues = {{ kwhdata | tojson }};
+    
+        new Chart("myGreenChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    label: "Green Energy in KWH",
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(48,185,56,1.0)",
+                    borderColor: "rgba(0,255,0,0.1)",
+                    data: yValues
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Prevent distortion when resizing
+                plugins: {
+                    legend: { display: true,
+                              position:'top',}
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            min: 6,
+                            max: 16
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+
+    function renderCarbonChart() {
+        const canvas = document.getElementById('myCarbonChart');
+        if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+        setTimeout(() => {
+            // Set canvas width and height dynamically
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const radarCtx = canvas.getContext('2d');
+            const radarData = {
+                labels: ['Scooby Doo ', 'Scooby', 'Dooby', 'Doo'], // Seven labels for heptagonal shape
+                datasets: [
+                    {
+                        label: 'Dataset 1',
+                        data: [40, 50, 60, 70, 30, 80, 55], // Seven data points for the first dataset
+                        backgroundColor: 'rgba(244, 190, 55, 0.5)', // Semi-transparent fill color
+                        borderColor: '#F4BE37', // Border color
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Dataset 2',
+                        data: [20, 90, 30, 60, 40, 50, 65], // Seven data points for the second dataset
+                        backgroundColor: 'rgba(83, 136, 216, 0.5)', // Semi-transparent fill color
+                        borderColor: '#5388D8', // Border color
+                        borderWidth: 2,
+                    }
+                ]
+            };
+
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: radarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000, // Animation duration in milliseconds
+                        easing: 'easeOutBounce' // Optional easing effect
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Hide the legend (label on top)
+                        }
+                    },
+                    layout: {
+                        padding: 0
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+        }, 100); // Slight delay
+    }
+    function renderBarChart() {
+        const canvas = document.getElementById('myBarChart');
+        if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+        const barCtx = canvas.getContext('2d');
+
+        // Create a linear gradient for the bar colors
+        const gradientMorning = barCtx.createLinearGradient(0, 0, 0, canvas.height);
+        gradientMorning.addColorStop(0, '#30B938'); // Lighter green at the top
+        gradientMorning.addColorStop(1, '#165319'); // Darker green at the bottom
+
+        const gradientAfternoon = barCtx.createLinearGradient(0, 0, 0, canvas.height);
+        gradientAfternoon.addColorStop(0, '#30B938'); // Lighter green at the top
+        gradientAfternoon.addColorStop(1, '#165319'); // Darker green at the bottom
+
+        const gradientEvening = barCtx.createLinearGradient(0, 0, 0, canvas.height);
+        gradientEvening.addColorStop(0, '#30B938'); // Lighter green at the top
+        gradientEvening.addColorStop(1, '#165319'); // Darker green at the bottom
+
+        const barData = {
+            labels: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+            datasets: [
+                {
+                    label: 'Morning',
+                    data: [10, 20, 30, 40, 50, 60, 70],
+                    backgroundColor: gradientMorning, // Use gradient for Morning
+                    borderColor: 'darkgreen',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Afternoon',
+                    data: [15, 25, 35, 45, 55, 65, 75],
+                    backgroundColor: gradientMorning, // Use gradient for Afternoon
+                    borderColor: 'darkblue',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Evening',
+                    data: [5, 15, 25, 35, 45, 55, 65],
+                    backgroundColor: gradientMorning, // Use gradient for Evening
+                    borderColor: 'darkorange',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        new Chart(barCtx, {
+            type: 'bar',
+            data: barData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: 'white' },
+                        grid: { color: 'white' }
+                    },
+                    x: {
+                        ticks: { color: 'blue' },
+                        grid: { display: false },
+                        stacked: false // Set to false to avoid stacking
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: 'blue' }
+                    }
+                },
+                animation: {
+                    duration: 1000, // Animation duration in milliseconds
+                    easing: 'easeOutBounce' // Optional easing effect
+                },
+                layout: {
+                    padding: 0 
+                },
+                barPercentage: 0.4, // Adjust bar width (0.0 to 1.0)
+                categoryPercentage: 0.5 // Adjust the space between categories
+            }
+        });
+    }
+</script>
 {% endblock %}
