@@ -10,7 +10,7 @@
 
     function renderGreenEnCharts() {
         const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
-        const yValues1 = [2.56,5.15,3.14,8.15,9.5,10.8,12.5];
+        const yValues1 = {{ greenenergydata | tojson }}
     
         new Chart("greenEnBarChart", {
             type: "bar",

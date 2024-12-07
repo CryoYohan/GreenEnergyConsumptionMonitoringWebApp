@@ -84,7 +84,7 @@ def GreenEnergyDash():
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
         }
-    return render_template('GreenEnergyDash.html',fullname=session.get('name'), pie_data=pie_data) if not session.get('name') == None else redirect(url_for('landing'))
+    return render_template('GreenEnergyDash.html',fullname=session.get('name'), pie_data=pie_data,greenenergydata=retrieve_greenenergy_data()) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/CostEstimationDash')
 def CostEstimationDash():
@@ -236,7 +236,11 @@ def userlogin():
         if record['email'] == email:
             account_exists = True  # Account with email exists
             if record['password'] == password:
-                session['name'] = email
+                recordname = db.find_user(table=user_table,email=email)
+                print("Record Name")
+                print(recordname)
+                session['name'] = recordname[0]['fullname']
+                session['email'] = email
                 fullname = record['fullname'].split(' ')[0] + ' ' + record['fullname'].split(' ')[-1]
                 flash("LOGIN SUCCESSFUL!", "info")
                 return redirect(url_for('UserDashboardContent'))
@@ -267,7 +271,8 @@ def userregister():
             return redirect(url_for('landing'))
     db.add_user(table=user_table,email=email,fullname=fullname, password=password)
 
-    session['name'] = email
+    session['email'] = email
+    session['name'] = fullname  
 
     flash(f"Welcome {fullname}, please complete the setup.", "success")
     return redirect(url_for('setup'))
