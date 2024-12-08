@@ -22,14 +22,14 @@
                     <label for="fname-input">First Name</label>
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="fname-input" name="firstname" placeholder="E.g. Juan John">
+                        <input type="text" id="fname-input" name="firstname" placeholder="{{ user_record[0]['fullname'].split(' ')[0]}}">
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="lname-input">Last Name</label>
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="lname-input" name="lastname" placeholder="E.g. Amaro III">
+                        <input type="text" id="lname-input" name="lastname" placeholder="{{ user_record[0]['fullname'].split(' ')[-1] }}">
                     </div>
                 </div>
             </div>
@@ -38,14 +38,18 @@
                     <label for="uname-input">Email</label>
                     <div class="input-icon">
                         <i class="fas fa-user-circle"></i>
-                        <input type="text" id="uname-input" name="email" placeholder="E.g. philmcrackin@gmail.com">
+                        <input type="text" id="uname-input" name="email" placeholder="{{ user_record[0]['email'] }}">
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="phone-input">Phone Number</label>
                     <div class="input-icon">
                         <i class="fas fa-phone"></i>
-                        <input type="text" id="phone-input" name="phonenumber" placeholder="E.g. 0912345678">
+                        {% if not user_record[0]['phoneno'] == None  %}
+                            <input type="text" id="phone-input" name="phoneno" placeholder="{{ user_record[0]['phoneno'] }}">
+                        {% else %}
+                        <input type="text" id="phone-input" name="phoneno" placeholder="E.g. 09123456789">
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -81,19 +85,27 @@
     </div>
 </div>
 <script>
-    // Function to clear the form inputs
-    function clearForm() {
-        document.getElementById('settings-form').reset();
-    }
-
-    // Function to handle dynamic "required" attribute for lastname
-    document.getElementById('fname-input').addEventListener('input', function () {
+    // Function to dynamically handle the "required" attribute for both firstname and lastname
+    function toggleRequiredFields() {
+        const firstnameField = document.getElementById('fname-input');
         const lastnameField = document.getElementById('lname-input');
-        if (this.value.trim() !== '') {
+
+        if (firstnameField.value.trim() !== '') {
             lastnameField.setAttribute('required', 'true');
         } else {
             lastnameField.removeAttribute('required');
         }
-    });
+
+        if (lastnameField.value.trim() !== '') {
+            firstnameField.setAttribute('required', 'true');
+        } else {
+            firstnameField.removeAttribute('required');
+        }
+    }
+
+    // Attach the function to the input event of both fields
+    document.getElementById('fname-input').addEventListener('input', toggleRequiredFields);
+    document.getElementById('lname-input').addEventListener('input', toggleRequiredFields);
 </script>
+
 {% endblock %}

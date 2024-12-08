@@ -74,7 +74,7 @@ def updateuser(email):
     firstname = request.form.get('firstname', '').strip()
     lastname = request.form.get('lastname', '').strip()
     emailupdate = request.form.get('email', '').strip()
-    phonenumber = request.form.get('phonenumber', '').strip()
+    phonenumber = request.form.get('phoneno', '').strip()
 
     # Combine firstname and lastname into fullname
     fullname = f"{firstname} {lastname}".strip() if firstname or lastname else None
@@ -92,7 +92,7 @@ def updateuser(email):
     if emailupdate:
         update_data['email'] = emailupdate
     if phonenumber:
-        update_data['phonenumber'] = phonenumber
+        update_data['phoneno'] = phonenumber
 
     # Perform the update only if there are fields to update
     if update_data:
@@ -109,7 +109,8 @@ def Settings():
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
         }
-    return render_template('Settings.html',fullname=getfullname_with_session(session.get('email')),email=session.get('email'), pie_data=pie_data) if not session.get('name') == None else redirect(url_for('landing'))
+    user_record = db.find_user(table=user_table,email=session.get('email'))
+    return render_template('Settings.html',fullname=getfullname_with_session(session.get('email')),email=session.get('email'), pie_data=pie_data,user_record=user_record) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/SimulationPage')
 def SimulationPage():
