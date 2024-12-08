@@ -1,77 +1,44 @@
-{%extends 'UserDashboardTemplate.html'%}
+{% extends 'UserDashboardTemplate.html' %}
 {% block content %}
 <div id="simulation-container" style="background-color: #f8f9fa; font-family: Arial, sans-serif; padding: 40px;">
-    <!-- Simulasyon Header -->
-    <div style="text-align: center; margin-bottom: 40px;">
-        <h1 style="font-size: 32px; color: #333; font-weight: bold;">Simulation</h1>
-    </div>
-
-    <!-- Row of Cards -->
-    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-        <!-- Weather Selection Card -->
-        <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
-            <h3 style="color: #30B938; text-align: center;">Picking Weather Condition</h3>
-            <select id="weather-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                <option value="" disabled selected>Select Weather Condition</option>
-                <option value="Sunny">Init (Sunny)</option>
-                <option value="Cloudy">Dag-um (Cloudy)</option>
-                <option value="Overcast">Makit-an (Overcast)</option>
-                <option value="Rainy">Uwanon (Rainy)</option>
-            </select>
-        </div>
-
-        <!-- Panel Addition Card -->
-        <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
-            <h3 style="color: #30B938; text-align: center;">Add Panels</h3>
-            <select id="panel-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                <option value="" disabled selected>Pick a Panel Type</option>
-                <option value="Type1">Monocrystalline</option>
-                <option value="Type2">Polycrystalline</option>
-                <option value="Type3">Thin-Film</option>
-            </select>
-            <div style="margin-top: 15px; text-align: center;">
-                <label>Quantity: </label>
-                <input id="quantity1" value="1" readonly style="width: 50px; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
-                <button onclick="changeQuantity('quantity1', 1)" style="margin-left: 10px; padding: 5px 10px; border: none; background: #30B938; color: white; border-radius: 5px;">+</button>
-                <button onclick="changeQuantity('quantity1', -1)" style="margin-left: 5px; padding: 5px 10px; border: 1px solid #30B938; background: white; color: #30B938; border-radius: 5px;">-</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Appliance List Table -->
-    <div style="margin: 20px auto; width: 100%; max-width: 800px;">
+    <div style="margin: 20px auto; width: 100%; max-width: 1000px;">
         <h3 style="text-align: center; color: #30B938; margin-bottom: 20px;">List of Appliances</h3>
-        <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
-            <thead style="background-color: #30B938; color: white;">
-                <tr>
-                    <th style="padding: 10px; text-align: left;">Appliance ID</th>
-                    <th style="padding: 10px; text-align: left;">Appliance Name</th>
-                    <th style="padding: 10px; text-align: left;">Wattage</th>
-                    <th style="padding: 10px; text-align: left;">Hours of Use</th>
-                    <th style="padding: 10px; text-align: center;">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="appliance-table-body">
-                <!-- Example Row -->
-                <tr>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">1</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">Air Conditioner</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">1500W</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">8 Hours</td>
-                    <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ccc;">
-                        <button style="padding: 5px 10px; border: none; background: #dc3545; color: white; border-radius: 5px; cursor: pointer;">Remove</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div style="max-height: 650px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px;">
+            <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                <thead style="background-color: #30B938; color: white;">
+                    <tr>
+                        <th style="padding: 10px; text-align: left;">Appliance ID</th>
+                        <th style="padding: 10px; text-align: left;">Appliance Name</th>
+                        <th style="padding: 10px; text-align: left;">Appliance Wattage</th>
+                        <th style="padding: 10px; text-align: left;">Panel ID</th>
+                        <th style="padding: 10px; text-align: left;">Panel Type</th>
+                        <th style="padding: 10px; text-align: left;">Panel Watt Capacity</th>
+                        <th style="padding: 10px; text-align: left;">Panel Quantity</th>
+                        <th style="padding: 10px; text-align: left;">Peak Sunlight Hours</th>
+                        <th style="padding: 10px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="appliance-table-body">
+                    {% for data in inventory %}
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['applianceid']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['appliancename']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['watt']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['panel_id']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['panelname']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['wattcapacity']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['panel_quantity']}}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['hours_use']}}</td>
+                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ccc;">
+                            <button style="padding: 5px 10px; border: none; background: #dc3545; color: white; border-radius: 5px; cursor: pointer;">Remove</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <!-- Save Button -->
-    <div style="text-align: center; margin-top: 30px;">
-        <button style="background: #30B938; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px;cursor:pointer;">Save</button>
-    </div>
-</div>
-
 <script>
     function changeQuantity(id, value) {
         const quantity = document.getElementById(id);
@@ -81,6 +48,5 @@
         }
     }
 </script>
-
 
 {% endblock %}

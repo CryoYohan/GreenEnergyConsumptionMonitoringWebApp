@@ -40,6 +40,10 @@ class Databasehelper:
     def find_user(self,email:str, table:str):
         sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)
+    
+    def find_panel(self,panelname:str, table:str):
+        sql:str = f"SELECT * FROM {table} WHERE `panelname` = '{panelname}'"
+        return self.getprocess(sql)
 
     def find_simrecord(self,userid:int, table:str):
         sql:str = f"SELECT * FROM {table} WHERE `userid` = {userid}"
@@ -65,3 +69,5 @@ class Databasehelper:
         #create sql statement
         sql:str = f"UPDATE `{table}` SET {fld} WHERE `{keys[0]}`= '{values[0]}'"
         return self.postprocess(sql)
+    
+

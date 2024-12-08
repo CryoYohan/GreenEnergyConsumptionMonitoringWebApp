@@ -117,7 +117,8 @@ def SimulationPage():
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
         }
-    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data) if not session.get('name') == None else redirect(url_for('landing'))
+    inventory = db.getall_users(table='inventory')
+    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/CarbonEmissionDash')
 def CarbonEmissionDash():
@@ -125,7 +126,17 @@ def CarbonEmissionDash():
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
         }
-    return render_template('CarbonEmissionDash.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,carbonemission=retrieve_carbonemissions(),carbonemissiongreen=retrieve_carbonemissions_greenenergy()) if not session.get('name') == None else redirect(url_for('landing'))
+    sum_carbonemission = round(sum(retrieve_carbonemissions()),2)
+    sum_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()),2)
+    deducted_carbonemission = round((sum_carbonemission - sum_carbonemissiongreen),2)
+
+    return render_template('CarbonEmissionDash.html',fullname=getfullname_with_session(session.get('email')), 
+                           pie_data=pie_data,carbonemission=retrieve_carbonemissions(),
+                           carbonemissiongreen=retrieve_carbonemissions_greenenergy(),
+                           sum_carbonemission=sum_carbonemission,
+                           sum_carbonemissiongreen=sum_carbonemissiongreen,
+                           deducted_carbonemission=deducted_carbonemission
+                           ) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/GreenEnergyDash')
 def GreenEnergyDash():
@@ -134,7 +145,8 @@ def GreenEnergyDash():
         'values': [50, 20, 15, 15],
         }
     greenenergydata = retrieve_greenenergy_data()
-    return render_template('GreenEnergyDash.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,greenenergydata=greenenergydata) if not session.get('name') == None else redirect(url_for('landing'))
+    sum_greenenergydata = round(sum(greenenergydata),2)
+    return render_template('GreenEnergyDash.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,greenenergydata=greenenergydata,sum_greenenergydata=sum_greenenergydata)if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/CostEstimationDash')
 def CostEstimationDash():
@@ -393,7 +405,7 @@ def retrieve_carbonemissions_greenenergy():
 @app.route('/UserDashboardContent')
 def UserDashboardContent():
     global panel_type, panel_quantity
-    sum_green_data = sum(retrieve_greenenergy_data())
+    sum_green_data = round(sum(retrieve_greenenergy_data()),2)
     sum_total_consumption = sum(retrieve_kwhconsumption_data())
     sum_total_carbonemission = sum(retrieve_carbonemissions())
     sum_total_carbonemissiongreen = sum(retrieve_carbonemissions_greenenergy())
@@ -512,7 +524,7 @@ def userregister():
 
 @app.route('/submit_tariff', methods=['POST'])
 def submit_tariff():
-    global email, tariff_rate, tariffcompany, tariff_type,appliances
+    global email, tariff_rate, tariffcompany, tariff_type,appliances,panel_type,panel_quantity
     # Retrieve JSON data from request
     data = request.get_json()
     tariffcompany = data.get('provider')
@@ -555,11 +567,44 @@ def submit_tariff():
     calculate_carbon_emission(email=email,totalConsumption=retrieve_kwhconsumption_data(),tariff_company=tariffcompany)
     # Calculate Carbon Emission
     calculate_carbon_emission_green(email=email,totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=tariffcompany)
+    # Insert appliance, solar, and user data in inventory table
+    insert_to_inventory(email=email,appliances=appliances,panel_type=panel_type,panel_quantity=panel_quantity)
 
     # Confirm user session before redirecting to the dashboard
     session['registered_user'] = email  
     return jsonify({"redirect": url_for('UserDashboardContent')})
 
+def insert_to_inventory(email, appliances: list, panel_type, panel_quantity):
+    # Fetch all appliances and panel details from the database
+    appliances_db = db.getall_users(table='appliance')  # All appliances
+    panelrecord = db.find_panel(table='solarpanel', panelname=panel_type)  # Panel details
+    
+    if not panelrecord:
+        raise ValueError(f"No panel found with the type: {panel_type}")
+    
+    # Create a mapping of appliance names to their records for faster lookup
+    appliance_map = {appl['appliancename']: appl for appl in appliances_db}
+    
+    # Iterate through the appliances provided in the list
+    for appliance in appliances:
+        # Check if the appliance exists in the database
+        if appliance in appliance_map:
+            appliance_record = appliance_map[appliance]
+            # Insert the appliance into the inventory table
+            db.add_user(
+                table='inventory',
+                email=email,
+                applianceid=appliance_record['applianceid'],
+                appliancename=appliance_record['appliancename'],
+                watt=appliance_record['watt'],
+                panel_id=panelrecord[0]['panel_id'],
+                hours_use=panelrecord[0]['hours_use'],
+                wattcapacity=panelrecord[0]['wattcapacity'],
+                panelname=panel_type,
+                panel_quantity=panel_quantity,
+            )
+        else:
+            print(f"Appliance '{appliance}' not found in the database, skipping.")
 
 
 @app.route('/setupTariff')
