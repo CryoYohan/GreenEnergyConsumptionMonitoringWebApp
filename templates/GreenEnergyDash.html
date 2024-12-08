@@ -1,7 +1,53 @@
 {% extends 'UserDashboardTemplate.html'%}
 {% block content %}
-<div id="appliance-page-container" style="height:700px;background-color:white">
-    <canvas id="greenEnBarChart"></canvas>
+<style>
+    #appliance-page-container {
+        height: 800px; /* Total height of the container */
+        background-color: white;
+        display: flex;
+        flex-direction: column; /* Stack elements vertically */
+    }
+    
+    #top-section {
+        height: 15%; /* 1/4 of the container */
+        border-bottom: 3px solid gray;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #chart-section {
+        height: 105%; /* 3/4 of the container */
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+</style>
+<div id="appliance-page-container" style="height: 700px; background-color: white;">
+    <!-- Top Section -->
+    <div id="top-section" style="height: 10%;">
+        <div class="labels">
+            <ul>
+                <div class="label-item">
+                    <li>
+                        <div class="label-text">
+                            TOTAL KWH POWER PRODUCED
+                        </div>
+                        <div class="percentage" style="color: rgb(12, 241, 115);font-size:30px;">{{sum_cost_kwh}} KWH</div>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <!-- Chart Section -->
+    <div id="chart-section" style="height: 90%; background-color: white; display: flex; align-items: center; justify-content: center;">
+        <canvas id="greenEnBarChart"></canvas>
+    </div>
 </div>
 <script>
     window.onload = function() {

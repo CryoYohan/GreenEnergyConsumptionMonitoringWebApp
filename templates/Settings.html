@@ -2,125 +2,98 @@
 {% block content %}
 <link rel="stylesheet" href="{{url_for('static', filename='css/SettingStyles.css')}}">
 <div class="settings-container">
-        
     <div class="user-settings">
         <div id="settings-section">
             <div class="settings-status">
                 <img src="../static/images/svg/profilenako.svg" alt="">
                 <div class="user-info">
-                    <span id="settings-name">Nicholai</span>
-                    <p>Admin</p>
+                    <span id="settings-name">{{ fullname }}</span>
+                    <p>User</p>
                 </div>
             </div>
             <div class="change-pp">
                 <button>Upload New Photo</button>
             </div>  
+        </div>
+        <hr>
+        <form id="settings-form" action="/updateuser/{{ email }}" method="POST">
+            <div class="fname-mname">
+                <div class="input-group">
+                    <label for="fname-input">First Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fname-input" name="firstname" placeholder="E.g. Juan John">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="lname-input">Last Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="lname-input" name="lastname" placeholder="E.g. Amaro III">
+                    </div>
+                </div>
+            </div>
+            <div class="fname-mname">
+                <div class="input-group">
+                    <label for="uname-input">Email</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="uname-input" name="email" placeholder="E.g. philmcrackin@gmail.com">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="phone-input">Phone Number</label>
+                    <div class="input-icon">
+                        <i class="fas fa-phone"></i>
+                        <input type="text" id="phone-input" name="phonenumber" placeholder="E.g. 0912345678">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="fname-mname">
+                <div class="input-group">
+                    <label for="new-password">New Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="new-password" name="password" placeholder="">
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword('new-password')"></i>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-check-circle"></i>
+                        <input type="password" id="confirm-password" name="confirmpassword" placeholder="">
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword('confirm-password')"></i>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="save-cancelbtn">
+                <div class="save">
+                    <button type="submit">Save</button>
+                </div>  
+                <div class="cancel">
+                    <button type="button" onclick="clearForm()">Cancel</button>
+                </div>  
+            </div>
+        </form>
     </div>
-    <hr>
-    <div class="fname-mname">
-        <div class="input-group">
-            <label for="fname-input">First Name</label>
-            <div class="input-icon">
-                <i class="fas fa-user"></i>
-                <input type="text" id="fname-input" placeholder="Nicholai">
-            </div>
-        </div>
-        <div class="input-group">
-            <label for="mname-input">Middle Name</label>
-            <div class="input-icon">
-                <i class="fas fa-user"></i>
-                <input type="text" id="mname-input" placeholder="B.">
-            </div>
-        </div>
-    </div>
-    
-    <div class="fname-mname">
-        <div class="input-group">
-            <label for="lname-input">Last Name</label>
-            <div class="input-icon">
-                <i class="fas fa-user"></i>
-                <input type="text" id="lname-input" placeholder="Koblashnicov">
-            </div>
-        </div>
-        <div class="input-group">
-            <label for="uname-input">User Name</label>
-            <div class="input-icon">
-                <i class="fas fa-user-circle"></i>
-                <input type="text" id="uname-input" placeholder="Nicholai">
-            </div>
-        </div>
-    </div>
-    <hr>
-    
-    <div class="fname-mname">
-        <div class="input-group">
-            <label for="email-input">Email Address</label>
-            <div class="input-icon">
-                <i class="fas fa-envelope"></i>
-                <input type="text" id="email-input" placeholder="Nicholai@gmail.com">
-            </div>
-        </div>
-        <div class="input-group">
-            <label for="phone-input">Phone Number</label>
-            <div class="input-icon">
-                <i class="fas fa-phone"></i>
-                <input type="text" id="phone-input" placeholder="09214684512">
-            </div>
-        </div>
-    </div>
-    <hr>
-    
-    <div class="fname-mname">
-        <div class="input-group">
-            <label for="address-input">Address</label>
-            <div class="input-icon">
-                <i class="fas fa-map-marker-alt"></i>
-                <input type="text" id="address-input" placeholder="Volgograd, Russia">
-            </div>
-        </div>
-    </div>
-    <hr>
-    
-    <div class="fname-mname">
-        <div class="input-group">
-            <label for="current-password">Current Password</label>
-            <div class="input-icon">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="current-password" placeholder="Nicho123">
-                <i class="fas fa-eye toggle-password" onclick="togglePassword('current-password')"></i>
-            </div>
-        </div>
-        <div class="input-group">
-            <label for="new-password">New Password</label>
-            <div class="input-icon">
-                <i class="fas fa-key"></i>
-                <input type="password" id="new-password" placeholder="">
-                <i class="fas fa-eye toggle-password" onclick="togglePassword('new-password')"></i>
-            </div>
-        </div>
-    </div>
-    
-    <div class="fname-mname">
-        <div class="input-group">
-            <label for="confirm-password">Confirm Password</label>
-            <div class="input-icon">
-                <i class="fas fa-check-circle"></i>
-                <input type="password" id="confirm-password" placeholder="">
-                <i class="fas fa-eye toggle-password" onclick="togglePassword('confirm-password')"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="save-cancelbtn">
-        <div class="save">
-            <button>Save</button>
-        </div>  
-        <div class="cancel">
-            <button>Cancel</button>
-        </div>  
-    </div>
-</div>
 </div>
 <script>
+    // Function to clear the form inputs
+    function clearForm() {
+        document.getElementById('settings-form').reset();
+    }
+
+    // Function to handle dynamic "required" attribute for lastname
+    document.getElementById('fname-input').addEventListener('input', function () {
+        const lastnameField = document.getElementById('lname-input');
+        if (this.value.trim() !== '') {
+            lastnameField.setAttribute('required', 'true');
+        } else {
+            lastnameField.removeAttribute('required');
+        }
+    });
 </script>
 {% endblock %}

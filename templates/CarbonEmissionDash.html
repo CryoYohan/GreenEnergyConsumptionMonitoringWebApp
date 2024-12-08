@@ -1,12 +1,74 @@
 {%extends 'UserDashboardTemplate.html'%}
 {% block content %}
-<div id="appliance-page-container" style="height:700px;background-color:white">
-    <canvas id="carbonEmLineChart"></canvas>
+<style>
+    #appliance-page-container {
+        height: 800px; /* Total height of the container */
+        background-color: white;
+        display: flex;
+        flex-direction: column; /* Stack elements vertically */
+    }
+    
+    #top-section {
+        height: 15%; /* 1/4 of the container */
+        border-bottom: 3px solid gray;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #chart-section {
+        height: 105%; /* 3/4 of the container */
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+</style>
+<div id="appliance-page-container" style="height: 700px; background-color: white;">
+    <!-- Top Section -->
+    <div id="top-section" style="height: 10%;">
+        <div class="labels">
+            <ul>
+                <div class="label-item">
+                    <li>
+                        <div class="label-text">
+                            TOTAL COST OF KWH CONSUMPTION/ WEEK
+                        </div>
+                        <div class="percentage" style="color: rgb(230, 161, 32);font-size:30px;">₱ {{sum_cost_kwh}}</div>
+                    </li>
+                </div>
+                <div class="label-item">
+                    <li>
+                        <div class="label-text">
+                            TOTAL COST OF KWH CONSUMPTION WITH GREEN ENERGY/ WEEK
+                        </div>
+                        <div class="percentage" style="color: rgb(29, 134, 26);font-size:30px;">₱ {{sum_cost_kwh_green}}</div>
+                    </li>
+                </div>
+                <div>
+                    <li>
+                        <div class="label-text">
+                            ELECTRICITY SAVED
+                        </div>
+                        <div class="percentage" style="color: rgb(25, 231, 18);font-size:30px;">₱ {{deducted_sum_costkwh}} </div>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <!-- Chart Section -->
+    <div id="chart-section" style="height: 90%; background-color: white; display: flex; align-items: center; justify-content: center;">
+        <canvas id="carbonEmLineChart"></canvas>
+    </div>
 </div>
 <script>
 const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
-const yValues = [31, 45, 36, 24, 48, 59, 64];
-const yValuesGreen = [25, 31, 30, 19, 34, 42, 51];
+const yValues = {{ carbonemission | tojson }};
+const yValuesGreen = {{ carbonemissiongreen | tojson }};
 
 new Chart("carbonEmLineChart", {
     type: "line",
@@ -35,6 +97,7 @@ new Chart("carbonEmLineChart", {
     },
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: true, // Ensure the legend is displayed
