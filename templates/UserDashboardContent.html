@@ -1,6 +1,44 @@
 {%  extends 'UserDashboardTemplate.html'%}
 {% block content %}
+<style>
+/* Loader Styling */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loader .spinner {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #30B938; /* Green */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hide loader when page is ready */
+#loader.hidden {
+    display: none;
+}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Loader Element -->
+<div id="loader">
+    <div class="spinner"></div>
+</div>
 <div class="topdiv">
     {% for i in range(7) %}
         <div class="day" id="{{days_in_week[i]}}">
@@ -76,22 +114,31 @@
     </div>
 </div>
 <script>
-    function renderCharts(){
-        var time = 700
-        setTimeout(renderCostCharts, time);
-        setTimeout(renderDoughnutChart, time);
-        setTimeout(renderGreenChart, time);
-        setTimeout(renderCarbonChart, time);
-        setTimeout(renderBarChart, time);
-    }
-    window.onload = function() {
-        renderCharts();
-        
-    };
+    // Track the number of charts that need to be rendered
+    const totalCharts = 4; // Update this to the total number of charts you're rendering
+    let chartsRendered = 0; // Counter for completed chart renderings
 
+    function hideLoader() {
+        // Check if all charts are rendered
+        if (chartsRendered >= totalCharts) {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.classList.add('hidden'); // Hide loader
+            }
+        }
+    }
+
+    function renderCharts() {
+        renderCostCharts();
+        renderDoughnutChart(); // Pass necessary data
+        renderGreenChart();
+        renderCarbonChart();
+    }
+
+    // Modified render functions to increment the counter after rendering
     function renderCostCharts() {
         const canvas = document.getElementById('myPieChart');
-        if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+        if (!canvas) return;
 
         const pieLabels = {{ pie_data['labels'] | tojson }};
         const pieValues = {{ pie_data['values'] | tojson }};
@@ -101,83 +148,76 @@
             labels: pieLabels,
             datasets: [{
                 data: pieValues,
-                backgroundColor: ['#F4BE37', '#30B938',],
-                hoverBackgroundColor: ['orange', '#0EEE1B',],
-                }]
-            }; 
+                backgroundColor: ['#F4BE37', '#30B938'],
+                hoverBackgroundColor: ['orange', '#0EEE1B']
+            }]
+        };
 
         new Chart(pieCtx, {
             type: 'pie',
             data: pieData,
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Allows the chart to fill the entire container
+                maintainAspectRatio: false,
                 animation: {
-                    duration: 1000, // Animation duration in milliseconds (adjust as needed)
-                    easing: 'easeOutBounce' // Optional easing effect
+                    duration: 1000,
+                    easing: 'easeOutBounce'
                 },
                 plugins: {
                     legend: {
-                        display: true, // Hide legend to save space if needed
+                        display: true,
                         position: 'right'
                     }
-                },
-                layout: {
-                    padding: 0 
                 }
             }
         });
+
+        // Increment the counter and check loader
+        chartsRendered++;
+        hideLoader();
     }
-    
-    
-    function renderDoughnutChart(dynamicData) {
+
+    function renderDoughnutChart() {
         const canvas = document.getElementById('myDoughnutChart');
-        if (!canvas) return; // Ensure the canvas element exists
-    
-        setTimeout(()=>{
-                // Extract labels and data from the dynamic JSON input
-            const labels = Object.keys(dynamicData);
-            const dataValues = Object.values(dynamicData).map(
-                weeklyData => weeklyData.reduce((sum, value) => sum + value, 0) // Sum weekly data
-            );
-        
-            // Define color palettes (adjustable if more categories are added)
-            const colors = ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40', '#8A2BE2', '#3CB371', '#FF6347'];
-            const hoverColors = colors.map(color => shadeColor(color, -20)); // Slightly darker for hover effect
-        
-            // Create a new doughnut chart
-            new Chart(canvas, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: dataValues,
-                        backgroundColor: colors.slice(0, labels.length),
-                        hoverBackgroundColor: hoverColors.slice(0, labels.length),
-                    }]
-                },
-                options: {
-                    responsive: true, // Automatically resizes to the container
-                    maintainAspectRatio: false, // Allows flexibility in height/width ratio
-                    plugins: {
-                        legend: {
-                            display: true, // Show legend
-                            position: 'left', // Position legend at the top
-                        }
-                    },
-                    animation: {
-                        duration: 1000, // Animation duration
-                        easing: 'easeOutBounce', // Optional bounce effect
-                    },
-                    layout: {
-                        padding: 10 // Adds padding around the chart
+        if (!canvas) return;
+        const dynamicData = {{ appliances_sorted_consumption_data |tojson }}
+        // Doughnut chart rendering logic
+        const labels = Object.keys(dynamicData);
+        const dataValues = Object.values(dynamicData).map(
+            weeklyData => weeklyData.reduce((sum, value) => sum + value, 0)
+        );
+
+        // Define color palettes (adjustable if more categories are added)
+        const colors = ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40', '#8A2BE2', '#3CB371', '#FF6347'];
+        const hoverColors = colors.map(color => shadeColor(color, -20)); // Slightly darker for hover effect
+
+        new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataValues,
+                    backgroundColor: colors.slice(0, labels.length),
+                    hoverBackgroundColor: hoverColors.slice(0, labels.length),  
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'left'
                     }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutBounce'
                 }
-            });
-        },1700);
-    
-        // Helper function to generate hover colors
-        function shadeColor(color, percent) {
+            }
+        });
+         // Helper function to generate hover colors
+         function shadeColor(color, percent) {
             let R = parseInt(color.slice(1, 3), 16),
                 G = parseInt(color.slice(3, 5), 16),
                 B = parseInt(color.slice(5, 7), 16);
@@ -192,115 +232,78 @@
     
             return '#' + (R.toString(16).padStart(2, '0')) + (G.toString(16).padStart(2, '0')) + (B.toString(16).padStart(2, '0'));
         }
-    }
-    
-    const applianceData = {{ appliances_sorted_consumption_data | tojson }};
-    renderDoughnutChart(applianceData);
-    
-    function renderGreenChart() { 
-        setTimeout(()=>{
 
-            const xValues = {{ days_in_week | tojson }};
-            const yValues = {{ kwhdata | tojson }};
-        
-            new Chart("myGreenChart", {
-                type: "bar",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        label: "Green Energy in KWH",
-                        fill: false,
-                        lineTension: 0,
-                        backgroundColor: "rgba(48,185,56,1.0)",
-                        borderColor: "rgba(0,255,0,0.1)",
-                        data: yValues
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Prevent distortion when resizing
-                    plugins: {
-                        legend: { display: true,
-                                position:'top',}
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                min: 6,
-                                max: 16
-                            }
-                        }
-                    }
-                }
-            });
-        },100);
+        chartsRendered++;
+        hideLoader();
     }
-    
+
+    function renderGreenChart() {
+        const xValues = {{ days_in_week | tojson }};
+        const yValues = {{ kwhdata | tojson }};
+
+        new Chart("myGreenChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    label: "Green Energy in KWH",
+                    backgroundColor: "rgba(48,185,56,1.0)",
+                    data: yValues
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        chartsRendered++;
+        hideLoader();
+    }
 
     function renderCarbonChart() {
         const canvas = document.getElementById('myCarbonChart');
-        if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+        if (!canvas) return;
 
-        setTimeout(() => {
-            // Set canvas width and height dynamically
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+        const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+        const yValues = {{ carbonemission | tojson }};
+        const yValuesGreen = {{ carbonemissiongreen | tojson }};
 
-            const radarCtx = canvas.getContext('2d');
-            const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
-            const yValues = {{ carbonemission | tojson }};
-            const yValuesGreen = {{ carbonemissiongreen | tojson }};
-            const radarData = {
-                labels:  xValues,
+        new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: xValues,
                 datasets: [
                     {
                         label: 'Carbon Emission Electricity',
-                        data: yValues, // Seven data points for the first dataset
-                        backgroundColor: 'rgba(244, 190, 55, 0.5)', // Semi-transparent fill color
-                        borderColor: '#F4BE37', // Border color
-                        borderWidth: 2,
+                        data: yValues,
+                        backgroundColor: 'rgba(244, 190, 55, 0.5)',
+                        borderColor: '#F4BE37'
                     },
                     {
                         label: 'Carbon Emission Green Energy',
-                        data: yValuesGreen, // Seven data points for the second dataset
-                        backgroundColor: 'rgba(83, 136, 216, 0.5)', // Semi-transparent fill color
-                        borderColor: '#5388D8', // Border color
-                        borderWidth: 2,
+                        data: yValuesGreen,
+                        backgroundColor: 'rgba(83, 136, 216, 0.5)',
+                        borderColor: '#5388D8'
                     }
                 ]
-            };
-
-            new Chart(radarCtx, {
-                type: 'line',
-                data: radarData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000, // Animation duration in milliseconds
-                        easing: 'easeOutBounce' // Optional easing effect
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position:'bottom' // Hide the legend (label on top)
-                        }
-                    },
-                    layout: {
-                        padding: 0
-                    },
-                    scales: {
-                        r: {
-                            angleLines: {
-                                display: true
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100
-                        }
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false  
                     }
                 }
-            });
-        }, 100); // Slight delay
+
+            }
+        });
+
+        chartsRendered++;
+        hideLoader();
     }
+
+    window.onload = renderCharts;
 </script>
 {% endblock %}

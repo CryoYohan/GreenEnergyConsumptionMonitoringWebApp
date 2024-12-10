@@ -11,9 +11,6 @@
                     <p>User</p>
                 </div>
             </div>
-            <div class="change-pp">
-                <button>Upload New Photo</button>
-            </div>  
         </div>
         <hr>
         <form id="settings-form" action="/updateuser/{{ email }}" method="POST">
@@ -106,6 +103,46 @@
     // Attach the function to the input event of both fields
     document.getElementById('fname-input').addEventListener('input', toggleRequiredFields);
     document.getElementById('lname-input').addEventListener('input', toggleRequiredFields);
+
+    // Handle form submission response
+    const form = document.getElementById('settings-form');
+    form.onsubmit = async function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            Swal.fire({
+                title: 'Success!',
+                text: result.success,
+                icon: 'success',
+                confirmButtonText: 'Okay'
+            }).then(() => {
+                // Reload the page after the success message
+                window.location.reload();
+            });
+        } else if (result.error) {
+            Swal.fire({
+                title: 'Error!',
+                text: result.error,
+                icon: 'error',
+                confirmButtonText: 'Okay'
+            });
+        } else if (result.warning) {
+            Swal.fire({
+                title: 'Warning!',
+                text: result.warning,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            });
+        }
+    };
 </script>
 
 {% endblock %}

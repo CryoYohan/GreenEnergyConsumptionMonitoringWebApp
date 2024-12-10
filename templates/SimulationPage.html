@@ -1,52 +1,54 @@
 {% extends 'UserDashboardTemplate.html' %}
 {% block content %}
-<div id="simulation-container" style="background-color: #f8f9fa; font-family: Arial, sans-serif; padding: 40px;">
-    <!-- Appliance List Table -->
-    <div style="margin: 20px auto; width: 100%; max-width: 1000px;">
-        <h3 style="text-align: center; color: #30B938; margin-bottom: 20px;">List of Appliances</h3>
-        <div style="max-height: 650px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px;">
-            <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                <thead style="background-color: #30B938; color: white;">
-                    <tr>
-                        <th style="padding: 10px; text-align: left;">Appliance ID</th>
-                        <th style="padding: 10px; text-align: left;">Appliance Name</th>
-                        <th style="padding: 10px; text-align: left;">Appliance Wattage</th>
-                        <th style="padding: 10px; text-align: left;">Panel ID</th>
-                        <th style="padding: 10px; text-align: left;">Panel Type</th>
-                        <th style="padding: 10px; text-align: left;">Panel Watt Capacity</th>
-                        <th style="padding: 10px; text-align: left;">Panel Quantity</th>
-                        <th style="padding: 10px; text-align: left;">Peak Sunlight Hours</th>
-                        <th style="padding: 10px; text-align: center;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="appliance-table-body">
-                    {% for data in inventory %}
-                    <tr>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['applianceid']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['appliancename']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['watt']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['panel_id']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['panelname']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['wattcapacity']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['panel_quantity']}}</td>
-                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{data['hours_use']}}</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ccc;">
-                            <button style="padding: 5px 10px; border: none; background: #dc3545; color: white; border-radius: 5px; cursor: pointer;">Remove</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div id="simulation-container" style="font-family: Arial, sans-serif; padding: 40px;">
+    <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+        <!-- Appliance List Table -->
+        <div style="flex: 1; max-width: 48%; min-width: 300px;">
+            <h3 style="text-align: center; color: #30B938; margin-bottom: 20px;">List of Appliances</h3>
+            <div style="max-height: 650px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px;">
+                <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                    <thead style="background-color: #30B938; color: white;">
+                        <tr>
+                            <th style="padding: 10px; text-align: center;">Appliance ID</th>
+                            <th style="padding: 10px; text-align: center;">Appliance Name</th>
+                            <th style="padding: 10px; text-align: center;">Appliance Wattage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appliance-table-body">
+                        {%for appliance in inventory%}
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #ccc; text-align: center;">{{ appliance['applianceid'] }}</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #ccc; text-align: center;">{{ appliance['appliancename'] }}</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #ccc; text-align: center;">{{ appliance['watt'] }} watts</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Solar Panel and Tariff Cards -->
+        <div style="flex: 1; max-width: 48%; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Solar Panel Card -->
+            <div style="background-color: white; border: 1px solid #ccc; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <h3 style="color: #30B938; text-align: center; margin-bottom: 20px;">Solar Panel Report</h3>
+                <hr>
+                <p><strong>Panel ID:</strong> {{ inventory[0]['panel_id'] }}</p>
+                <p><strong>Panel Type: </strong>{{ inventory[0]['panelname'].title() }} Solar Panel</p>
+                <p><strong>Watt Capacity: </strong> {{inventory[0]['wattcapacity'] }} watts</p>
+                <p><strong>Quantity: </strong>{{inventory[0]['panel_quantity'] }}</p>
+                <p><strong>Peak Sunlight Hours: </strong> {{ inventory[0]['hours_use'] | int }} hours</p>
+            </div>
+
+            <!-- Tariff Card -->
+            <div style="background-color: white; border: 1px solid #ccc; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <h3 style="color: #30B938; text-align: center; margin-bottom: 20px;">Tariff Data</h3>
+                <hr>
+                <p><strong>Current Tariff Company:</strong> {{ inventory[0]['tariffcompany'].upper() }}</p>
+                <p><strong>Current Tariff Rate:</strong> ₱{{ inventory[0]['tariffrate'] }} per kWh</p>
+                <p><strong>Current Tariff Type:</strong> {{ inventory[0]['tarifftype'].title() }}</p>
+            </div>
         </div>
     </div>
-<script>
-    function changeQuantity(id, value) {
-        const quantity = document.getElementById(id);
-        let current = parseInt(quantity.value, 10);
-        if (current + value > 0) {
-            quantity.value = current + value;
-        }
-    }
-</script>
-
+</div>
 {% endblock %}

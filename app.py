@@ -78,8 +78,8 @@ def updateuser(email):
     password = request.form.get('password', '').strip()
     confirmpassword = request.form.get('confirmpassword', '').strip()
 
-    if not password == confirmpassword:
-        return redirect(url_for('Settings'))
+    if password != confirmpassword:
+        return jsonify({'error': 'Passwords do not match!'}), 400
 
     # Combine firstname and lastname into fullname
     fullname = f"{firstname} {lastname}".strip() if firstname or lastname else None
@@ -104,9 +104,10 @@ def updateuser(email):
     # Perform the update only if there are fields to update
     if update_data:
         db.update_user(table=user_table, email=email, **update_data)
-        return redirect(url_for('Settings'))
+        return jsonify({'success': 'User details updated successfully!'}), 200
     else:
         return jsonify({'warning': 'No fields provided for update.'}), 400
+
 
 
 
@@ -487,14 +488,19 @@ def userlogin():
 
     # Flag to check if the account exists
     account_exists = False
-
+    
     for record in records:
-        if record['email'] == email:
+        if email == record['email'] and email == 'kryllosadmin':
+            if password == record['password']:
+                recordname = db.find_user(table=user_table,email=email)
+                session['name'] = recordname[0]['fullname']
+                session['email'] = email
+                fullname = record['fullname'].split(' ')[0] + ' ' + record['fullname'].split(' ')[-1]
+                return redirect(url_for('AdminDashboard'))
+        elif record['email'] == email:
             account_exists = True  # Account with email exists
             if record['password'] == password:
                 recordname = db.find_user(table=user_table,email=email)
-                print("Record Name")
-                print(recordname)
                 session['name'] = recordname[0]['fullname']
                 session['email'] = email
                 fullname = record['fullname'].split(' ')[0] + ' ' + record['fullname'].split(' ')[-1]
@@ -578,13 +584,20 @@ def submit_tariff():
     # Calculate Carbon Emission
     calculate_carbon_emission_green(email=email,totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=tariffcompany)
     # Insert appliance, solar, and user data in inventory table
-    insert_to_inventory(email=email,appliances=appliances,panel_type=panel_type,panel_quantity=panel_quantity)
+    insert_to_inventory(email=email,appliances=appliances,panel_type=panel_type,
+                        panel_quantity=panel_quantity,tariffcompany=tariffcompany,
+                        tariffrate=tariff_rate,tarifftype=tariff_type)
 
+    
     # Confirm user session before redirecting to the dashboard
     session['registered_user'] = email  
     return jsonify({"redirect": url_for('UserDashboardContent')})
 
-def insert_to_inventory(email, appliances: list, panel_type, panel_quantity):
+@app.route('/AdminDashboard')
+def AdminDashboard():
+    return render_template('AdminDashboardContent.html') if not session.get('name') == None else redirect(url_for('landing'))
+
+def insert_to_inventory(email, appliances: list, panel_type, panel_quantity,tariffcompany,tariffrate,tarifftype):
     # Fetch all appliances and panel details from the database
     appliances_db = db.getall_users(table='appliance')  # All appliances
     panelrecord = db.find_panel(table='solarpanel', panelname=panel_type)  # Panel details
@@ -612,6 +625,9 @@ def insert_to_inventory(email, appliances: list, panel_type, panel_quantity):
                 wattcapacity=panelrecord[0]['wattcapacity'],
                 panelname=panel_type,
                 panel_quantity=panel_quantity,
+                tariffcompany=tariffcompany,
+                tariffrate=tariffrate,
+                tarifftype=tarifftype
             )
         else:
             print(f"Appliance '{appliance}' not found in the database, skipping.")
