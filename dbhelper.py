@@ -37,6 +37,12 @@ class Databasehelper:
         users:list = self.getprocess(query)
         return users
     
+    def getall_inventory(self, table:str,email:str)->list:
+        query = f"SELECT * FROM {table} WHERE `email` = '{email}'"
+        inventory:list = self.getprocess(query)
+        return inventory
+    
+    
     def find_user(self,email:str, table:str):
         sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)

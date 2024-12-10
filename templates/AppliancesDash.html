@@ -36,7 +36,7 @@
                 <div class="label-item">
                     <li>
                         <div class="label-text">
-                            TOTAL KWH CONSUMPTION OF APPLIANCES
+                            TOTAL KWH CONSUMPTION OF APPLIANCES/WEEK
                         </div>
                         <div class="percentage" style="color: rgb(230, 161, 32);font-size:30px;">{{sum_appliances_consumption}} KWH</div>
                     </li>
@@ -94,6 +94,17 @@
                     legend: {
                         display: true,
                         position: "top",
+                        labels: {
+                            generateLabels: function(chart) {
+                                const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                labels.forEach(label => {
+                                    const dataset = chart.data.datasets[label.datasetIndex];
+                                    const total = dataset.data.reduce((a, b) => a + b, 0); // Calculate the total for the dataset
+                                    label.text += ` (${total.toFixed(2)}KWH)`; // Append the total to the label
+                                });
+                                return labels;
+                            },
+                        },
                     },
                 },
                 scales: {
@@ -105,7 +116,7 @@
                     },
                 },
             },
-        });
+        });        
     }
     
 </script>

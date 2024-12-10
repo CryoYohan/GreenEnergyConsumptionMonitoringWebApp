@@ -169,14 +169,18 @@ class Simulator:
                 for appliance_record in appliance_records:
                     if appliance_record['appliancename'] in appliances:
                         # Simulate random hours of use
-                        random_hour = uniform(0, 4)
-                        adjusted_hours = max(0, float(appliance_record['hours_use']) - random_hour)
-                        
+                        random_hour = uniform(0,4)
+                        # Don't deduct hours_use if the hours of use is less than 5 to avoid zero values.
+                        if not appliance_record['hours_use'] < 1:
+                            adjusted_hours = max(0, float(appliance_record['hours_use']) - random_hour)
+                        else:
+                            random_hour = uniform(0.01, 0.2)
+                            adjusted_hours = float(appliance_record['hours_use']) - random_hour
                         # Calculate kWh consumption
                         kwh_consumption = (appliance_record['watt'] * adjusted_hours) / 1000
                         
                         # Accumulate daily consumption by type
-                        daily_consumption_by_type[appliance_type] += kwh_consumption
+                        daily_consumption_by_type[appliance_type] += float(kwh_consumption)
             
             # Append daily totals to weekly totals
             for appliance_type, daily_total in daily_consumption_by_type.items():

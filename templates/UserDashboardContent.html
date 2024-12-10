@@ -134,45 +134,47 @@
         const canvas = document.getElementById('myDoughnutChart');
         if (!canvas) return; // Ensure the canvas element exists
     
-        // Extract labels and data from the dynamic JSON input
-        const labels = Object.keys(dynamicData);
-        const dataValues = Object.values(dynamicData).map(
-            weeklyData => weeklyData.reduce((sum, value) => sum + value, 0) // Sum weekly data
-        );
-    
-        // Define color palettes (adjustable if more categories are added)
-        const colors = ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40', '#8A2BE2', '#3CB371', '#FF6347'];
-        const hoverColors = colors.map(color => shadeColor(color, -20)); // Slightly darker for hover effect
-    
-        // Create a new doughnut chart
-        new Chart(canvas, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: dataValues,
-                    backgroundColor: colors.slice(0, labels.length),
-                    hoverBackgroundColor: hoverColors.slice(0, labels.length),
-                }]
-            },
-            options: {
-                responsive: true, // Automatically resizes to the container
-                maintainAspectRatio: false, // Allows flexibility in height/width ratio
-                plugins: {
-                    legend: {
-                        display: true, // Show legend
-                        position: 'left', // Position legend at the top
+        setTimeout(()=>{
+                // Extract labels and data from the dynamic JSON input
+            const labels = Object.keys(dynamicData);
+            const dataValues = Object.values(dynamicData).map(
+                weeklyData => weeklyData.reduce((sum, value) => sum + value, 0) // Sum weekly data
+            );
+        
+            // Define color palettes (adjustable if more categories are added)
+            const colors = ['#F4BE37', '#5388D8', '#0D2535', '#FF9F40', '#8A2BE2', '#3CB371', '#FF6347'];
+            const hoverColors = colors.map(color => shadeColor(color, -20)); // Slightly darker for hover effect
+        
+            // Create a new doughnut chart
+            new Chart(canvas, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: colors.slice(0, labels.length),
+                        hoverBackgroundColor: hoverColors.slice(0, labels.length),
+                    }]
+                },
+                options: {
+                    responsive: true, // Automatically resizes to the container
+                    maintainAspectRatio: false, // Allows flexibility in height/width ratio
+                    plugins: {
+                        legend: {
+                            display: true, // Show legend
+                            position: 'left', // Position legend at the top
+                        }
+                    },
+                    animation: {
+                        duration: 1000, // Animation duration
+                        easing: 'easeOutBounce', // Optional bounce effect
+                    },
+                    layout: {
+                        padding: 10 // Adds padding around the chart
                     }
-                },
-                animation: {
-                    duration: 1000, // Animation duration
-                    easing: 'easeOutBounce', // Optional bounce effect
-                },
-                layout: {
-                    padding: 10 // Adds padding around the chart
                 }
-            }
-        });
+            });
+        },1700);
     
         // Helper function to generate hover colors
         function shadeColor(color, percent) {
@@ -196,39 +198,42 @@
     renderDoughnutChart(applianceData);
     
     function renderGreenChart() { 
-        const xValues = {{ days_in_week | tojson }};
-        const yValues = {{ kwhdata | tojson }};
-    
-        new Chart("myGreenChart", {
-            type: "bar",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    label: "Green Energy in KWH",
-                    fill: false,
-                    lineTension: 0,
-                    backgroundColor: "rgba(48,185,56,1.0)",
-                    borderColor: "rgba(0,255,0,0.1)",
-                    data: yValues
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Prevent distortion when resizing
-                plugins: {
-                    legend: { display: true,
-                              position:'top',}
+        setTimeout(()=>{
+
+            const xValues = {{ days_in_week | tojson }};
+            const yValues = {{ kwhdata | tojson }};
+        
+            new Chart("myGreenChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: "Green Energy in KWH",
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(48,185,56,1.0)",
+                        borderColor: "rgba(0,255,0,0.1)",
+                        data: yValues
+                    }]
                 },
-                scales: {
-                    y: {
-                        ticks: {
-                            min: 6,
-                            max: 16
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Prevent distortion when resizing
+                    plugins: {
+                        legend: { display: true,
+                                position:'top',}
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                min: 6,
+                                max: 16
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        },100);
     }
     
 
@@ -296,88 +301,6 @@
                 }
             });
         }, 100); // Slight delay
-    }
-    function renderBarChart() {
-        const canvas = document.getElementById('myBarChart');
-        if (!canvas) return; // Ensure the canvas element exists before rendering the chart
-
-        const barCtx = canvas.getContext('2d');
-
-        // Create a linear gradient for the bar colors
-        const gradientMorning = barCtx.createLinearGradient(0, 0, 0, canvas.height);
-        gradientMorning.addColorStop(0, '#30B938'); // Lighter green at the top
-        gradientMorning.addColorStop(1, '#165319'); // Darker green at the bottom
-
-        const gradientAfternoon = barCtx.createLinearGradient(0, 0, 0, canvas.height);
-        gradientAfternoon.addColorStop(0, '#30B938'); // Lighter green at the top
-        gradientAfternoon.addColorStop(1, '#165319'); // Darker green at the bottom
-
-        const gradientEvening = barCtx.createLinearGradient(0, 0, 0, canvas.height);
-        gradientEvening.addColorStop(0, '#30B938'); // Lighter green at the top
-        gradientEvening.addColorStop(1, '#165319'); // Darker green at the bottom
-
-        const barData = {
-            labels: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
-            datasets: [
-                {
-                    label: 'Morning',
-                    data: [10, 20, 30, 40, 50, 60, 70],
-                    backgroundColor: gradientMorning, // Use gradient for Morning
-                    borderColor: 'darkgreen',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Afternoon',
-                    data: [15, 25, 35, 45, 55, 65, 75],
-                    backgroundColor: gradientMorning, // Use gradient for Afternoon
-                    borderColor: 'darkblue',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Evening',
-                    data: [5, 15, 25, 35, 45, 55, 65],
-                    backgroundColor: gradientMorning, // Use gradient for Evening
-                    borderColor: 'darkorange',
-                    borderWidth: 1
-                }
-            ]
-        };
-
-        new Chart(barCtx, {
-            type: 'bar',
-            data: barData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: { color: 'white' },
-                        grid: { color: 'white' }
-                    },
-                    x: {
-                        ticks: { color: 'blue' },
-                        grid: { display: false },
-                        stacked: false // Set to false to avoid stacking
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: 'blue' }
-                    }
-                },
-                animation: {
-                    duration: 1000, // Animation duration in milliseconds
-                    easing: 'easeOutBounce' // Optional easing effect
-                },
-                layout: {
-                    padding: 0 
-                },
-                barPercentage: 0.4, // Adjust bar width (0.0 to 1.0)
-                categoryPercentage: 0.5 // Adjust the space between categories
-            }
-        });
     }
 </script>
 {% endblock %}

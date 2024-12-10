@@ -41,7 +41,8 @@ appliances = {
     ],
     "PersonalCare": [
         "Hair Dryer",
-        "Electric Toothbrush"
+        "Electric Toothbrush",
+        "Electric Shaver"
     ],
     "Cooking": [
         "Oven",

@@ -75,6 +75,11 @@ def updateuser(email):
     lastname = request.form.get('lastname', '').strip()
     emailupdate = request.form.get('email', '').strip()
     phonenumber = request.form.get('phoneno', '').strip()
+    password = request.form.get('password', '').strip()
+    confirmpassword = request.form.get('confirmpassword', '').strip()
+
+    if not password == confirmpassword:
+        return redirect(url_for('Settings'))
 
     # Combine firstname and lastname into fullname
     fullname = f"{firstname} {lastname}".strip() if firstname or lastname else None
@@ -93,6 +98,8 @@ def updateuser(email):
         update_data['email'] = emailupdate
     if phonenumber:
         update_data['phoneno'] = phonenumber
+    if password:
+        update_data['password'] = password
 
     # Perform the update only if there are fields to update
     if update_data:
@@ -114,11 +121,13 @@ def Settings():
 
 @app.route('/SimulationPage')
 def SimulationPage():
+    email = session.get('email')
+    print(f"Email: {email}")
     pie_data = {
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
         }
-    inventory = db.getall_users(table='inventory')
+    inventory = db.getall_inventory(table='inventory',email=email)
     return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/CarbonEmissionDash')
@@ -408,8 +417,8 @@ def UserDashboardContent():
     global panel_type, panel_quantity
     sum_green_data = round(sum(retrieve_greenenergy_data()),2)
     sum_total_consumption = sum(retrieve_kwhconsumption_data())
-    sum_total_carbonemission = sum(retrieve_carbonemissions())
-    sum_total_carbonemissiongreen = sum(retrieve_carbonemissions_greenenergy())
+    sum_total_carbonemission = round(sum(retrieve_carbonemissions()),2)
+    sum_total_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()),2)
     appliances_sorted_consumption_data = retrieve_sortedappliances_consumption()
     pie_data = {
         'labels': ['Electricity in KWH', 'Green Energy in KWH'],

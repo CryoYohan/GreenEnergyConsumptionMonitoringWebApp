@@ -66,53 +66,64 @@
     </div>
 </div>
 <script>
-const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
-const yValues = {{ costkwh | tojson }};
-const yValuesGreen = {{ costkwhgreen | tojson }};
-
-new Chart("costLineChart", {
-    type: "line",
-    data: {
-        labels: xValues,
-        datasets: [
-            {
-                label: "Cost in Pesos", // First line
-                fill: false,
-                lineTension: 0,
-                backgroundColor: "rgba(244,190,55,1)",
-                borderColor: "rgba(244,190,55,0.8)",
-                borderWidth: 2,
-                data: yValues
-            },
-            {
-                label: "Cost with Green Energy", // Second line
-                fill: false,
-                lineTension: 0,
-                backgroundColor: "rgba(46,156,53,1)",
-                borderColor: "rgba(0,255,155,0.8)",
-                borderWidth: 2,
-                data: yValuesGreen
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: true, // Ensure the legend is displayed
-                position: 'left', // Position of the legend
-            }
+    const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
+    const yValues = {{ costkwh | tojson }};
+    const yValuesGreen = {{ costkwhgreen | tojson }};
+    
+    new Chart("costLineChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [
+                {
+                    label: "Cost in Pesos", // First line
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(244,190,55,1)",
+                    borderColor: "rgba(244,190,55,0.8)",
+                    borderWidth: 2,
+                    data: yValues
+                },
+                {
+                    label: "Cost with Green Energy", // Second line
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(46,156,53,1)",
+                    borderColor: "rgba(0,255,155,0.8)",
+                    borderWidth: 2,
+                    data: yValuesGreen
+                }
+            ]
         },
-        scales: {
-            y: {
-                ticks: {
-                    stepSize: 10 // Optional: set step size for y-axis ticks
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true, // Ensure the legend is displayed
+                    position: 'left', // Position of the legend
+                },
+                datalabels: {
+                    color: '#000', // Label color
+                    anchor: 'end', // Position relative to the point
+                    align: 'top', // Alignment
+                    formatter: (value) => `₱${value.toFixed(2)}`, // Format values with '₱' and 2 decimal places
+                    font: {
+                        size: 10,
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 10 // Optional: set step size for y-axis ticks
+                    }
                 }
             }
-        }
-    }
-});
+        },
+        plugins: [ChartDataLabels] // Add the plugin to the chart
+    });
+    
 </script>
     
 {% endblock %}

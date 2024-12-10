@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Screen</title>
+    <style>
+        body {
+            background: #f7f7f7; /* Tertiary: Dark blue */
+        }
+        
+        #container {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            margin: auto;
+            transform: rotate(45deg);
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        @property --progress-value {
+            syntax: '<integer>';
+            inherits: true;
+            initial-value: 0;
+          }
+          
+          :root {
+            --progress-bar-color: #cfd8dc;
+            --progress-value-color: #2196f3;
+            --progress-empty-color-h: 4.1;
+            --progress-empty-color-s: 89.6;
+            --progress-empty-color-l: 58.4;
+            --progress-filled-color-h: 122.4;
+            --progress-filled-color-s: 39.4;
+            --progress-filled-color-l: 49.2;
+          }
+          
+          html, body {
+            height: 100%;
+            margin: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            flex-direction: column;
+          }
+          
+          body {
+              justify-content: space-evenly;
+            max-height: 300px;
+            width: 100%;
+            max-width: 400px;
+            font-family: 'Roboto Mono', monospace;
+          }
+          
+          progress[value] {
+            display: block;
+            position: relative;
+            appearance: none;
+            width: 80%;
+            height: 6px;
+            border: 0;
+            --border-radius: 10px;
+            border-radius: var(--border-radius);
+            counter-reset: progress var(--progress-value);
+            --progress-value-string: counter(progress) '%';
+            --progress-max-decimal: calc(var(--value, 0) / var(--max, 0));
+            --progress-value-decimal: calc(var(--progress-value, 0) / var(--max, 0));
+            @supports selector(::-moz-progress-bar) {
+              --progress-value-decimal: calc(var(--value, 0) / var(--max, 0));
+            }
+            --progress-value-percent: calc(var(--progress-value-decimal) * 100%);
+            --progress-value-color: hsl(
+              calc((var(--progress-empty-color-h) + (var(--progress-filled-color-h) - var(--progress-empty-color-h)) * var(--progress-value-decimal)) * 1deg)
+              calc((var(--progress-empty-color-s) + (var(--progress-filled-color-s) - var(--progress-empty-color-s)) * var(--progress-value-decimal)) * 1%)
+              calc((var(--progress-empty-color-l) + (var(--progress-filled-color-l) - var(--progress-empty-color-l)) * var(--progress-value-decimal)) * 1%)
+            );
+            animation: calc(3s * var(--progress-max-decimal)) linear 0.5s 1 normal both progress;
+          }
+          
+          progress[value]::-webkit-progress-bar {
+            background-color: var(--progress-bar-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+          }
+          
+          progress[value]::-webkit-progress-value {
+            width: var(--progress-value-percent) !important;
+            background-color: var(--progress-value-color);
+            border-radius: var(--border-radius);
+          }
+          
+          progress[value]::-moz-progress-bar {
+            width: var(--progress-value-percent) !important;
+            background-color: var(--progress-value-color);
+            border-radius: var(--border-radius);
+          }
+          
+          progress[value]::after {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            --size: 32px;
+            width: var(--size);
+            height: var(--size);
+            position: absolute;
+            left: var(--progress-value-percent);
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--progress-value-color);
+            border-radius: 50%;
+            content: attr(value);
+            content: var(--progress-value-string, var(--value));
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+          }
+          
+          @keyframes progress {
+              from {
+                  --progress-value: 0;
+              } to {
+                  --progress-value: var(--value);
+              }
+          }
+        }
+        
+    </style>
+</head>
+<body>
+    <div style="margin:auto;text-align:center">
+        <h1>Starting Simulation...</h1>
+    </div>
+    <canvas id="container" width="200" height="200"></canvas>
+    <progress value="100" max="100" style="--value: 100; --max: 100;"></progress>
+    <script>
+        var points = [],
+            velocity2 = 5, // velocity squared
+            canvas = document.getElementById('container'),
+            context = canvas.getContext('2d'),
+            radius = 5,
+            boundaryX = 200,
+            boundaryY = 200,
+            numberOfPoints = 30;
+
+        init();
+
+        function init() {
+            // create points
+            for (var i = 0; i < numberOfPoints; i++) {
+                createPoint();
+            }
+            // create connections
+            for (var i = 0, l = points.length; i < l; i++) {
+                var point = points[i];
+                if (i == 0) {
+                    points[i].buddy = points[points.length - 1];
+                } else {
+                    points[i].buddy = points[i - 1];
+                }
+            }
+            
+            // animate
+            animate();
+        }
+
+        function createPoint() {
+            var point = {}, vx2, vy2;
+            point.x = Math.random() * boundaryX;
+            point.y = Math.random() * boundaryY;
+            // random vx 
+            point.vx = (Math.floor(Math.random()) * 2 - 1) * Math.random();
+            vx2 = Math.pow(point.vx, 2);
+            // vy^2 = velocity^2 - vx^2
+            vy2 = velocity2 - vx2;
+            point.vy = Math.sqrt(vy2) * (Math.random() * 2 - 1);
+            points.push(point);
+        }
+
+        function resetVelocity(point, axis, dir) {
+            var vx, vy;
+            if (axis == 'x') {
+                point.vx = dir * Math.random();  
+                vx2 = Math.pow(point.vx, 2);
+                vy2 = velocity2 - vx2;
+                point.vy = Math.sqrt(vy2) * (Math.random() * 2 - 1);
+            } else {
+                point.vy = dir * Math.random();  
+                vy2 = Math.pow(point.vy, 2);
+                vx2 = velocity2 - vy2;
+                point.vx = Math.sqrt(vx2) * (Math.random() * 2 - 1);
+            }
+        }
+
+        function drawCircle(x, y) {
+            context.beginPath();
+            context.arc(x, y, radius, 0, 2 * Math.PI, false);
+            context.fillStyle = '#30B938'; /* Secondary: Light green */
+            context.fill();  
+        }
+
+        function drawLine(x1, y1, x2, y2) {
+            context.beginPath();
+            context.moveTo(x1, y1);
+            context.lineTo(x2, y2);
+            context.strokeStyle = '#0D2535'; /* Tertiary: Dark blue */
+            context.stroke();
+        }  
+
+        function draw() {
+            for (var i = 0, l = points.length; i < l; i++) {
+                // circles
+                var point = points[i];
+                point.x += point.vx;
+                point.y += point.vy;
+                drawCircle(point.x, point.y);
+                // lines
+                drawLine(point.x, point.y, point.buddy.x, point.buddy.y);
+                // check for edge
+                if (point.x < 0 + radius) {
+                    resetVelocity(point, 'x', 1);
+                } else if (point.x > boundaryX - radius) {
+                    resetVelocity(point, 'x', -1);
+                } else if (point.y < 0 + radius) {
+                    resetVelocity(point, 'y', 1);
+                } else if (point.y > boundaryY - radius) {
+                    resetVelocity(point, 'y', -1);
+                } 
+            }
+        }
+
+        function animate() {
+            context.clearRect(0, 0, 200, 200);
+            draw();
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>
