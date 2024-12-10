@@ -600,7 +600,21 @@ def UserManagement():
 
 @app.route('/AdminDashboard')
 def AdminDashboard():
-    return render_template('AdminDashboardContent.html',fullname=session.get('name')) if not session.get('name') == None else redirect(url_for('landing'))
+    tariffstats = [
+        len(db.getall_tariffcompanystats('tariffcompany','MERALCO')),
+        len(db.getall_tariffcompanystats('tariffcompany','VECO')),
+        len(db.getall_tariffcompanystats('tariffcompany','CEBECO')),
+        len(db.getall_tariffcompanystats('tariffcompany','TORECO')),
+        len(db.getall_tariffcompanystats('tariffcompany','Aboitiz'))
+    ]
+
+    panelstats = [
+        len(db.getall_tariffcompanystats('panelname','monocrystalline')),
+        len(db.getall_tariffcompanystats('panelname','polycrystalline')),
+        len(db.getall_tariffcompanystats('panelname','thin-film')),
+    ]
+
+    return render_template('AdminDashboardContent.html',fullname=session.get('name'),tariffstats=tariffstats,panelstats=panelstats) if not session.get('name') == None else redirect(url_for('landing'))
 
 def insert_to_inventory(userid,email, appliances: list, panel_type, panel_quantity,tariffcompany,tariffrate,tarifftype):
     # Fetch all appliances and panel details from the database

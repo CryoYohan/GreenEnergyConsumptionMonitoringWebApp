@@ -21,13 +21,13 @@
      <div class="user-estimation">
          
         <div class="total-users">
-            <p id="Cost-sect">Total Users</p>
-            <h1>250</h1>   
+            <p id="Cost-sect">Solar Panel Trends</p>
+            <canvas id="myBarChart"></canvas> 
         </div>       
         
          
          <div class="Cost-Emission">
-             <p id="Cost-sect">Company Stats</p>
+             <p id="Cost-sect">Tariff Company Users</p>
              <canvas id="myPieChart"></canvas>
 
              <div class="labels">
@@ -38,7 +38,7 @@
                                  <span class="bullet orange">●</span> 
                                  MERALCO
                              </div>
-                             <div class="percentage">60%</div>
+                             <div class="percentage">{{ tariffstats[0] }}</div>
                          </li>
                      </div>
                      <div class="label-item">
@@ -47,7 +47,7 @@
                                  <span class="bullet blue">●</span> 
                                  VECO
                              </div>
-                             <div class="percentage">10%</div>
+                             <div class="percentage">{{ tariffstats[1] }}</div>
                          </li>
                      </div>
                      <div class="label-item">
@@ -56,16 +56,25 @@
                                  <span class="bullet orange-red">●</span> 
                                  CEBECO
                              </div>
-                             <div class="percentage">20%</div>
+                             <div class="percentage">{{ tariffstats[2] }}</div>
                          </li>
                      </div>
+                     <div class="label-item">
+                        <li>
+                            <div class="label-text">
+                                <span class="bullet red">●</span> 
+                                TORECO
+                            </div>
+                            <div class="percentage">{{ tariffstats[4] }}</div>
+                        </li>
+                    </div>
                      <div class="label-item">
                          <li>
                              <div class="label-text">
                                  <span class="bullet red">●</span> 
                                  ABOITIZ
                              </div>
-                             <div class="percentage">10%</div>
+                             <div class="percentage">{{ tariffstats[4] }}</div>
                          </li>
                      </div>
                  </ul>
@@ -75,51 +84,8 @@
      
     <div class="Emissions">
          <div class="Energy-Emission">
-             <p id="emit">Green Energy Emission Summary</p>
+             <p id="emit">Green Energy vs. Electricity</p>
              <canvas id="myGreenChart"></canvas>
- 
-             <div class="labels">
-                 <ul>
-                     <div class="label-item">
-                         <li>
-                             <div class="label-text">
-                                 <span class="bullet orange">●</span> 
-                                 lorem
-                             </div>
-                             <div class="percentage">60%</div>
-                         </li>
-                     </div>
-                     <div class="label-item">
-                         <li>
-                             <div class="label-text">
-                                 <span class="bullet blue">●</span> 
-                                 lorem
-                             </div>
-                             <div class="percentage">10%</div>
-                         </li>
-                     </div>
-                     <div class="label-item">
-                         <li>
-                             <div class="label-text">
-                                 <span class="bullet orange-red">●</span> 
-                                 lorem
-                             </div>
-                             <div class="percentage">20%</div>
-                         </li>
-                     </div>
-                     <div class="label-item">
-                         <li>
-                             <div class="label-text">
-                                 <span class="bullet red">●</span> 
-                                 lorem
-                             </div>
-                             <div class="percentage">10%</div>
-                         </li>
-                     </div>
-                 </ul>
-             </div>
-             
- 
          </div>
          <div class="Carbon-Emission">
              <p id="emit">Carbon Emission Analysis</p>
@@ -151,7 +117,7 @@
     </div>
  </div>
 
- <script>
+ <script type="text/javascript">
      // Function to update the current date and time
      function updateDateTime() {
          const date = new Date();
@@ -170,5 +136,209 @@
      
      // Initial call to set the date and time immediately on page load
      updateDateTime();
+
+     var xValues = ["Monocrystalline", "Polycrystalline", "Thin-Film"];
+    var yValues = {{ panelstats | tojson }};
+    var barColors = ["#66cc33", "#0066cc", "#ffcc00"];
+
+    new Chart("myBarChart", {
+        type: "bar",
+        data: {
+            labels: xValues.map((label, index) => `${label} (${yValues[index]})`), // Add values to labels
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            responsive: true, // Makes the chart responsive
+            maintainAspectRatio: true, // Disables maintaining the aspect ratio
+            animation: {
+                duration: 1500, // Animation duration in milliseconds
+                easing: "easeOutBounce" // Add bounce easing effect
+            },
+            plugins: {
+                legend: {
+                    display: false // Disables the legend
+                }
+            }
+        }
+    });
+        window.onload = function() {
+            loadDashboard(); 
+             setTimeout(renderCostCharts, 100);
+            // setTimeout(renderDoughnutChart, 100);
+             setTimeout(renderGreenChart, 100);
+             setTimeout(renderCarbonChart, 100);
+
+            // setTimeout(renderBarChart, 100);
+            
+        };
+
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.closest(".profile-section")) {
+                document.getElementById("profile-dropdown").style.display = "none";
+            }
+        }
+
+        function loadDashboard() {
+            fetch('./AdminDashboardContent.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Weekly Energy Monitoring Statistics"; // Change the page title
+                    document.getElementById("page-title").innerText = "Dashboard"; // Change the displayed title
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        }
+
+        document.getElementById("settings").addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('./Settings.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("Main-Content").innerHTML = data;
+                    document.title = "Admin Dashboard";
+                    document.getElementById("dash-title").innerText = "Manage Settings";
+
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+
+        function renderCostCharts() {
+            const canvas = document.getElementById('myPieChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+            const yValues =  {{ tariffstats | tojson }}
+            const pieCtx = canvas.getContext('2d');
+            const pieData = {
+                labels: ['MERALCO ', 'VECO', 'CEBECO', 'TORECO','Aboitiz'],
+                datasets: [{
+                    data:yValues,
+                    backgroundColor: ['#F4BE37', '#5388D8', '#0D2535 ', '#FF9F40'],
+                    hoverBackgroundColor: ['#F4BE37', '#5388D8', '#0D2535 ', '#FF9F40'],
+                }]
+            }; 
+
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: pieData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Allows the chart to fill the entire container
+                    animation: {
+                        duration: 1000, // Animation duration in milliseconds (adjust as needed)
+                        easing: 'easeOutBounce' // Optional easing effect
+                    },
+                    plugins: {
+                        legend: {
+                            display: false, // Hide legend to save space if needed
+                            position: 'bottom'
+                        }
+                    },
+                    layout: {
+                        padding: 0 
+                    }
+                }
+            });
+        }
+
+        var xValues = ["Green Energy", "Electricity"];
+        var yValues = [70,100];
+        var barColors = ["Green", "Orange"];
+    
+        new Chart("myGreenChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                responsive: true, // Makes the chart responsive
+                maintainAspectRatio: false, // Disables maintaining the aspect ratio
+                animation: {
+                    duration: 1500, // Animation duration in milliseconds
+                    easing: "easeOutBounce" // Add bounce easing effect
+                },
+                plugins: {
+                    legend: {
+                        display: false // Disables the legend
+                    }
+                }
+            }
+        });
+
+        
+        function renderCarbonChart() {
+            const canvas = document.getElementById('myCarbonChart');
+            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+
+            setTimeout(() => {
+                // Set canvas width and height dynamically
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                const radarCtx = canvas.getContext('2d');
+                const radarData = {
+                    labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7'], // Seven labels for heptagonal shape
+                    datasets: [
+                        {
+                            label: 'Dataset 1',
+                            data: [40, 50, 60, 70, 30, 80, 55], // Seven data points for the first dataset
+                            backgroundColor: 'rgba(244, 190, 55, 0.5)', // Semi-transparent fill color
+                            borderColor: '#F4BE37', // Border color
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Dataset 2',
+                            data: [20, 90, 30, 60, 40, 50, 65], // Seven data points for the second dataset
+                            backgroundColor: 'rgba(83, 136, 216, 0.5)', // Semi-transparent fill color
+                            borderColor: '#5388D8', // Border color
+                            borderWidth: 2,
+                        }
+                    ]
+                };
+
+                new Chart(radarCtx, {
+                    type: 'radar',
+                    data: radarData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000, // Animation duration in milliseconds
+                            easing: 'easeOutBounce' // Optional easing effect
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Hide the legend (label on top)
+                            }
+                        },
+                        layout: {
+                            padding: 0
+                        },
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+            }, 100); // Slight delay
+        }
+
  </script>
 {% endblock %}

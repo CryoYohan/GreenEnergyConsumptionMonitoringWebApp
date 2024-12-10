@@ -52,6 +52,8 @@
                 <th>Solar Panel</th>
                 <th>Panel Quantity</th>
                 <th>Tariff Company</th>
+                <th>Tariff Rate</th>
+                <th>Tariff Type</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -59,10 +61,12 @@
             {%  for record in records %}
             <tr>
                 <td>{{record['email']}}</td>
-                <td>{{record['fullname']}}</td>
-                <td>{{record['panelname']}}</td>
+                <td>{{record['fullname'].title()}}</td>
+                <td>{{record['panelname'].title()}}</td>
                 <td>{{record['panel_quantity']}}</td>
                 <td>{{record['tariffcompany']}}</td>
+                <td>₱{{record['tariffrate']}}</td>
+                <td>{{record['tarifftype']}}</td>
                 <td><a href="#">Suspend</a></td>
             </tr>
             {% endfor %}

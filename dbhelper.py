@@ -43,10 +43,15 @@ class Databasehelper:
         return inventory
 
     def getall_joinedrecords(self):
-        query = "SELECT DISTINCT u.email, u.fullname, i.panelname, i.panel_quantity, i.tariffcompany FROM user u INNER JOIN inventory i ON u.id = i.userid ORDER BY u.id"
+        query = "SELECT DISTINCT u.email, u.fullname, i.panelname, i.panel_quantity, i.tariffcompany, i.tariffrate, i.tarifftype FROM user u INNER JOIN inventory i ON u.id = i.userid ORDER BY u.id"
         joinedrecords:list = self.getprocess(query)
         return joinedrecords
-    
+
+    def getall_tariffcompanystats(self,column,tariffcompany):
+        query = f"select distinct email from inventory where {column}='{tariffcompany}'"
+        tariffcompanystats:list = self.getprocess(query)
+        return tariffcompanystats
+
     def find_user(self,email:str, table:str):
         sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)

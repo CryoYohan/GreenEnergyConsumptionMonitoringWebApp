@@ -47,6 +47,21 @@
                 <p><strong>Current Tariff Company:</strong> {{ inventory[0]['tariffcompany'].upper() }}</p>
                 <p><strong>Current Tariff Rate:</strong> ₱{{ inventory[0]['tariffrate'] }} per kWh</p>
                 <p><strong>Current Tariff Type:</strong> {{ inventory[0]['tarifftype'].title() }}</p>
+                {% if inventory[0]['tariffcompany'] == 'MERALCO' %}
+                    <p><strong>Energy Source:</strong> Coal 50%, Natural Gas 25%, Renewable Energy 25%</p>
+                {% elif inventory[0]['tariffcompany'] == 'CEBECO' %}
+                    <p><strong>Energy Source:</strong> Coal 60%, Hydropower 30%, Renewable Energy 10%</p>
+                {% elif inventory[0]['tariffcompany'] == 'VECO' %}
+                    <p><strong>Energy Source:</strong> Coal 65%, Hydro 20%, Renewable Energy 15%</p>
+                {% elif inventory[0]['tariffcompany'] == 'TORECO' %}
+                    <p><strong>Energy Source:</strong> Coal 70%, Natural Gas 20%, Hydro 10%</p>
+                {% elif inventory[0]['tariffcompany'] == 'Aboitiz' %}
+                    <p><strong>Energy Source:</strong> Coal 55%, Solar 30%, Natural Gas 15%</p>
+                {% else %}
+                    <p><strong>Energy Source:</strong> Data not available</p>
+                {% endif %}
+                <p><strong>Carbon Emission of Coal per KWH:</strong>1.1 KG CO₂</p>
+                <p><strong>Carbon Emission of Natural Gas per KWH:</strong>0.5 KG CO₂</p>
             </div>
         </div>
     </div>
