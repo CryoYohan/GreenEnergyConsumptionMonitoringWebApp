@@ -6,9 +6,200 @@
     <link rel="stylesheet" href="../static/css/AdminDashTemplateStyle.css">
     <title>Admin Dasboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+        .topdiv {
+            width: 100%;
+            height: 10vh;
+            background-color: transparent;
+            margin: 10px;
+            margin-top: 25px;
+            display: flex;
+            gap: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .welcome h1{
+            color: #ffff;
+            padding: 0;
+            margin: 0;
+        }
+        .date-time{
+            display: flex;
+            flex-direction: row;
+            margin-top: -2em;
+            padding: 0;
+            gap: 10px;
+            color: #ffff;
+        }
+        #date, #time{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .statistics {
+            width: 98.3%;
+            height: 70vh;
+            background-color: transparent;
+            margin: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .user-estimation,
+        .Emissions {
+            width:35%;
+            height: 100%;
+            background-color: #002c4c;
+            border-radius: 20px;
+            gap: 10px;
+        }
+        
+        .user-estimation {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+        
+        .total-users,
+        .Cost-Emission{
+            height: 50%;
+            width: 100%;
+            background-color: #ffff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .Emissions {
+            width: 65%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        
+        .Energy-Emission,
+        .Carbon-Emission {
+            width: 50%;
+            height: 100%;
+            background-color: #ffff;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #myPieChart, 
+        #myDoughnutChart,
+        #myGreenChart,
+        #myCarbonChart {
+            width: 73% !important; /* Adjust based on your layout */
+            margin-left: 0 !important;
+            height: 60% !important; /* Adjust based on your layout */
+            margin: 0 !important;
+            padding-bottom: 5px;
+        }
+        
+        .labels ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            padding: 0;
+            margin-top: 1em;
+            position: relative;
+            bottom: 15%;
+        }
+        
+        .label-item {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+        
+        .label-item li {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-size: 15px;
+            margin: 0;
+        }
+        
+        .bullet {
+            font-size: 20px;
+            padding-right: 5px;
+        }
+        
+        .orange {
+            color: #F4BE37;
+        }
+        
+        .blue {
+            color: #FF9F40;
+        }
+        
+        .orange-red {
+            color: #0D2535;
+        }
+        
+        .red {
+            color: #5388D8;
+        }
+        
+        .percentage {
+            font-weight: bold;
+            font-size: 15px;
+            padding-left: 5px;
+        }
+        #App-sect, #Cost-sect{
+            margin-right: 20em;
+        }
+        #emit{
+            height: 19px;
+            margin: 19px;
+            padding: 0;
+            margin-left: 10px;
+        }
+        .total-users-card {
+            width: 300px;
+            padding: 20px;
+            background: linear-gradient(145deg, #e0f7dc, #c9e8c3);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .total-users-card .card-header h3 {
+            font-size: 1.5rem;
+            color: #48a14d;
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .total-users-card .card-body h1 {
+            font-size: 3rem;
+            color: #2e7d32;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .total-users-card .card-body p {
+            font-size: 1rem;
+            color: #6c757d;
+            margin: 0;
+            font-style: italic;
+        }
+        
+        
     </style>
 </head>
 <body>
@@ -27,7 +218,7 @@
             <div class="Navigation-buttons">
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button" id="Dashboard-btn">
+                        <a href="{{ url_for('AdminDashboard') }}" class="nav-button">
                             <img id="homeicon" src="../static/images/svg/Home-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Dashboard
                         </a>
                     </li>
@@ -35,31 +226,7 @@
 
                 <div class="Dashbtn">
                     <li>
-                        <a href="#" class="nav-button"  id="AdEnergy-btn">
-                            <img src="../static/images/svg/Energy-Icon.svg" alt="Appliances Icon" width="24" height="24"> Green Energy
-                        </a>
-                    </li>
-                </div>
-
-                <div class="Dashbtn">
-                    <li>
-                        <a href="#" class="nav-button"  id="Emission-btn">
-                            <img src="../static/images/svg/Emission-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Carbon Emission
-                        </a>
-                    </li>
-                </div>
-
-                <div class="Dashbtn">
-                    <li>
-                        <a href="#" class="nav-button"  id="Analytics-btn">
-                            <img src="../static/images/svg/Databaseic.svg" alt="Dashboard Icon" width="24" height="24"> Data Analytics
-                        </a>
-                    </li>
-                </div>
-
-                <div class="Dashbtn">
-                    <li>
-                        <a href="#" class="nav-button" id="management-btn">
+                        <a href="{{ url_for('UserManagement') }}" class="nav-button">
                             <img src="../static/images/svg/useric.svg" alt="Dashboard Icon" width="24" height="24"> User Management
                         </a>
                     </li>
@@ -78,29 +245,27 @@
                     <a href="#">
                         <img src="../static/images/svg/profilenako.svg" alt="">
                         <div class="name-status">
-                            <span id="user-name">Nicholai</span> <br>
+                            <span id="user-name">{{ fullname }}</span> <br>
                             <p>Admin</p>
                         </div>
                     </a>
                     <div class="dropdown-menu" id="profile-dropdown">
                         <a id="settings" href="#"> <img src="../static/images/svg/settingsicon.svg" alt="" width="10" height="10"> Settings</a>
-                        <a href="./Landing.html"> <img src="../static/images/svg/logouticon.svg" alt=""  width="24" height="24"> Logout</a>
+                        <a href="{{ url_for('logout') }}"> <img src="../static/images/svg/logouticon.svg" alt=""  width="24" height="24"> Logout</a>
                     </div>
                 </div>
                 
 
             </div>
-            <div id="Main-Content">
+            {%  block content %}
+            {% endblock %}
 
-            </div>
-            <div class="footer">
-                <footer>© Copyright 2024 EnerGreen</footer>
             </div>
         </div>
     </div>
 
 
-    <script>
+    <script type="text/javascript">
 
         window.onload = function() {
             loadDashboard(); 
@@ -113,20 +278,7 @@
             
         };
 
-        function togglePassword(inputId) {
-            const passwordInput = document.getElementById(inputId);
-            const toggleIcon = passwordInput.parentElement.querySelector('.toggle-password');
-            
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                toggleIcon.classList.remove("fa-eye");
-                toggleIcon.classList.add("fa-eye-slash");
-            } else {
-                passwordInput.type = "password";
-                toggleIcon.classList.remove("fa-eye-slash");
-                toggleIcon.classList.add("fa-eye");
-            }
-        }
+
         function toggleDropdown() {
             const dropdown = document.getElementById("profile-dropdown");
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
@@ -150,80 +302,6 @@
                 .catch(error => console.error('Error fetching content:', error));
         }
 
-
-        document.getElementById("Dashboard-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./AdminDashboardContent.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Admin Dashboard";
-                    document.getElementById("dash-title").innerText = "Dashboard";
-
-                    setTimeout(renderCostCharts, 100);
-                    setTimeout(renderGreenChart, 100);
-                    setTimeout(renderCarbonChart, 100);
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
-        document.getElementById("AdEnergy-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./AdminGreenEnergyDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Admin Dashboard";
-                    document.getElementById("dash-title").innerText = "Green Energy";
-                    setTimeout(renderGreenEnergyChart, 100)
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
-        document.getElementById("Emission-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./AdminCarbonEmissionDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Admin Dashboard";
-                    document.getElementById("dash-title").innerText = "Carbon Emission";
-                    setTimeout(renderGreenEnergyChart, 100)
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
-        document.getElementById("Analytics-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./DataAnalyticsDash.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Admin Dashboard";
-                    document.getElementById("dash-title").innerText = "Data Analytics";
-                    setTimeout(renderAnalhart, 100)
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
-
-        document.getElementById("management-btn").addEventListener("click", function(event) {
-            event.preventDefault();
-            fetch('./UserManagement.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("Main-Content").innerHTML = data;
-                    document.title = "Admin Dashboard";
-                    document.getElementById("dash-title").innerText = "User Management";
-
-                })
-                .catch(error => console.error('Error fetching content:', error));
-        });
-
         document.getElementById("settings").addEventListener("click", function(event) {
             event.preventDefault();
             fetch('./Settings.html')
@@ -236,8 +314,6 @@
                 })
                 .catch(error => console.error('Error fetching content:', error));
         });
-
-
 
         function renderCostCharts() {
             const canvas = document.getElementById('myPieChart');
@@ -390,164 +466,35 @@
                 });
             }, 100); // Slight delay
         }
+        google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ["Element", "Density", { role: "style" } ],
+        ["Copper", 8.94, "#b87333"],
+        ["Silver", 10.49, "silver"],
+        ["Gold", 19.30, "gold"],
+        ["Platinum", 21.45, "color: #e5e4e2"]
+      ]);
 
-        function renderGreenEnergyChart() {
-            const canvas = document.getElementById('greenEnergyChart');
-            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
 
-            setTimeout(() => {
-                // Set canvas width and height dynamically
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-
-                const ctx = canvas.getContext('2d');
-                const barData = {
-                    labels: ['7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'], // Hourly labels
-                    datasets: [{
-                        label: 'kWh',
-                        data: [1, 2, 3, 3.5, 4.5, 4.2, 5, 4.8, 3, 2], // Energy consumption data points
-                        backgroundColor: {
-                            type: 'linear',
-                            x0: 0,
-                            y0: 0,
-                            x1: 0,
-                            y1: 1,
-                            colorStops: [
-                                { offset: 0, color: '#2D972B' }, // Light green
-                                { offset: 1, color: '#0C4109' }  // Dark green
-                            ]
-                        },
-                        borderColor: '#2D972B', // Border color (green)
-                        borderWidth: 2
-                    }]
-                };
-
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: barData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: {
-                            duration: 1000, // Animation duration in milliseconds
-                            easing: 'easeOutBounce' // Optional easing effect
-                        },
-                        plugins: {
-                            legend: {
-                                display: false // Hide the legend (label on top)
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    // Customizing tooltip to show kWh first, then time
-                                    label: function(tooltipItem) {
-                                        const kWh = tooltipItem.raw + ' kWh'; // Show kWh value
-                                        const time = barData.labels[tooltipItem.dataIndex]; // Get corresponding time label
-                                        return `${kWh}\n${time}`; // Display kWh on top, time below
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    callback: function(value) {
-                                        return value + ' kWh'; // Customize x-axis labels to show kWh
-                                    }
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                max: 10, // Adjust the max value if needed
-                                ticks: {
-                                    stepSize: 2
-                                }
-                            }
-                        }
-                    }
-                });
-            }, 100); // Slight delay
-        }
-
-        function renderAnalhart() {
-            const canvas = document.getElementById('AnalyticsChart');
-            if (!canvas) return; // Ensure the canvas element exists before rendering the chart
-
-            setTimeout(() => {
-                // Set canvas width and height dynamically
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-
-                const ctx = canvas.getContext('2d');
-                const barData = {
-                    labels: ['7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'], // Hourly labels
-                    datasets: [{
-                        label: 'kWh',
-                        data: [1, 2, 3, 3.5, 4.5, 4.2, 5, 4.8, 3, 2], // Energy consumption data points
-                        backgroundColor: {
-                            type: 'linear',
-                            x0: 0,
-                            y0: 0,
-                            x1: 0,
-                            y1: 1,
-                            colorStops: [
-                                { offset: 0, color: '#2D972B' }, // Light green
-                                { offset: 1, color: '#0C4109' }  // Dark green
-                            ]
-                        },
-                        borderColor: '#2D972B', // Border color (green)
-                        borderWidth: 2
-                    }]
-                };
-
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: barData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: {
-                            duration: 1000, // Animation duration in milliseconds
-                            easing: 'easeOutBounce' // Optional easing effect
-                        },
-                        plugins: {
-                            legend: {
-                                display: false // Hide the legend (label on top)
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    // Customizing tooltip to show kWh first, then time
-                                    label: function(tooltipItem) {
-                                        const kWh = tooltipItem.raw + ' kWh'; // Show kWh value
-                                        const time = barData.labels[tooltipItem.dataIndex]; // Get corresponding time label
-                                        return `${kWh}\n${time}`; // Display kWh on top, time below
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    callback: function(value) {
-                                        return value + ' kWh'; // Customize x-axis labels to show kWh
-                                    }
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                max: 10, // Adjust the max value if needed
-                                ticks: {
-                                    stepSize: 2
-                                }
-                            }
-                        }
-                    }
-                });
-            }, 100); // Slight delay
-        }
+      var options = {
+        title: "Density of Precious Metals, in g/cm^3",
+        width: 600,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+      chart.draw(view, options);
+  }
     </script>
 </body>
 </html>

@@ -584,7 +584,7 @@ def submit_tariff():
     # Calculate Carbon Emission
     calculate_carbon_emission_green(email=email,totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=tariffcompany)
     # Insert appliance, solar, and user data in inventory table
-    insert_to_inventory(email=email,appliances=appliances,panel_type=panel_type,
+    insert_to_inventory(userid=userid,email=email,appliances=appliances,panel_type=panel_type,
                         panel_quantity=panel_quantity,tariffcompany=tariffcompany,
                         tariffrate=tariff_rate,tarifftype=tariff_type)
 
@@ -593,11 +593,16 @@ def submit_tariff():
     session['registered_user'] = email  
     return jsonify({"redirect": url_for('UserDashboardContent')})
 
+@app.route('/UserManagement')
+def UserManagement():
+    records = db.getall_joinedrecords()
+    return render_template('AdminCarbonEmissionDash.html',fullname=session.get('name'),records=records) if not session.get('name') == None else redirect(url_for('landing'))
+
 @app.route('/AdminDashboard')
 def AdminDashboard():
-    return render_template('AdminDashboardContent.html') if not session.get('name') == None else redirect(url_for('landing'))
+    return render_template('AdminDashboardContent.html',fullname=session.get('name')) if not session.get('name') == None else redirect(url_for('landing'))
 
-def insert_to_inventory(email, appliances: list, panel_type, panel_quantity,tariffcompany,tariffrate,tarifftype):
+def insert_to_inventory(userid,email, appliances: list, panel_type, panel_quantity,tariffcompany,tariffrate,tarifftype):
     # Fetch all appliances and panel details from the database
     appliances_db = db.getall_users(table='appliance')  # All appliances
     panelrecord = db.find_panel(table='solarpanel', panelname=panel_type)  # Panel details
@@ -616,6 +621,7 @@ def insert_to_inventory(email, appliances: list, panel_type, panel_quantity,tari
             # Insert the appliance into the inventory table
             db.add_user(
                 table='inventory',
+                userid=userid,
                 email=email,
                 applianceid=appliance_record['applianceid'],
                 appliancename=appliance_record['appliancename'],

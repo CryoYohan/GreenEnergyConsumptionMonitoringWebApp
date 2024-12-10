@@ -1,66 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Green Energy</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-            
-            .green-energy-chart {
-                width: 98.3%;
-                height: 70vh;
-                margin: 0 auto;
-                background-color: #ffff;
-            }
-            .chartbuttons{
-                width: 100%;
-                height: 10vh;
-                background-color: transparent;
-            }
-            .footer{
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                color: #ffff;
-            }
-            .chartbuttons{
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-            
-            }
-            .chartbuttons li a{
-                list-style: none;
-                text-decoration: none;
-                color: #ffff;
-                font-size: 20px;
-                margin-left: 10px;
-            }
-            hr {
-                border: 1px solid #ccc; 
-                margin-top: 5px;
-                margin-left: 30px;
-            }
-            
-        </style>
-    </head>
-<body>
-    <div class="chartbuttons">
-        <li>
-            <a href="">Daily</a>
-            <a href="">Monthly</a>
-            <a href="">Yearly</a>
-            <hr>
-        </li>
-    </div>
-    <div class="green-energy-chart">
-        <canvas id="greenEnergyChart"></canvas>
-    </div>
-    <script>
-        
-    </script>
-</body>
-</html>
+{% extends 'AdminDashTemplate.html' %}
+{% block content %}
+<style>
+    /* Ensure the table is centered */
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1em;
+}
+
+/* Styling for the table */
+.styled-table {
+    width: 80%;
+    border-collapse: collapse;
+}
+
+/* Styling for the table header with light green */
+.styled-table thead {
+    background-color: #30B938;  /* Light green color */
+    color: white;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+.styled-table td{
+    background-color: #f2f2f2;
+}
+
+.styled-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+</style>
+<div style="display: flex;justify-content:center;align-items:center;padding-top: 1em;">
+    <h1><span style="color: #30B938;text-align:center">Active Users</span></h1>
+</div>
+<div class="table-container">
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Fullname</th>
+                <th>Solar Panel</th>
+                <th>Panel Quantity</th>
+                <th>Tariff Company</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for record in records %}
+            <tr>
+                <td>{{record['email']}}</td>
+                <td>{{record['fullname']}}</td>
+                <td>{{record['panelname']}}</td>
+                <td>{{record['panel_quantity']}}</td>
+                <td>{{record['tariffcompany']}}</td>
+                <td><a href="#">Suspend</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,169 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/AdminDashboardContentStyles.css">
-    <title>Dashboard</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
- 
-        }
-    </style>
-</head>
-<body>
-    <div class="topdiv">
-       <div class="welcome">
-            <h1>Welcome, Admin <span>Nicholai!</span> </h1>
-       </div>
-       <div class="date-time">
-            <div id="date">
-                <img src="../static/images/svg/Date_today.svg" alt="">
-                <p>October 9, 2024</p> 
-            </div>
-
-            <div id="time">
-                <img src="../static/images/svg/Time.svg" alt="">
-               <p>11:30:20 A.M.</p> 
-            </div>
-       </div>
+{% extends 'AdminDashTemplate.html' %}
+{% block content %}
+<div class="topdiv">
+    <div class="welcome">
+         <h1>Welcome, Admin <span>{{fullname}}</span> </h1>
     </div>
+    <div class="date-time">
+         <div id="date">
+             <img src="../static/images/svg/Date_today.svg" alt="">
+             <p id="current-date"></p> <!-- This will display the current date -->
+         </div>
 
-    <div class="statistics">
-        <div class="user-estimation">
-            
-            <div class="total-users">
-                <p id="Cost-sect">Total Users</p>
+         <div id="time">
+             <img src="../static/images/svg/Time.svg" alt="">
+            <p id="current-time"></p> <!-- This will display the current time -->
+         </div>
+    </div>
+ </div>
 
-
-            </div>            
-            
-            
-            <div class="Cost-Emission">
-                <p id="Cost-sect">Cost Estimation</p>
-
-                <canvas id="myPieChart"></canvas>
-
-                <div class="labels">
-                    <ul>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">60%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet blue">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange-red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">20%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
-            </div>       
-        </div>
+ <div class="statistics">
+     <div class="user-estimation">
+         
+        <div class="total-users">
+            <p id="Cost-sect">Total Users</p>
+            <h1>250</h1>   
+        </div>       
         
-       <div class="Emissions">
-            <div class="Energy-Emission">
-                <p id="emit">Green Energy Emission Summary</p>
-                <canvas id="myGreenChart"></canvas>
-    
-                <div class="labels">
-                    <ul>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">60%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet blue">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange-red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">20%</div>
-                            </li>
-                        </div>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
-                
-            </div>
-            <div class="Carbon-Emission">
-                <p id="emit">Carbon Emission Analysis</p>
-                <canvas id="myCarbonChart"></canvas>
-    
-                <div class="labels">
-                    <ul>
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet orange">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">60%</div>
-                            </li>
-                        </div> 
-                        <div class="label-item">
-                            <li>
-                                <div class="label-text">
-                                    <span class="bullet red">●</span> 
-                                    lorem
-                                </div>
-                                <div class="percentage">10%</div>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
-            </div>
-       </div>
+         
+         <div class="Cost-Emission">
+             <p id="Cost-sect">Company Stats</p>
+             <canvas id="myPieChart"></canvas>
+
+             <div class="labels">
+                 <ul>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet orange">●</span> 
+                                 MERALCO
+                             </div>
+                             <div class="percentage">60%</div>
+                         </li>
+                     </div>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet blue">●</span> 
+                                 VECO
+                             </div>
+                             <div class="percentage">10%</div>
+                         </li>
+                     </div>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet orange-red">●</span> 
+                                 CEBECO
+                             </div>
+                             <div class="percentage">20%</div>
+                         </li>
+                     </div>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet red">●</span> 
+                                 ABOITIZ
+                             </div>
+                             <div class="percentage">10%</div>
+                         </li>
+                     </div>
+                 </ul>
+             </div>
+         </div>       
+     </div>
+     
+    <div class="Emissions">
+         <div class="Energy-Emission">
+             <p id="emit">Green Energy Emission Summary</p>
+             <canvas id="myGreenChart"></canvas>
+ 
+             <div class="labels">
+                 <ul>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet orange">●</span> 
+                                 lorem
+                             </div>
+                             <div class="percentage">60%</div>
+                         </li>
+                     </div>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet blue">●</span> 
+                                 lorem
+                             </div>
+                             <div class="percentage">10%</div>
+                         </li>
+                     </div>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet orange-red">●</span> 
+                                 lorem
+                             </div>
+                             <div class="percentage">20%</div>
+                         </li>
+                     </div>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet red">●</span> 
+                                 lorem
+                             </div>
+                             <div class="percentage">10%</div>
+                         </li>
+                     </div>
+                 </ul>
+             </div>
+             
+ 
+         </div>
+         <div class="Carbon-Emission">
+             <p id="emit">Carbon Emission Analysis</p>
+             <canvas id="myCarbonChart"></canvas>
+ 
+             <div class="labels">
+                 <ul>
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet orange">●</span> 
+                                 lorem
+                             </div>
+                             <div class="percentage">60%</div>
+                         </li>
+                     </div> 
+                     <div class="label-item">
+                         <li>
+                             <div class="label-text">
+                                 <span class="bullet red">●</span> 
+                                 lorem
+                             </div>
+                             <div class="percentage">10%</div>
+                         </li>
+                     </div>
+                 </ul>
+             </div>
+         </div>
     </div>
-</body>
-</html>
+ </div>
+
+ <script>
+     // Function to update the current date and time
+     function updateDateTime() {
+         const date = new Date();
+         
+         // Get current date in the format: YYYY-MM-DD
+         const currentDate = date.toLocaleDateString();
+         document.getElementById('current-date').textContent = currentDate;
+         
+         // Get current time in the format: HH:MM:SS A.M./P.M.
+         const currentTime = date.toLocaleTimeString();
+         document.getElementById('current-time').textContent = currentTime;
+     }
+     
+     // Update the date and time every second
+     setInterval(updateDateTime, 1000);
+     
+     // Initial call to set the date and time immediately on page load
+     updateDateTime();
+ </script>
+{% endblock %}
