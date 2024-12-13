@@ -591,8 +591,12 @@ def submit_tariff():
     
     # Confirm user session before redirecting to the dashboard
     session['registered_user'] = email  
-    return jsonify({"redirect": url_for('UserDashboardContent')})
+    return jsonify({"redirect": url_for('loader')})
 
+@app.route('/loader')
+def loader():
+    return render_template('loader.html',fullname=session.get('name')) if not session.get('name') == None else redirect(url_for('landing'))
+    
 @app.route('/UserManagement')
 def UserManagement():
     records = db.getall_joinedrecords()

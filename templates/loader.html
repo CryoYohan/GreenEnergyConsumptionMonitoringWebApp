@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Screen</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
+    <title>Energreen | Simulating Data</title>
     <style>
         body {
             background: #f7f7f7; /* Tertiary: Dark blue */
@@ -130,7 +131,7 @@
 </head>
 <body>
     <div style="margin:auto;text-align:center">
-        <h1>Starting Simulation...</h1>
+        <h1>Calculating Data...</h1>
     </div>
     <canvas id="container" width="200" height="200"></canvas>
     <progress value="100" max="100" style="--value: 100; --max: 100;"></progress>
@@ -143,9 +144,9 @@
             boundaryX = 200,
             boundaryY = 200,
             numberOfPoints = 30;
-
+    
         init();
-
+    
         function init() {
             // create points
             for (var i = 0; i < numberOfPoints; i++) {
@@ -163,8 +164,11 @@
             
             // animate
             animate();
+    
+            // Simulate progress
+            simulateProgress();
         }
-
+    
         function createPoint() {
             var point = {}, vx2, vy2;
             point.x = Math.random() * boundaryX;
@@ -177,7 +181,7 @@
             point.vy = Math.sqrt(vy2) * (Math.random() * 2 - 1);
             points.push(point);
         }
-
+    
         function resetVelocity(point, axis, dir) {
             var vx, vy;
             if (axis == 'x') {
@@ -192,14 +196,14 @@
                 point.vx = Math.sqrt(vx2) * (Math.random() * 2 - 1);
             }
         }
-
+    
         function drawCircle(x, y) {
             context.beginPath();
             context.arc(x, y, radius, 0, 2 * Math.PI, false);
             context.fillStyle = '#30B938'; /* Secondary: Light green */
             context.fill();  
         }
-
+    
         function drawLine(x1, y1, x2, y2) {
             context.beginPath();
             context.moveTo(x1, y1);
@@ -207,7 +211,7 @@
             context.strokeStyle = '#0D2535'; /* Tertiary: Dark blue */
             context.stroke();
         }  
-
+    
         function draw() {
             for (var i = 0, l = points.length; i < l; i++) {
                 // circles
@@ -229,12 +233,28 @@
                 } 
             }
         }
-
+    
         function animate() {
             context.clearRect(0, 0, 200, 200);
             draw();
             requestAnimationFrame(animate);
         }
-    </script>
+    
+        function simulateProgress() {
+            const progressBar = document.querySelector('progress[value]');
+            let value = 0;
+    
+            const interval = setInterval(() => {
+                value += 5; // Increment value by 5
+                progressBar.value = value;
+                progressBar.style.setProperty('--value', value);
+    
+                if (value >= 100) {
+                    clearInterval(interval);
+                    window.location.href = "{{ url_for('UserDashboardContent') }}"; // Replace with Flask URL
+                }
+            }, 200); // Update every 200ms
+        }
+    </script>    
 </body>
 </html>
