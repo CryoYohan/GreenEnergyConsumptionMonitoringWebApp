@@ -68,6 +68,7 @@
             --progress-value-string: counter(progress) '%';
             --progress-max-decimal: calc(var(--value, 0) / var(--max, 0));
             --progress-value-decimal: calc(var(--progress-value, 0) / var(--max, 0));
+            
             @supports selector(::-moz-progress-bar) {
               --progress-value-decimal: calc(var(--value, 0) / var(--max, 0));
             }

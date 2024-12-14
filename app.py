@@ -129,7 +129,18 @@ def SimulationPage():
         'values': [50, 20, 15, 15],
         }
     inventory = db.getall_inventory(table='inventory',email=email)
-    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
+    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=retrieve_greenenergy_data()) if not session.get('name') == None else redirect(url_for('landing'))
+
+@app.route('/Inventory')
+def inventory():
+    email = session.get('email')
+    print(f"Email: {email}")
+    pie_data = {
+        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
+        'values': [50, 20, 15, 15],
+        }
+    inventory = db.getall_inventory(table='inventory',email=email)
+    return render_template('Inventory.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))    
 
 @app.route('/CarbonEmissionDash')
 def CarbonEmissionDash():
