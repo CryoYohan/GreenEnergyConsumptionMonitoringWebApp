@@ -6,7 +6,7 @@ class Simulator:
         self.temperatures:list = [31,34,36,35,32]
         self.db = Databasehelper()
 
-    def getTotalConsumption(self, appliances: list) -> list:
+    def getTotalConsumption(self, appliances:list) -> list:
         weeklyconsumption = []
         self.db_appliances = self.db.getall_users('appliance')
 

@@ -52,6 +52,16 @@ class Databasehelper:
         tariffcompanystats:list = self.getprocess(query)
         return tariffcompanystats
 
+    def getall_prevweeklygreendata(self, table: str, userid: int):
+        query = f"""
+            SELECT DISTINCT weeklygreendata 
+            FROM {table} 
+            WHERE userid = {userid} AND weeklygreendata IS NOT NULL
+        """
+        prevweeklydata = self.getprocess(query)
+        return prevweeklydata
+
+
     def find_user(self,email:str, table:str):
         sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)

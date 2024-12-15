@@ -1,96 +1,180 @@
 {% extends 'UserDashboardTemplate.html' %}
 {% block content %}
+<style>
+    /* Scrollable Table Body */
+    #appliance-table-body {
+        max-height: 220px; /* Adjust as needed */
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    thead {
+        background-color: #30B938;
+        color: white;
+        display: block;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+    }
+
+    /* Scrollbar Style */
+    #appliance-table-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #appliance-table-body::-webkit-scrollbar-thumb {
+        background-color: #30B938;
+        border-radius: 10px;
+    }
+
+    #appliance-table-body::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    th {
+        position: sticky;
+        top: 0; /* Ensure header stays at top */
+    }
+</style>
 <div id="simulation-container" style="background-color: #f8f9fa; font-family: Arial, sans-serif; padding: 40px;">
     <!-- Simulasyon Header -->
     <div style="text-align: center; margin-bottom: 40px;">
-        <h1 style="font-size: 32px; color: #333; font-weight: bold;">Simulation</h1>
+        <h1 style="font-size: 32px; color: #333; font-weight: bold;">Simulation Scenario</h1>
         <h4><span style="color:#30B938;">Please note: Upon saving, the entered data will be logged and used as reference for the next week's records.</span></h4>
     </div>
 
-    <!-- Row of Cards -->
-    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-        <!-- Weather Selection Card -->
-        <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
-            <h3 style="color: #30B938; text-align: center;">Simulate Weather</h3>
-            <select id="weather-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                <option value="" disabled selected>Pick a weather</option>
-                <option value="Sunny">Init (Sunny)</option>
-                <option value="Cloudy">Dag-um (Cloudy)</option>
-                <option value="Overcast">Makit-an (Overcast)</option>
-                <option value="Rainy">Uwanon (Rainy)</option>
-            </select>
-        </div>
+    <form action="/simulatescenarios" method="POST">
+            <!-- Row of Cards -->
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+            <!-- Weather Selection Card 
+            <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
+                <h3 style="color: #30B938; text-align: center;">Simulate Weather</h3>
+                <select name="weather-select" id="weather-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="" disabled selected>Pick a weather</option>
+                    <option value="Sunny">Init (Sunny)</option>
+                    <option value="Cloudy">Dag-um (Cloudy)</option>
+                    <option value="Overcast">Makit-an (Overcast)</option>
+                    <option value="Rainy">Uwanon (Rainy)</option>
+                </select>
+            </div>-->
 
-        <!-- Panel Addition Card -->
-        <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
-            <h3 style="color: #30B938; text-align: center;">Add Appliances</h3>
-            <select id="panel-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                <option value="" disabled selected>Pick Appliances</option>
-                <option value="Type1">Monocrystalline</option>
-                <option value="Type2">Polycrystalline</option>
-                <option value="Type3">Thin-Film</option>
-            </select>
-            <div style="margin-top: 15px; text-align: center;">
-                <label>Quantity: </label>
-                <input id="quantity1" value="1" readonly style="width: 50px; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
-                <button onclick="changeQuantity('quantity1', 1)" style="margin-left: 10px; padding: 5px 10px; border: none; background: #30B938; color: white; border-radius: 5px;">+</button>
-                <button onclick="changeQuantity('quantity1', -1)" style="margin-left: 5px; padding: 5px 10px; border: 1px solid #30B938; background: white; color: #30B938; border-radius: 5px;">-</button>
+            <!-- Panel Addition Card -->
+            <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
+                <h3 style="color: #30B938; text-align: center;">Add Appliances</h3>
+                <select name="appliance-select" id="appliance-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="" disabled selected>Pick an Appliance</option>
+                    <option value="Electric Stove">Electric Stove</option>
+                    <option value="Heater">Heater</option>
+                    <option value="Electric Kettle">Electric Kettle</option>
+                    <option value="Coffee Maker">Coffee Maker</option>
+                    <option value="Water Heater">Water Heater</option>
+                    <option value="Lamp">Lamp</option>
+                    <option value="House Lighting">House Lighting</option>
+                    <option value="RGB Lighting">RGB Lighting</option>
+                    <option value="Christmas Lights">Christmas Lights</option>
+                    <option value="OLED TV (Television)">OLED TV (Television)</option>
+                    <option value="Amplifiers">Amplifiers</option>
+                    <option value="Speakers">Speakers</option>
+                    <option value="Portable Bluetooth Speakers">Portable Bluetooth Speakers</option>
+                    <option value="Radio">Radio</option>
+                    <option value="Desktop Computer">Desktop Computer</option>
+                    <option value="Laptop">Laptop</option>
+                    <option value="Smartphones">Smartphones</option>
+                    <option value="Smartwatch">Smartwatch</option>
+                    <option value="PS5 Console">PS5 Console</option>
+                    <option value="Inverter Air Conditioner">Inverter Air Conditioner</option>
+                    <option value="Ceiling Fan">Ceiling Fan</option>
+                    <option value="Electric Fan">Electric Fan</option>
+                    <option value="Air Purifier">Air Purifier</option>
+                    <option value="Washing Machine">Washing Machine</option>
+                    <option value="Clothes Iron">Clothes Iron</option>
+                    <option value="Dishwasher">Dishwasher</option>
+                    <option value="Vacuum Cleaner">Vacuum Cleaner</option>
+                    <option value="Refrigerator">Refrigerator</option>
+                    <option value="Freezer">Freezer</option>
+                    <option value="Water Dispenser">Water Dispenser</option>
+                    <option value="Hair Dryer">Hair Dryer</option>
+                    <option value="Electric Toothbrush">Electric Toothbrush</option>
+                    <option value="Electric Shaver">Electric Shaver</option>
+                    <option value="Oven">Oven</option>
+                    <option value="Electric Stove">Electric Stove</option>
+                    <option value="Rice Cooker">Rice Cooker</option>
+                    <option value="Blender">Blender</option>
+                    <option value="Microwave">Microwave</option>
+                    <option value="Induction Cooker">Induction Cooker</option>
+                    <option value="Toaster">Toaster</option>
+                </select>
+                
+                <div style="margin-top: 15px; text-align: center;">
+                    <label>Quantity: </label>
+                    <input name="quantity1" id="quantity1" value="0" readonly style="width: 50px; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                    <button type="button" onclick="changeQuantity('quantity1', 1)" style="margin-left: 10px; padding: 5px 10px; border: none; background: #30B938; color: white; border-radius: 5px;">+</button>
+                    <button type="button" onclick="changeQuantity('quantity1', -1)" style="margin-left: 5px; padding: 5px 10px; border: 1px solid #30B938; background: white; color: #30B938; border-radius: 5px;">-</button>
+                </div>
+            </div>
+            <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
+                <h3 style="color: #30B938; text-align: center;">Add Panels</h3>
+                <select name="panel-select" id="panel-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option value="" disabled selected>Pick Panel Type</option>
+                    <option value="monocrystalline">Monocrystalline</option>
+                    <option value="polycrystalline">Polycrystalline</option>
+                    <option value="thin-film">Thin-Film</option>
+                </select>
+                <div style="margin-top: 15px; text-align: center;">
+                    <label>Quantity: </label>
+                    <input name="quantity2" id="quantity2" value="0" readonly style="width: 50px; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                    <button type="button" onclick="changeQuantity('quantity2', 1)" style="margin-left: 10px; padding: 5px 10px; border: none; background: #30B938; color: white; border-radius: 5px;">+</button>
+                    <button type="button" onclick="changeQuantity('quantity2', -1)" style="margin-left: 5px; padding: 5px 10px; border: 1px solid #30B938; background: white; color: #30B938; border-radius: 5px;">-</button>
+                </div>
             </div>
         </div>
-        <div style="background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; width: 300px;">
-            <h3 style="color: #30B938; text-align: center;">Add Panels</h3>
-            <select id="panel-select" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                <option value="" disabled selected>Pick Panel Type</option>
-                <option value="Type1">Monocrystalline</option>
-                <option value="Type2">Polycrystalline</option>
-                <option value="Type3">Thin-Film</option>
-            </select>
-            <div style="margin-top: 15px; text-align: center;">
-                <label>Quantity: </label>
-                <input id="quantity1" value="1" readonly style="width: 50px; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
-                <button onclick="changeQuantity('quantity1', 1)" style="margin-left: 10px; padding: 5px 10px; border: none; background: #30B938; color: white; border-radius: 5px;">+</button>
-                <button onclick="changeQuantity('quantity1', -1)" style="margin-left: 5px; padding: 5px 10px; border: 1px solid #30B938; background: white; color: #30B938; border-radius: 5px;">-</button>
-            </div>
+
+        <!-- Weekly Green Energy Table -->
+        <div style="margin: 20px auto; width: 100%; max-width: 680px; overflow-x: auto;">
+            <h3 style="text-align: center; color: #30B938; margin-bottom: 20px;">Weekly Record of Green Energy Production Records</h3>
+            <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                <thead style="background-color: #30B938; color: white;">
+                    <tr>
+                        <th style="padding: 10px; text-align: center;">Monday</th>
+                        <th style="padding: 10px; text-align: center;">Tuesday</th>
+                        <th style="padding: 10px; text-align: center;">Wednesday</th>
+                        <th style="padding: 10px; text-align: center;">Thursday</th>
+                        <th style="padding: 10px; text-align: center;">Friday</th>
+                        <th style="padding: 10px; text-align: center;">Saturday</th>
+                        <th style="padding: 10px; text-align: center;">Sunday</th>
+                    </tr>
+                </thead>
+                <tbody id="appliance-table-body">
+                    {% for week_data in (inventory) %}
+                    <tr>
+                        {% for daily_kwh in week_data %}
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ daily_kwh }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </div>
 
-    <!-- Appliance List Table -->
-    <div style="margin: 20px auto; width: 100%; max-width: 800px;">
-        <h3 style="text-align: center; color: #30B938; margin-bottom: 20px;">Weekly Record of Green Energy Production</h3>
-        <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
-            <thead style="background-color: #30B938; color: white;">
-                <tr>
-                    <th style="padding: 10px; text-align: left;">Monday</th>
-                    <th style="padding: 10px; text-align: left;">Tuesday</th>
-                    <th style="padding: 10px; text-align: left;">Wednesday</th>
-                    <th style="padding: 10px; text-align: left;">Thursday</th>
-                    <th style="padding: 10px; text-align: center;">Friday</th>
-                    <th style="padding: 10px; text-align: center;">Saturday</th>
-                    <th style="padding: 10px; text-align: center;">Sunday</th>
-                    <th style="padding: 10px; text-align: center;">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="appliance-table-body">
-                <tr>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[0] }} kwh</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[1] }} kwh</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[2] }} kwh</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[3] }} kwh</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[4] }} kwh</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[5] }} kwh</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ccc;">{{ inventory[6] }} kwh</td>
-                    <td style="padding: 10px; text-align: center; border-bottom: 1px solid #ccc;">
-                        <button style="padding: 5px 10px; border: none; background: #dc3545; color: white; border-radius: 5px; cursor: pointer;">Remove</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
-    <!-- Save Button -->
-    <div style="text-align: center; margin-top: 30px;">
-        <button style="background: #30B938; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px;">Luwasa</button>
-    </div>
+        <!-- Save Button -->
+        <div style="text-align: center; margin-top: 30px;">
+            <button title="Save Preferences" style="cursor:pointer;background: #30B938; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px;">Save</button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -101,6 +185,7 @@
             quantity.value = current + value;
         }
     }
+    
 </script>
 
 {% endblock %}

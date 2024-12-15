@@ -123,13 +123,20 @@ def Settings():
 @app.route('/SimulationPage')
 def SimulationPage():
     email = session.get('email')
+    userid = getUserIDFromEmail(email)
     print(f"Email: {email}")
     pie_data = {
         'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
         'values': [50, 20, 15, 15],
         }
-    inventory = db.getall_inventory(table='inventory',email=email)
-    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=retrieve_greenenergy_data()) if not session.get('name') == None else redirect(url_for('landing'))
+    weekly_logs = db.getall_prevweeklygreendata(table='greenergyweeklylogs', userid=userid)
+
+    # Extract only non-null `weeklygreendata` values and convert to lists of floats
+    inventory = [
+        [f"{kwh} kwh" for kwh in log['weeklygreendata'].split(',')]
+        for log in weekly_logs if log['weeklygreendata'] is not None
+    ]
+    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/Inventory')
 def inventory():
@@ -170,13 +177,6 @@ def GreenEnergyDash():
     sum_greenenergydata = round(sum(greenenergydata),2)
     return render_template('GreenEnergyDash.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,greenenergydata=greenenergydata,sum_greenenergydata=sum_greenenergydata)if not session.get('name') == None else redirect(url_for('landing'))
 
-@app.route('/CostEstimationDash')
-def CostEstimationDash():
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    return render_template('CostEstimationDash.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/AppliancesDash')
 def AppliancesDash():
@@ -231,14 +231,20 @@ def oauth2callback():
         flash("Token verification failed. Please try again.", 'error')
         return redirect(url_for("Landing"))
 
-# Calculate Total Power Consumption of Appliances
-def calculate_total_consumption(appliances:list,email:str):
+ # Get User ID from email
+def getUserIDFromEmail(email:str):
     # Get User ID from email
     userid=0
     records = db.getall_users(table=user_table)
     for record in records:
         if email == record['email']:
             userid = record['id'] 
+    return userid
+
+# Calculate Total Power Consumption of Appliances
+def calculate_total_consumption(appliances:list,email:str):
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
 
     # Calculate Solar Panel Energy Production        
     kwhconsumption:list = simulate.getTotalConsumption(appliances=appliances)
@@ -248,12 +254,8 @@ def calculate_total_consumption(appliances:list,email:str):
     db.update_user(table='simulation', userid=userid,kwhconsumption=csv_kwhconsumption)
 
 def calculate_total_consumption_sorted(appliances:list,email:str):
-    # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+     # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
 
     # Calculate Solar Panel Energy Production        
     kwhconsumption_sorted = simulate.getTotalConsumption2(appliances=appliances)
@@ -268,12 +270,8 @@ def calculate_total_consumption_sorted(appliances:list,email:str):
 def calculate_weekly_powergeneration_solar(email:str):
     global panel_type,panel_quantity,weeklydata
     
-    # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+     # Get User ID from email
+    userid = getUserIDFromEmail(email=email) 
 
     # Calculate Solar Panel Energy Production        
     weeklydata = simulate.getTotalSolarKWH_Production(panel_type,panel_quantity)
@@ -282,12 +280,8 @@ def calculate_weekly_powergeneration_solar(email:str):
 
 # Calculate KWH Consumption Equivalent Cost in Pesos
 def calculate_total_consumption_equivalent_cost(email:str,totalConsumption:list, tariffRate:str, tariffType:str):
-     # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
             
     weeklycost = simulate.getTotalCosts(totalConsumption=totalConsumption,tariffRate=tariffRate,tariffType=tariffType)
     csv_weeklycost =','.join(map(str, weeklycost))
@@ -295,12 +289,8 @@ def calculate_total_consumption_equivalent_cost(email:str,totalConsumption:list,
 
 # Calculate KWH Consumption Equivalent Cost in Pesos with Green Energy
 def calculate_total_consumption_equivalent_cost_with_greenenergy(email:str,totalConsumption:list,totalGreenEnergy:list, tariffRate:str, tariffType:str)->None:
-     # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email) 
             
     weeklycost_with_greenenergy = simulate.getTotalCostwithGreenEnergy(totalConsumption=totalConsumption,totalGreenEnergy=totalGreenEnergy,tariffRate=tariffRate,tariffType=tariffType)
     csv_weeklycost_with_greenenergy =','.join(map(str, weeklycost_with_greenenergy))
@@ -308,12 +298,8 @@ def calculate_total_consumption_equivalent_cost_with_greenenergy(email:str,total
 
 # Calculate the carbon emission of KWH consumption according to each Tariff Companies
 def calculate_carbon_emission(email:str,totalConsumption:list,tariff_company:str):
-      # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email) 
             
     weekly_carbonemission = simulate.getTotalCarbonEmissions(totalConsumption=totalConsumption,tariff_company=tariff_company)
     csv_weekly_carbonemission=','.join(map(str, weekly_carbonemission))
@@ -322,38 +308,33 @@ def calculate_carbon_emission(email:str,totalConsumption:list,tariff_company:str
 
 # Calculate the carbon emission of KWH consumption according to each Tariff Companies with Green Energy
 def calculate_carbon_emission_green(email:str,totalConsumption:list,totalGreenEnergy:list,tariff_company:str):
-      # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
 
     deducted_weekly_consumption = simulate.deductkwhFromGreenEnergy(totalConsumption=totalConsumption,totalGreenEnergy=totalGreenEnergy)
     weekly_carbonemissiongreen = simulate.getTotalCarbonEmissions(totalConsumption=deducted_weekly_consumption,tariff_company=tariff_company)
     csv_weekly_carbonemissiongreen=','.join(map(str, weekly_carbonemissiongreen))
     print(f"WEEKLY CARBON EMISSION with Green Energy: {csv_weekly_carbonemissiongreen}")
+    print(f"user id: {userid}")
     db.update_user(table='simulation', userid=userid,carbonemissiongreen=csv_weekly_carbonemissiongreen)
 
 def retrieve_kwhconsumption_data():
     email = session.get('email')
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+    
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
     simulation_record = simulation_record[0]['kwhconsumption'].split(',')
-    simulation_record = [float(value) for value in simulation_record]
+    simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
 def retrieve_sortedappliances_consumption():
-    email = session.get('email')    
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+    email = session.get('email')  
+
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     result = db.find_simrecord(table='simulation', userid=userid)
     print('RESULT JSON')
     print(result)
@@ -364,63 +345,58 @@ def retrieve_sortedappliances_consumption():
 
 def retrieve_greenenergy_data():
     email = session.get('email')
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
     simulation_record = simulation_record[0]['panelweekdata'].split(',')
-    simulation_record = [float(value) for value in simulation_record]
+    simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
 def retrieve_costkwh():
     email = session.get('email')
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
     simulation_record = simulation_record[0]['costofkwh'].split(',')
-    simulation_record = [float(value) for value in simulation_record]
+    simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
 
 def retrieve_costkwhgreen():
     email = session.get('email')
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+    
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
     simulation_record = simulation_record[0]['costofkwhgreen'].split(',')
-    simulation_record = [float(value) for value in simulation_record]
+    simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
 def retrieve_carbonemissions():
     email = session.get('email')
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
     simulation_record = simulation_record[0]['carbonemission'].split(',')
-    simulation_record = [float(value) for value in simulation_record]
+    simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
 def retrieve_carbonemissions_greenenergy():
     email = session.get('email')
-    userid = 0
-    records = db.getall_users(table='user')
-    for record in records:
-        if record['email'] == email:
-            userid = record['id']
+
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
     simulation_record = simulation_record[0]['carbonemissiongreen'].split(',')
-    simulation_record = [float(value) for value in simulation_record]
+    simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
 # Dashboard Template Route
@@ -487,6 +463,49 @@ def email_exists(email:str):
             return True  
     return False
 
+def updateWeeklySolarPanelEnerProd(paneltype, panel_qty):
+    global tariff_rate,tariff_type,tariffcompany
+    # Get user id using email
+    userid = getUserIDFromEmail(email=session.get('email'))
+
+    currentweekenergyprod = retrieve_greenenergy_data()
+    nextweekgreenenergyprod = simulate.getTotalSolarKWH_Production(paneltype,panel_qty)
+    result = [round(a + b,2) for a, b in zip(nextweekgreenenergyprod, currentweekenergyprod)]
+
+    csv_weeklydata = ','.join(map(str, result))
+    print("Updating user with weekly solar data...")
+    db.update_user(table='simulation', userid=userid, panelweekdata=csv_weeklydata)
+
+def updateWeeklyCostEstimation():
+    calculate_total_consumption_equivalent_cost_with_greenenergy(email=session.get('email'), totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariffRate=retrieve_usertariffrate(email=session.get('email')), tariffType=tariff_type)
+
+def updateWeeklyCarbonEmission():
+    calculate_carbon_emission_green(email=session.get('email'),totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=retrieve_usertariffcompany(email=session.get('email')))
+  
+def retrieve_usertariffrate(email:str):
+    inventoryrecords = db.getall_inventory(email=email,table='inventory')
+    tariffrate = inventoryrecords[0]['tariffrate']
+    return tariffrate
+
+def retrieve_usertariffcompany(email:str):
+    inventoryrecords = db.getall_inventory(email=email,table='inventory')
+    tariffcompany = inventoryrecords[0]['tariffcompany']
+    return tariffcompany
+
+@app.route('/simulatescenarios', methods=['POST'])
+def simulatescenarios():
+    weather = request.form.get('weather-select')
+    appliance = request.form.get('appliance-select')
+    appliance_qty = request.form.get('quantity1')
+    paneltype = request.form.get('panel-select')
+    panel_qty = request.form.get('quantity2')
+    print(weather,appliance,appliance_qty, paneltype,panel_qty)
+
+    updateWeeklySolarPanelEnerProd(paneltype=paneltype, panel_qty=panel_qty)
+    updateWeeklyCostEstimation()
+    updateWeeklyCarbonEmission()
+
+    return redirect(url_for('loader'))
 
 # Manual Login Route
 @app.route('/userlogin', methods=['POST'])
@@ -569,11 +588,9 @@ def submit_tariff():
         flash("Session expired or invalid. Please log in again.", "error")
         return jsonify({"redirect": url_for('landing')})
 
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
+    # Get User ID from email
+    userid = getUserIDFromEmail(email=email)
+
     hasSetup=1
     # Set the user status to Has SETUP
     db.update_user(table='user', email=email,hasSetup=hasSetup) # This user has already setup and his hasSetup status is changed to 1
@@ -685,7 +702,6 @@ def setupPanels():
         print(panel_type)
         panel_quantity = request.form['quantity']
         print(panel_quantity)
-        simulate.getTotalSolarKWH_Production(panel_type, int(panel_quantity))
     return redirect(url_for('setupTariff'))
 
 @app.route('/setupAppliances', methods=['POST'])
