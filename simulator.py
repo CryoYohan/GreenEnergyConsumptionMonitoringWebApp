@@ -26,7 +26,7 @@ class Simulator:
 
             weeklyconsumption.append(round(totalConsumption, 2))
 
-        print(weeklyconsumption)
+        print(f"Total Weekly Consumption{weeklyconsumption}")
         return weeklyconsumption
 
 

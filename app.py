@@ -463,17 +463,21 @@ def email_exists(email:str):
             return True  
     return False
 
-def updateWeeklySolarPanelEnerProd(paneltype, panel_qty):
-    global tariff_rate,tariff_type,tariffcompany
+def updateWeeklySolarPanelEnerProd(paneltype, panelqty):
     # Get user id using email
-    userid = getUserIDFromEmail(email=session.get('email'))
+    email = session.get('email')
+    userid = getUserIDFromEmail(email=email)
 
     currentweekenergyprod = retrieve_greenenergy_data()
-    nextweekgreenenergyprod = simulate.getTotalSolarKWH_Production(paneltype,panel_qty)
+    nextweekgreenenergyprod = simulate.getTotalSolarKWH_Production(paneltype,panelqty)
     result = [round(a + b,2) for a, b in zip(nextweekgreenenergyprod, currentweekenergyprod)]
-
     csv_weeklydata = ','.join(map(str, result))
-    print("Updating user with weekly solar data...")
+
+    db.add_user(table='inventory',userid=userid,panelname=paneltype,panel_quantity=panelqty,
+                tariffcompany=retrieve_usertariffcompany(session.get('email')),
+                tariffrate=retrieve_usertariffrate(session.get('email')),
+                tarifftype='Fixed Rate',email=email
+                )
     db.update_user(table='simulation', userid=userid, panelweekdata=csv_weeklydata)
 
 def updateWeeklyCostEstimation():
@@ -481,6 +485,42 @@ def updateWeeklyCostEstimation():
 
 def updateWeeklyCarbonEmission():
     calculate_carbon_emission_green(email=session.get('email'),totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=retrieve_usertariffcompany(email=session.get('email')))
+
+def updateWeeklyKWHConsumption(appliance:list):
+    # Get user id using email
+    email = session.get('email')
+    userid = getUserIDFromEmail(email=email)
+    print(f"updateWeeklyKWHConsumption USERID: {userid}")
+    nextweekkwhconsumption = simulate.getTotalConsumption(appliances=appliance)
+    lastweekconsumption = retrieve_costkwh()
+    result = [round(a + b,2) for a, b in zip(nextweekkwhconsumption, lastweekconsumption)]
+    print(f"New updated KWH Consumption: {result}")
+    csv_weeklydata = ','.join(map(str, result))
+    db.update_user(table='simulation', userid=userid, kwhconsumption=csv_weeklydata)
+
+def add_new_appliances_and_update_simulation(new_appliances: list):
+    # Retrieve current simulation data
+    current_data = retrieve_sortedappliances_consumption()
+    
+    # Simulate weekly consumption for the new appliances
+    new_data = simulate.getTotalConsumption2(appliances=new_appliances)
+    
+    # Merge the new appliance consumption with the current data
+    for appliance_type, new_consumption in new_data.items():
+        if appliance_type in current_data:
+            current_data[appliance_type] = [
+                round(old + new, 2) 
+                for old, new in zip(current_data[appliance_type], new_consumption)
+            ]
+        else:
+            current_data[appliance_type] = new_consumption
+    
+    # Update the database with the new combined data
+    email = session.get('email')
+    userid = getUserIDFromEmail(email=email)
+    updated_json = json.dumps(current_data)
+    db.update_user(table='simulation', userid=userid, appliance_consumption=updated_json)
+
   
 def retrieve_usertariffrate(email:str):
     inventoryrecords = db.getall_inventory(email=email,table='inventory')
@@ -494,18 +534,32 @@ def retrieve_usertariffcompany(email:str):
 
 @app.route('/simulatescenarios', methods=['POST'])
 def simulatescenarios():
-    weather = request.form.get('weather-select')
     appliance = request.form.get('appliance-select')
     appliance_qty = request.form.get('quantity1')
     paneltype = request.form.get('panel-select')
     panel_qty = request.form.get('quantity2')
-    print(weather,appliance,appliance_qty, paneltype,panel_qty)
 
-    updateWeeklySolarPanelEnerProd(paneltype=paneltype, panel_qty=panel_qty)
-    updateWeeklyCostEstimation()
-    updateWeeklyCarbonEmission()
+    print(appliance, appliance_qty, paneltype, panel_qty)
+
+    # Ensure quantities are integers
+    appliance_qty = int(appliance_qty) if appliance_qty else 0
+    panel_qty = int(panel_qty) if panel_qty else 0
+
+    # Process appliances if valid input
+    if appliance and appliance_qty > 0:
+        appliancelist = [appliance] * appliance_qty
+        print(f"Multiplied Appliance: {appliancelist}")
+        updateWeeklyKWHConsumption(appliance=appliancelist)
+        add_new_appliances_and_update_simulation(new_appliances=appliance)
+
+    # Process panels if valid input
+    if paneltype and panel_qty > 0:
+        updateWeeklySolarPanelEnerProd(paneltype=paneltype, panelqty=panel_qty)
+        updateWeeklyCostEstimation()
+        updateWeeklyCarbonEmission()
 
     return redirect(url_for('loader'))
+
 
 # Manual Login Route
 @app.route('/userlogin', methods=['POST'])

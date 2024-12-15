@@ -1,12 +1,14 @@
 {% extends 'AdminDashTemplate.html' %}
 {% block content %}
 <style>
-    /* Ensure the table is centered */
+/* Ensure the table is centered */
 .table-container {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-top: 1em;
+    max-height: 600px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Add vertical scrollbar */
 }
 
 /* Styling for the table */
@@ -23,11 +25,12 @@
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+    padding: 1px 5px;
     text-align: center;
     border: 1px solid #ddd;
 }
-.styled-table td{
+
+.styled-table td {
     background-color: #f2f2f2;
 }
 
@@ -39,9 +42,23 @@
     background-color: #ddd;
 }
 
+/* Scrollbar styling (optional) */
+.table-container::-webkit-scrollbar {
+    width: 8px; /* Adjust width for vertical scrollbar */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #30B938;
+    border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+}
 </style>
-<div style="display: flex;justify-content:center;align-items:center;padding-top: 1em;">
-    <h1><span style="color: #30B938;text-align:center">Active Users</span></h1>
+
+<div style="display: flex; justify-content:center; align-items:center; padding-top: 1em;">
+    <h1><span style="color: #30B938; text-align:center;">Active Users</span></h1>
 </div>
 <div class="table-container">
     <table class="styled-table">
@@ -58,16 +75,16 @@
             </tr>
         </thead>
         <tbody>
-            {%  for record in records %}
+            {% for record in records %}
             <tr>
-                <td>{{record['email']}}</td>
-                <td>{{record['fullname'].title()}}</td>
-                <td>{{record['panelname'].title()}}</td>
-                <td>{{record['panel_quantity']}}</td>
-                <td>{{record['tariffcompany']}}</td>
-                <td>₱{{record['tariffrate']}}</td>
-                <td>{{record['tarifftype']}}</td>
-                <td><a href="#">Suspend</a></td>
+                <td>{{ record['email'] }}</td>
+                <td>{{ record['fullname'].title() }}</td>
+                <td>{{ record['panelname'].title() }}</td>
+                <td>{{ record['panel_quantity'] }}</td>
+                <td>{{ record['tariffcompany'] }}</td>
+                <td>₱{{ record['tariffrate'] }}</td>
+                <td>{{ record['tarifftype'] }}</td>
+                <td><a href="#">Remove</a></td>
             </tr>
             {% endfor %}
         </tbody>
