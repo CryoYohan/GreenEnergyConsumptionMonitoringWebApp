@@ -621,7 +621,6 @@ def userregister():
     return redirect(url_for('setup'))
 
 
-
 @app.route('/submit_tariff', methods=['POST'])
 def submit_tariff():
     global email, tariff_rate, tariffcompany, tariff_type,appliances,panel_type,panel_quantity
@@ -674,6 +673,10 @@ def submit_tariff():
     # Confirm user session before redirecting to the dashboard
     session['registered_user'] = email  
     return jsonify({"redirect": url_for('loader')})
+@app.route('/RemoveUser/<email>')
+def RemoveUser(email):
+    db.delete_user(table='user',id=email)
+    return jsonify({"response":"success"})
 
 @app.route('/loader')
 def loader():
@@ -681,7 +684,7 @@ def loader():
     
 @app.route('/UserManagement')
 def UserManagement():
-    records = db.getall_joinedrecords()
+    records = db.getall_users(table='user')
     return render_template('AdminCarbonEmissionDash.html',fullname=session.get('name'),records=records) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/AdminDashboard')
