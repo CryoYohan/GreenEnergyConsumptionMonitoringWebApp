@@ -94,10 +94,12 @@ class Databasehelper:
         #create sql statement
         sql:str = f"UPDATE `{table}` SET {fld} WHERE `{keys[0]}`= '{values[0]}'"
         return self.postprocess(sql)
-    
+
     def delete_user(self, table, id):
-        query = f"DELETE FROM `{table}` WHERE email = '{id}'"
-        return self.postprocess(query)
-        
+        query = f"DELETE FROM `{table}` WHERE userid = {id}"
+        return self.postprocess(query)    
+    def delete_userid(self, table, id):
+        query = f"DELETE FROM `{table}` WHERE id = {id}"
+        return self.postprocess(query) 
     
 

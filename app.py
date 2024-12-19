@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from appliances import appliances as appliancesdict
 from dbhelper import Databasehelper
 from simulator import Simulator
+from time import sleep
 import json
 
 load_dotenv()
@@ -486,30 +487,43 @@ def updateWeeklyCostEstimation():
 def updateWeeklyCarbonEmission():
     calculate_carbon_emission_green(email=session.get('email'),totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=retrieve_usertariffcompany(email=session.get('email')))
 
-def updateWeeklyKWHConsumption(appliance:list):
+def updateWeeklyKWHConsumption(appliance: list):
     # Get user id using email
     email = session.get('email')
     userid = getUserIDFromEmail(email=email)
-    print(f"updateWeeklyKWHConsumption USERID: {userid}")
+   
+    
+    # Calculate total consumption based on counts
     nextweekkwhconsumption = simulate.getTotalConsumption(appliances=appliance)
+    print(f"updateWeeklyKWHConsumption USERID: {nextweekkwhconsumption}")
     lastweekconsumption = retrieve_costkwh()
-    result = [round(a + b,2) for a, b in zip(nextweekkwhconsumption, lastweekconsumption)]
+    
+    # Ensure lengths match to avoid anomalies
+    if len(nextweekkwhconsumption) != len(lastweekconsumption):
+        raise ValueError("Consumption data lengths do not match.")
+    
+    result = [round(a + b, 2) for a, b in zip(nextweekkwhconsumption, lastweekconsumption)]
     print(f"New updated KWH Consumption: {result}")
+    
     csv_weeklydata = ','.join(map(str, result))
     db.update_user(table='simulation', userid=userid, kwhconsumption=csv_weeklydata)
+
 
 def add_new_appliances_and_update_simulation(new_appliances: list):
     # Retrieve current simulation data
     current_data = retrieve_sortedappliances_consumption()
     
-    # Simulate weekly consumption for the new appliances
-    new_data = simulate.getTotalConsumption2(appliances=new_appliances)
+    # Group new appliances by type and count quantities
+    appliance_counts = {appl: new_appliances.count(appl) for appl in set(new_appliances)}
     
-    # Merge the new appliance consumption with the current data
+    # Simulate weekly consumption for the new appliances
+    new_data = simulate.getTotalConsumption2(appliances=appliance_counts)
+    
+    # Merge new appliance consumption with current data
     for appliance_type, new_consumption in new_data.items():
         if appliance_type in current_data:
             current_data[appliance_type] = [
-                round(old + new, 2) 
+                round(old + new, 2)
                 for old, new in zip(current_data[appliance_type], new_consumption)
             ]
         else:
@@ -520,6 +534,7 @@ def add_new_appliances_and_update_simulation(new_appliances: list):
     userid = getUserIDFromEmail(email=email)
     updated_json = json.dumps(current_data)
     db.update_user(table='simulation', userid=userid, appliance_consumption=updated_json)
+
 
   
 def retrieve_usertariffrate(email:str):
@@ -539,8 +554,6 @@ def simulatescenarios():
     paneltype = request.form.get('panel-select')
     panel_qty = request.form.get('quantity2')
 
-    print(appliance, appliance_qty, paneltype, panel_qty)
-
     # Ensure quantities are integers
     appliance_qty = int(appliance_qty) if appliance_qty else 0
     panel_qty = int(panel_qty) if panel_qty else 0
@@ -548,9 +561,9 @@ def simulatescenarios():
     # Process appliances if valid input
     if appliance and appliance_qty > 0:
         appliancelist = [appliance] * appliance_qty
-        print(f"Multiplied Appliance: {appliancelist}")
+        print(f"Appliances List: {appliancelist}")
         updateWeeklyKWHConsumption(appliance=appliancelist)
-        add_new_appliances_and_update_simulation(new_appliances=appliance)
+        add_new_appliances_and_update_simulation(new_appliances=appliancelist)
 
     # Process panels if valid input
     if paneltype and panel_qty > 0:
@@ -559,6 +572,7 @@ def simulatescenarios():
         updateWeeklyCarbonEmission()
 
     return redirect(url_for('loader'))
+
 
 
 # Manual Login Route
@@ -675,8 +689,23 @@ def submit_tariff():
     return jsonify({"redirect": url_for('loader')})
 @app.route('/RemoveUser/<email>')
 def RemoveUser(email):
-    db.delete_user(table='user',id=email)
-    return jsonify({"response":"success"})
+    userid = getUserIDFromEmail(email)
+
+    try:
+        # Step 1: Delete dependent rows in the related tables
+        db.delete_user(table='greenergyweeklylogs', id=userid)  # Assuming userid matches
+        db.delete_user(table='simulation', id=userid)
+        db.delete_user(table='inventory', id=userid)
+
+        # Step 2: Delete the user from the `user` table
+        db.delete_userid(table='user', id=userid)
+
+        # Return success response
+        return jsonify({"response": "success"})
+    except Exception as e:
+        # Handle errors
+        return jsonify({"response": "error", "message": str(e)})
+
 
 @app.route('/loader')
 def loader():

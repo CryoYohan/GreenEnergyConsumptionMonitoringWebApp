@@ -78,7 +78,7 @@
                 <td>{{ record['email'] }}</td>
                 <td>{{ record['fullname'].title() }}</td>
                 <td>{{ record['phoneno']}}</td>
-                <td><a href="{{ url_for('RemoveUser', email=record['email']) }}">Remove</a></td>
+                <td><button style="cursor: pointer;background-color:rgb(156, 1, 1);color:aliceblue;padding:5px;" class="remove-btn" data-email="{{ record['email'] }}">Remove</button></td>
                 </tr>
             {% endfor %}
         </tbody>
