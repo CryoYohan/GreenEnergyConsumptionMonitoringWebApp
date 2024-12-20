@@ -1,24 +1,29 @@
 import mysql.connector as mariadb
+from sqlite3 import connect, Row
 class Databasehelper:
     def __init__(self)->None:
         self.host = 'localhost'
         self.user = 'root'
         self.password = ''
-        self.database = 'energreen'
+        self.database_old = 'energreen'
+        self.database = 'energreen.db'
 
     def getdb_connection(self):
-        connection = mariadb.connect(
-            host= self.host,
-            user= self.user,
-            password= self.password,
-            database= self.database
-        )
+        # connection = mariadb.connect(
+        #     host= self.host,
+        #     user= self.user,
+        #     password= self.password,
+        #     database= self.database
+        # )
+        # return connection
+        connection = connect(self.database)
         return connection
     
     def getprocess(self,sql:str):
         connection = self.getdb_connection()
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor()
         cursor.execute(sql)
+        cursor.row_factory = Row
         data:list = cursor.fetchall()
         cursor.close()
         connection.close()
@@ -26,19 +31,19 @@ class Databasehelper:
 
     def postprocess(self,sql:str):
         connection = self.getdb_connection()
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor()
         cursor.execute(sql)
         connection.commit()
         cursor.close()
         connection.close() 
 
     def getall_users(self, table:str)->list:
-        query = f"SELECT * FROM {table}"
+        query = f"SELECT * FROM `{table}`"
         users:list = self.getprocess(query)
         return users
     
     def getall_inventory(self, table:str,email:str)->list:
-        query = f"SELECT * FROM {table} WHERE `email` = '{email}'"
+        query = f"SELECT * FROM `{table}` WHERE `email` = '{email}'"
         inventory:list = self.getprocess(query)
         return inventory
 
@@ -63,15 +68,15 @@ class Databasehelper:
 
 
     def find_user(self,email:str, table:str):
-        sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
+        sql:str = f"SELECT * FROM `{table}` WHERE `email` = '{email}'"
         return self.getprocess(sql)
     
     def find_panel(self,panelname:str, table:str):
-        sql:str = f"SELECT * FROM {table} WHERE `panelname` = '{panelname}'"
+        sql:str = f"SELECT * FROM `{table}` WHERE `panelname` = '{panelname}'"
         return self.getprocess(sql)
 
     def find_simrecord(self,userid:int, table:str):
-        sql:str = f"SELECT * FROM {table} WHERE `userid` = {userid}"
+        sql:str = f"SELECT * FROM `{table}` WHERE `userid` = {userid}"
         return self.getprocess(sql)
     
     def add_user(self,table,**kwargs):
