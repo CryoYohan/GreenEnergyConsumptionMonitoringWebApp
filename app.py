@@ -616,7 +616,6 @@ def userlogin():
 
 @app.route('/userregister', methods=['POST'])
 def userregister():
-    global fullname, email
     fullname = request.form.get('fullname')
     email = request.form.get('email')
     password = request.form.get('password')

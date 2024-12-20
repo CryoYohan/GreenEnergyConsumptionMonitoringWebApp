@@ -24,7 +24,7 @@ class Databasehelper:
         cursor = connection.cursor()
         cursor.execute(sql)
         cursor.row_factory = Row
-        data:list = cursor.fetchall()
+        data = [dict(row) for row in cursor.fetchall()]  # Convert rows to dictionaries
         cursor.close()
         connection.close()
         return data
@@ -38,12 +38,12 @@ class Databasehelper:
         connection.close() 
 
     def getall_users(self, table:str)->list:
-        query = f"SELECT * FROM `{table}`"
+        query = f"SELECT * FROM {table}"
         users:list = self.getprocess(query)
         return users
     
     def getall_inventory(self, table:str,email:str)->list:
-        query = f"SELECT * FROM `{table}` WHERE `email` = '{email}'"
+        query = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         inventory:list = self.getprocess(query)
         return inventory
 
@@ -68,15 +68,15 @@ class Databasehelper:
 
 
     def find_user(self,email:str, table:str):
-        sql:str = f"SELECT * FROM `{table}` WHERE `email` = '{email}'"
+        sql:str = f"SELECT * FROM {table} WHERE `email` = '{email}'"
         return self.getprocess(sql)
     
     def find_panel(self,panelname:str, table:str):
-        sql:str = f"SELECT * FROM `{table}` WHERE `panelname` = '{panelname}'"
+        sql:str = f"SELECT * FROM {table} WHERE `panelname` = '{panelname}'"
         return self.getprocess(sql)
 
     def find_simrecord(self,userid:int, table:str):
-        sql:str = f"SELECT * FROM `{table}` WHERE `userid` = {userid}"
+        sql:str = f"SELECT * FROM {table} WHERE `userid` = {userid}"
         return self.getprocess(sql)
     
     def add_user(self,table,**kwargs):
