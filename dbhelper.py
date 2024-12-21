@@ -24,7 +24,7 @@ class Databasehelper:
         cursor = connection.cursor()
         cursor.execute(sql)
         cursor.row_factory = Row
-        data = [dict(row) for row in cursor.fetchall()]  # Convert rows to dictionaries
+        data:list = cursor.fetchall()  # Convert rows to dictionaries
         cursor.close()
         connection.close()
         return data

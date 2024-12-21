@@ -230,7 +230,7 @@ def oauth2callback():
     
     except ValueError as e:
         flash("Token verification failed. Please try again.", 'error')
-        return redirect(url_for("Landing"))
+        return redirect(url_for("landing"))
 
  # Get User ID from email
 def getUserIDFromEmail(email:str):
@@ -326,6 +326,7 @@ def retrieve_kwhconsumption_data():
     userid = getUserIDFromEmail(email=email)
     
     simulation_record = db.find_simrecord(table='simulation', userid=userid)
+    print(f"Simulation Record [0]: {simulation_record}")
     simulation_record = simulation_record[0]['kwhconsumption'].split(',')
     simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
@@ -629,6 +630,7 @@ def userregister():
             return redirect(url_for('landing'))
     db.add_user(table=user_table,email=email,fullname=fullname, password=password)
 
+    print(f'Email in Session {email}')
     session['email'] = email
     session['name'] = fullname  
     return redirect(url_for('setup'))
@@ -636,8 +638,8 @@ def userregister():
 
 @app.route('/submit_tariff', methods=['POST'])
 def submit_tariff():
-    global email, tariff_rate, tariffcompany, tariff_type,appliances,panel_type,panel_quantity
     # Retrieve JSON data from request
+    email = session.get('email')
     data = request.get_json()
     tariffcompany = data.get('provider')
     tariff_rate = data.get('tariff_rate')
