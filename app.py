@@ -56,19 +56,6 @@ flow = Flow.from_client_config(
     redirect_uri=REDIRECT_URI
 )
 
-def getfullname_with_session(session_email: str):
-    # Find the user record based on email
-    record = db.find_user(table=user_table, email=session_email)
-    
-    # Extract the 'fullname' field directly from the record
-    if record and 'fullname' in record[0]:
-        fullname = record[0]['fullname']
-        return fullname.strip()  # Remove any extra spaces, if present
-    
-    # Return an empty string if no record is found or fullname is missing
-    return ""
-
-
 @app.route('/updateuser/<email>', methods=['POST'])
 def updateuser(email):
     # Extract form data
@@ -119,7 +106,7 @@ def Settings():
         'values': [50, 20, 15, 15],
         }
     user_record = db.find_user(table=user_table,email=session.get('email'))
-    return render_template('Settings.html',fullname=getfullname_with_session(session.get('email')),email=session.get('email'), pie_data=pie_data,user_record=user_record) if not session.get('name') == None else redirect(url_for('landing'))
+    return render_template('Settings.html',fullname=session.get('name'),email=session.get('email'), pie_data=pie_data,user_record=user_record) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/SimulationPage')
 def SimulationPage():
@@ -137,7 +124,7 @@ def SimulationPage():
         [f"{kwh} kwh" for kwh in log['weeklygreendata'].split(',')]
         for log in weekly_logs if log['weeklygreendata'] is not None
     ]
-    return render_template('SimulationPage.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
+    return render_template('SimulationPage.html',fullname=session.get('name'), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
 
 @app.route('/Inventory')
 def inventory():
@@ -148,7 +135,7 @@ def inventory():
         'values': [50, 20, 15, 15],
         }
     inventory = db.getall_inventory(table='inventory',email=email)
-    return render_template('Inventory.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))    
+    return render_template('Inventory.html',fullname=session.get('name'), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))    
 
 @app.route('/CarbonEmissionDash')
 def CarbonEmissionDash():
@@ -160,7 +147,7 @@ def CarbonEmissionDash():
     sum_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()),2)
     deducted_carbonemission = round((sum_carbonemission - sum_carbonemissiongreen),2)
 
-    return render_template('CarbonEmissionDash.html',fullname=getfullname_with_session(session.get('email')), 
+    return render_template('CarbonEmissionDash.html',fullname=session.get('name'), 
                            pie_data=pie_data,carbonemission=retrieve_carbonemissions(),
                            carbonemissiongreen=retrieve_carbonemissions_greenenergy(),
                            sum_carbonemission=sum_carbonemission,
@@ -176,14 +163,14 @@ def GreenEnergyDash():
         }
     greenenergydata = retrieve_greenenergy_data()
     sum_greenenergydata = round(sum(greenenergydata),2)
-    return render_template('GreenEnergyDash.html',fullname=getfullname_with_session(session.get('email')), pie_data=pie_data,greenenergydata=greenenergydata,sum_greenenergydata=sum_greenenergydata)if not session.get('name') == None else redirect(url_for('landing'))
+    return render_template('GreenEnergyDash.html',fullname=session.get('name'), pie_data=pie_data,greenenergydata=greenenergydata,sum_greenenergydata=sum_greenenergydata)if not session.get('name') == None else redirect(url_for('landing'))
 
 
 @app.route('/AppliancesDash')
 def AppliancesDash():
     appliances_sorted_consumption_data = retrieve_sortedappliances_consumption()
     sum_appliances_consumption = round(sum(retrieve_kwhconsumption_data()),2)
-    return render_template('AppliancesDash.html',fullname=getfullname_with_session(session.get('email')),
+    return render_template('AppliancesDash.html',fullname=session.get('name'),
                            appliances_sorted_consumption_data=appliances_sorted_consumption_data,
                            sum_appliances_consumption=sum_appliances_consumption
                            ) if not session.get('name') == None else redirect(url_for('landing'))
@@ -420,7 +407,7 @@ def UserDashboardContent():
         return redirect(url_for('landing'))
     else:
         return render_template('UserDashboardContent.html',
-                               fullname=getfullname_with_session(session.get('email')), 
+                               fullname=session.get('name'), 
                                pie_data=pie_data,
                                appliances_sorted_consumption_data=appliances_sorted_consumption_data,
                                kwhdata=retrieve_greenenergy_data(),days_in_week=days_in_week,
@@ -442,7 +429,7 @@ def CostEstimation():
         }
     costkwh = retrieve_costkwh()
     costkwhgreen = retrieve_costkwhgreen()
-    return render_template('CostEstimationDash.html',fullname=getfullname_with_session(session.get('email')),
+    return render_template('CostEstimationDash.html',fullname=session.get('name'),
                            pie_data=pie_data,costkwh=costkwh,costkwhgreen=costkwhgreen,sum_cost_kwh=sum_cost_kwh,
                            sum_cost_kwh_green=sum_cost_kwh_green, deducted_sum_costkwh=deducted_sum_costkwh) if not session.get('name') == None else redirect(url_for('landing'))
 
