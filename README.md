@@ -2,7 +2,7 @@
 A simulation-based web app that allows users to monitor energy consumption, simulate solar energy production, and track carbon footprint reduction. Experience real-time data, detailed analytics, and insights for sustainable energy management.
 
 <h3>Landing Page</h3>
-![image](https://github.com/user-attachments/assets/184795f9-b1d2-464d-bffb-f6ccbb297eca)
+https://github.com/user-attachments/assets/184795f9-b1d2-464d-bffb-f6ccbb297eca)
 
 <h3>Login and Register</h3>
 ![image](https://github.com/user-attachments/assets/84ec2325-e30a-48fb-b807-1b582a7f6deb)
