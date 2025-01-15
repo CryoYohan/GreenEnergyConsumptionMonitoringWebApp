@@ -31,7 +31,7 @@ tariff_rate:int = 0
 tariff_type:str = ''
 
 
-
+######################## GOOGLE CONFIGURATION AND MODULES ###########################
 # Configurations
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # For local testing only
 CLIENT_ID = os.getenv("CLIENT_ID")
@@ -55,126 +55,6 @@ flow = Flow.from_client_config(
     scopes=["openid", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"],
     redirect_uri=REDIRECT_URI
 )
-
-@app.route('/updateuser/<email>', methods=['POST'])
-def updateuser(email):
-    # Extract form data
-    firstname = request.form.get('firstname', '').strip()
-    lastname = request.form.get('lastname', '').strip()
-    emailupdate = request.form.get('email', '').strip()
-    phonenumber = request.form.get('phoneno', '').strip()
-    password = request.form.get('password', '').strip()
-    confirmpassword = request.form.get('confirmpassword', '').strip()
-
-    if password != confirmpassword:
-        return jsonify({'error': 'Passwords do not match!'}), 400
-
-    # Combine firstname and lastname into fullname
-    fullname = f"{firstname} {lastname}".strip() if firstname or lastname else None
-
-    # Check if the email to be updated already exists in the database (other than the current user)
-    existing_users = db.getall_users(table=user_table)
-    for user in existing_users:
-        if user['email'] == emailupdate and user['email'] != email:
-            return jsonify({'error': 'Email already exists. Please choose a different email.'}), 400
-
-    # Build the update dictionary dynamically
-    update_data = {}
-    if fullname:  # Update fullname if it exists
-        update_data['fullname'] = fullname
-    if emailupdate:
-        update_data['email'] = emailupdate
-    if phonenumber:
-        update_data['phoneno'] = phonenumber
-    if password:
-        update_data['password'] = password
-
-    # Perform the update only if there are fields to update
-    if update_data:
-        db.update_user(table=user_table, email=email, **update_data)
-        return jsonify({'success': 'User details updated successfully!'}), 200
-    else:
-        return jsonify({'warning': 'No fields provided for update.'}), 400
-
-
-
-
-@app.route('/Settings')
-def Settings():
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    user_record = db.find_user(table=user_table,email=session.get('email'))
-    return render_template('Settings.html',fullname=session.get('name'),email=session.get('email'), pie_data=pie_data,user_record=user_record) if not session.get('name') == None else redirect(url_for('landing'))
-
-@app.route('/SimulationPage')
-def SimulationPage():
-    email = session.get('email')
-    userid = getUserIDFromEmail(email)
-    print(f"Email: {email}")
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    weekly_logs = db.getall_prevweeklygreendata(table='greenergyweeklylogs', userid=userid)
-
-    # Extract only non-null `weeklygreendata` values and convert to lists of floats
-    inventory = [
-        [f"{kwh} kwh" for kwh in log['weeklygreendata'].split(',')]
-        for log in weekly_logs if log['weeklygreendata'] is not None
-    ]
-    return render_template('SimulationPage.html',fullname=session.get('name'), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))
-
-@app.route('/Inventory')
-def inventory():
-    email = session.get('email')
-    print(f"Email: {email}")
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    inventory = db.getall_inventory(table='inventory',email=email)
-    return render_template('Inventory.html',fullname=session.get('name'), pie_data=pie_data,inventory=inventory) if not session.get('name') == None else redirect(url_for('landing'))    
-
-@app.route('/CarbonEmissionDash')
-def CarbonEmissionDash():
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    sum_carbonemission = round(sum(retrieve_carbonemissions()),2)
-    sum_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()),2)
-    deducted_carbonemission = round((sum_carbonemission - sum_carbonemissiongreen),2)
-
-    return render_template('CarbonEmissionDash.html',fullname=session.get('name'), 
-                           pie_data=pie_data,carbonemission=retrieve_carbonemissions(),
-                           carbonemissiongreen=retrieve_carbonemissions_greenenergy(),
-                           sum_carbonemission=sum_carbonemission,
-                           sum_carbonemissiongreen=sum_carbonemissiongreen,
-                           deducted_carbonemission=deducted_carbonemission
-                           ) if not session.get('name') == None else redirect(url_for('landing'))
-
-@app.route('/GreenEnergyDash')
-def GreenEnergyDash():
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    greenenergydata = retrieve_greenenergy_data()
-    sum_greenenergydata = round(sum(greenenergydata),2)
-    return render_template('GreenEnergyDash.html',fullname=session.get('name'), pie_data=pie_data,greenenergydata=greenenergydata,sum_greenenergydata=sum_greenenergydata)if not session.get('name') == None else redirect(url_for('landing'))
-
-
-@app.route('/AppliancesDash')
-def AppliancesDash():
-    appliances_sorted_consumption_data = retrieve_sortedappliances_consumption()
-    sum_appliances_consumption = round(sum(retrieve_kwhconsumption_data()),2)
-    return render_template('AppliancesDash.html',fullname=session.get('name'),
-                           appliances_sorted_consumption_data=appliances_sorted_consumption_data,
-                           sum_appliances_consumption=sum_appliances_consumption
-                           ) if not session.get('name') == None else redirect(url_for('landing'))
-
 
 # Google Login Route
 @app.route("/login")
@@ -218,16 +98,173 @@ def oauth2callback():
     except ValueError as e:
         flash("Token verification failed. Please try again.", 'error')
         return redirect(url_for("landing"))
+    
 
- # Get User ID from email
-def getUserIDFromEmail(email:str):
-    # Get User ID from email
-    userid=0
-    records = db.getall_users(table=user_table)
-    for record in records:
-        if email == record['email']:
-            userid = record['id'] 
-    return userid
+
+###################### APP ROUTE HTML WEBPAGES ##########################
+# Dashboard Template Route
+@app.route('/UserDashboardContent')
+def UserDashboardContent():
+    global panel_type, panel_quantity
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+
+    sum_green_data = round(sum(retrieve_greenenergy_data()),2)
+    sum_total_consumption = sum(retrieve_kwhconsumption_data())
+    sum_total_carbonemission = round(sum(retrieve_carbonemissions()),2)
+    sum_total_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()),2)
+    appliances_sorted_consumption_data = retrieve_sortedappliances_consumption()
+    pie_data = {
+        'labels': ['Electricity in KWH', 'Green Energy in KWH'],
+        'values': [sum_total_consumption,sum_green_data],
+        }
+
+    return render_template('UserDashboardContent.html',
+                            fullname=session.get('name'), 
+                            pie_data=pie_data,
+                            appliances_sorted_consumption_data=appliances_sorted_consumption_data,
+                            kwhdata=retrieve_greenenergy_data(),days_in_week=days_in_week,
+                            carbonemission=retrieve_carbonemissions(),
+                            carbonemissiongreen=retrieve_carbonemissions_greenenergy(),
+                            sum_total_carbonemission=sum_total_carbonemission,
+                            sum_total_carbonemissiongreen=sum_total_carbonemissiongreen,
+                            sum_green_data=sum_green_data,
+                            )
+
+@app.route('/CostEstimation')
+def CostEstimation():
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+    
+    sum_cost_kwh = round(sum(retrieve_costkwh(),2))
+    sum_cost_kwh_green = round(sum(retrieve_costkwhgreen(),2))
+    deducted_sum_costkwh = sum_cost_kwh - sum_cost_kwh_green
+    costkwh = retrieve_costkwh()
+    costkwhgreen = retrieve_costkwhgreen()
+    
+    return render_template('CostEstimationDash.html',fullname=session.get('name'),
+                           costkwh=costkwh,costkwhgreen=costkwhgreen,sum_cost_kwh=sum_cost_kwh,
+                           sum_cost_kwh_green=sum_cost_kwh_green, deducted_sum_costkwh=deducted_sum_costkwh)
+
+
+@app.route('/Settings')
+def Settings():
+    user_record = db.find_user(table=user_table,email=session.get('email'))
+    return render_template('Settings.html',fullname=session.get('name'),email=session.get('email'),user_record=user_record) if not session.get('name') == None else redirect(url_for('landing'))
+
+@app.route('/SimulationPage')
+def SimulationPage():
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+    
+    email = session.get('email')
+    userid = getUserIDFromEmail(email)
+    weekly_logs = db.getall_prevweeklygreendata(table='greenergyweeklylogs', userid=userid)
+
+    # Extract only non-null `weeklygreendata` values and convert to lists of floats
+    inventory = [
+        [f"{kwh} kwh" for kwh in log['weeklygreendata'].split(',')]
+        for log in weekly_logs if log['weeklygreendata'] is not None
+    ]
+    return render_template('SimulationPage.html',fullname=session.get('name'),inventory=inventory)
+
+@app.route('/Inventory')
+def inventory():
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+    email = session.get('email')
+    print(f"Email: {email}")
+    inventory = db.getall_inventory(table='inventory',email=email)
+    return render_template('Inventory.html',fullname=session.get('name'),inventory=inventory)  
+
+@app.route('/CarbonEmissionDash')
+def CarbonEmissionDash():
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+
+    sum_carbonemission = round(sum(retrieve_carbonemissions()), 2)
+    sum_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()), 2)
+    deducted_carbonemission = round((sum_carbonemission - sum_carbonemissiongreen), 2)
+
+    return render_template(
+        'CarbonEmissionDash.html',
+        fullname=session.get('name'),
+        carbonemission=retrieve_carbonemissions(),
+        carbonemissiongreen=retrieve_carbonemissions_greenenergy(),
+        sum_carbonemission=sum_carbonemission,
+        sum_carbonemissiongreen=sum_carbonemissiongreen,
+        deducted_carbonemission=deducted_carbonemission
+    )
+
+
+@app.route('/GreenEnergyDash')
+def GreenEnergyDash():
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+    
+    greenenergydata = retrieve_greenenergy_data()
+    sum_greenenergydata = round(sum(greenenergydata),2)
+    return render_template('GreenEnergyDash.html',fullname=session.get('name'),greenenergydata=greenenergydata,sum_greenenergydata=sum_greenenergydata)
+
+
+@app.route('/AppliancesDash')
+def AppliancesDash():
+    if session.get('name') is None:
+        return redirect(url_for('landing'))
+    
+    appliances_sorted_consumption_data = retrieve_sortedappliances_consumption()
+    sum_appliances_consumption = round(sum(retrieve_kwhconsumption_data()),2)
+    return render_template('AppliancesDash.html',fullname=session.get('name'),
+                           appliances_sorted_consumption_data=appliances_sorted_consumption_data,
+                           sum_appliances_consumption=sum_appliances_consumption
+                           )
+
+@app.route('/loader')
+def loader():
+    return render_template('loader.html',fullname=session.get('name')) if not session.get('name') == None else redirect(url_for('landing'))
+    
+@app.route('/UserManagement')
+def UserManagement():
+    records = db.getall_users(table='user')
+    return render_template('AdminCarbonEmissionDash.html',fullname=session.get('name'),records=records) if not session.get('name') == None else redirect(url_for('landing'))
+
+@app.route('/AdminDashboard')
+def AdminDashboard():
+    tariffstats = [
+        len(db.getall_tariffcompanystats('tariffcompany','MERALCO')),
+        len(db.getall_tariffcompanystats('tariffcompany','VECO')),
+        len(db.getall_tariffcompanystats('tariffcompany','CEBECO')),
+        len(db.getall_tariffcompanystats('tariffcompany','TORECO')),
+        len(db.getall_tariffcompanystats('tariffcompany','Aboitiz'))
+    ]
+
+    panelstats = [
+        len(db.getall_tariffcompanystats('panelname','monocrystalline')),
+        len(db.getall_tariffcompanystats('panelname','polycrystalline')),
+        len(db.getall_tariffcompanystats('panelname','thin-film')),
+    ]
+
+    return render_template('AdminDashboardContent.html',fullname=session.get('name'),tariffstats=tariffstats,panelstats=panelstats) if not session.get('name') == None else redirect(url_for('landing'))
+
+@app.route('/setupTariff')
+def setupTariff():
+    return render_template('setupTariff.html') if not session.get('name') == None else redirect(url_for('landing'))
+
+
+@app.route('/panelsetup')
+def panelsetup():
+    return render_template('panelsetup.html') if not session.get('name') == None else redirect(url_for('landing'))
+
+@app.route('/setup')
+def setup():
+    return render_template('setup.html', appliances=appliancesdict) if not session.get('name') == None else redirect(url_for('landing'))
+# Landing Page
+@app.route('/')
+def landing():
+    return render_template('Landing.html')
+
+
+############## CALCULATION MODULES AND RETRIEVAL OF DATA FOR THE SIMULATION ####################
 
 # Calculate Total Power Consumption of Appliances
 def calculate_total_consumption(appliances:list,email:str):
@@ -388,55 +425,68 @@ def retrieve_carbonemissions_greenenergy():
     simulation_record = [round(float(value),2) for value in simulation_record]
     return simulation_record
 
-# Dashboard Template Route
-@app.route('/UserDashboardContent')
-def UserDashboardContent():
-    global panel_type, panel_quantity
-    sum_green_data = round(sum(retrieve_greenenergy_data()),2)
-    sum_total_consumption = sum(retrieve_kwhconsumption_data())
-    sum_total_carbonemission = round(sum(retrieve_carbonemissions()),2)
-    sum_total_carbonemissiongreen = round(sum(retrieve_carbonemissions_greenenergy()),2)
-    appliances_sorted_consumption_data = retrieve_sortedappliances_consumption()
-    pie_data = {
-        'labels': ['Electricity in KWH', 'Green Energy in KWH'],
-        'values': [sum_total_consumption,sum_green_data],
-        }
 
-    if not session.get("name"):
-        flash("Please log in first.", "error")
-        return redirect(url_for('landing'))
+
+########################### UTILITY MODULES #############################
+
+ # Get User ID from email
+def getUserIDFromEmail(email:str):
+    # Get User ID from email
+    userid=0
+    records = db.getall_users(table=user_table)
+    for record in records:
+        if email == record['email']:
+            userid = record['id'] 
+    return userid
+
+@app.route('/updateuser/<email>', methods=['POST'])
+def updateuser(email):
+    # Extract form data
+    firstname = request.form.get('firstname', '').strip()
+    lastname = request.form.get('lastname', '').strip()
+    emailupdate = request.form.get('email', '').strip()
+    phonenumber = request.form.get('phoneno', '').strip()
+    password = request.form.get('password', '').strip()
+    confirmpassword = request.form.get('confirmpassword', '').strip()
+
+    if password != confirmpassword:
+        return jsonify({'error': 'Passwords do not match!'}), 400
+
+    # Combine firstname and lastname into fullname
+    fullname = f"{firstname} {lastname}".strip() if firstname or lastname else None
+
+    # Check if the email to be updated already exists in the database (other than the current user)
+    existing_users = db.getall_users(table=user_table)
+    for user in existing_users:
+        if user['email'] == emailupdate and user['email'] != email:
+            return jsonify({'error': 'Email already exists. Please choose a different email.'}), 400
+
+    # Build the update dictionary dynamically
+    update_data = {}
+    if fullname:  # Update fullname if it exists
+        update_data['fullname'] = fullname
+        session['name'] = fullname
+    if emailupdate:
+        update_data['email'] = emailupdate
+    if phonenumber:
+        update_data['phoneno'] = phonenumber
+    if password:
+        update_data['password'] = password
+    print(f"Update Data Dictionary: {update_data}")
+    # Perform the update only if there are fields to update
+    if update_data:
+        try:
+            db.update_user(table=user_table,**update_data)
+            return jsonify({'success': 'User details updated successfully!'}), 200
+        except Exception as e:
+            return jsonify({'error': f'An error occurred while updating user details: {str(e)}'}), 500
     else:
-        return render_template('UserDashboardContent.html',
-                               fullname=session.get('name'), 
-                               pie_data=pie_data,
-                               appliances_sorted_consumption_data=appliances_sorted_consumption_data,
-                               kwhdata=retrieve_greenenergy_data(),days_in_week=days_in_week,
-                               carbonemission=retrieve_carbonemissions(),
-                               carbonemissiongreen=retrieve_carbonemissions_greenenergy(),
-                               sum_total_carbonemission=sum_total_carbonemission,
-                               sum_total_carbonemissiongreen=sum_total_carbonemissiongreen,
-                               sum_green_data=sum_green_data,
-                               )
-
-@app.route('/CostEstimation')
-def CostEstimation():
-    sum_cost_kwh = round(sum(retrieve_costkwh(),2))
-    sum_cost_kwh_green = round(sum(retrieve_costkwhgreen(),2))
-    deducted_sum_costkwh = sum_cost_kwh - sum_cost_kwh_green
-    pie_data = {
-        'labels': ['Apples', 'Oranges', 'Bananas', 'Grapes'],
-        'values': [50, 20, 15, 15],
-        }
-    costkwh = retrieve_costkwh()
-    costkwhgreen = retrieve_costkwhgreen()
-    return render_template('CostEstimationDash.html',fullname=session.get('name'),
-                           pie_data=pie_data,costkwh=costkwh,costkwhgreen=costkwhgreen,sum_cost_kwh=sum_cost_kwh,
-                           sum_cost_kwh_green=sum_cost_kwh_green, deducted_sum_costkwh=deducted_sum_costkwh) if not session.get('name') == None else redirect(url_for('landing'))
+        return jsonify({'warning': 'No fields provided for update.'}), 400
 
 @app.after_request
 def after_request(response):
     response.headers['Cache-Control'] = 'no-cache,no-store,must-revalidate'
-    #response.headers['Pragma'] = 'no-cache'
+    response.headers['Pragma'] = 'no-cache'
     return response 
 
 @app.route("/logout")
@@ -452,79 +502,25 @@ def email_exists(email:str):
             return True  
     return False
 
-def updateWeeklySolarPanelEnerProd(paneltype, panelqty):
-    # Get user id using email
-    email = session.get('email')
-    userid = getUserIDFromEmail(email=email)
+@app.route('/RemoveUser/<email>')
+def RemoveUser(email):
+    userid = getUserIDFromEmail(email)
 
-    currentweekenergyprod = retrieve_greenenergy_data()
-    nextweekgreenenergyprod = simulate.getTotalSolarKWH_Production(paneltype,panelqty)
-    result = [round(a + b,2) for a, b in zip(nextweekgreenenergyprod, currentweekenergyprod)]
-    csv_weeklydata = ','.join(map(str, result))
+    try:
+        # Step 1: Delete dependent rows in the related tables
+        db.delete_user(table='greenergyweeklylogs', id=userid)  # Assuming userid matches
+        db.delete_user(table='simulation', id=userid)
+        db.delete_user(table='inventory', id=userid)
 
-    db.add_user(table='inventory',userid=userid,panelname=paneltype,panel_quantity=panelqty,
-                tariffcompany=retrieve_usertariffcompany(session.get('email')),
-                tariffrate=retrieve_usertariffrate(session.get('email')),
-                tarifftype='Fixed Rate',email=email
-                )
-    db.update_user(table='simulation', userid=userid, panelweekdata=csv_weeklydata)
+        # Step 2: Delete the user from the `user` table
+        db.delete_userid(table='user', id=userid)
 
-def updateWeeklyCostEstimation():
-    calculate_total_consumption_equivalent_cost_with_greenenergy(email=session.get('email'), totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariffRate=retrieve_usertariffrate(email=session.get('email')), tariffType=tariff_type)
+        # Return success response
+        return jsonify({"response": "success"})
+    except Exception as e:
+        # Handle errors
+        return jsonify({"response": "error", "message": str(e)})
 
-def updateWeeklyCarbonEmission():
-    calculate_carbon_emission_green(email=session.get('email'),totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=retrieve_usertariffcompany(email=session.get('email')))
-
-def updateWeeklyKWHConsumption(appliance: list):
-    # Get user id using email
-    email = session.get('email')
-    userid = getUserIDFromEmail(email=email)
-   
-    
-    # Calculate total consumption based on counts
-    nextweekkwhconsumption = simulate.getTotalConsumption(appliances=appliance)
-    print(f"updateWeeklyKWHConsumption USERID: {nextweekkwhconsumption}")
-    lastweekconsumption = retrieve_costkwh()
-    
-    # Ensure lengths match to avoid anomalies
-    if len(nextweekkwhconsumption) != len(lastweekconsumption):
-        raise ValueError("Consumption data lengths do not match.")
-    
-    result = [round(a + b, 2) for a, b in zip(nextweekkwhconsumption, lastweekconsumption)]
-    print(f"New updated KWH Consumption: {result}")
-    
-    csv_weeklydata = ','.join(map(str, result))
-    db.update_user(table='simulation', userid=userid, kwhconsumption=csv_weeklydata)
-
-
-def add_new_appliances_and_update_simulation(new_appliances: list):
-    # Retrieve current simulation data
-    current_data = retrieve_sortedappliances_consumption()
-    
-    # Group new appliances by type and count quantities
-    appliance_counts = {appl: new_appliances.count(appl) for appl in set(new_appliances)}
-    
-    # Simulate weekly consumption for the new appliances
-    new_data = simulate.getTotalConsumption2(appliances=appliance_counts)
-    
-    # Merge new appliance consumption with current data
-    for appliance_type, new_consumption in new_data.items():
-        if appliance_type in current_data:
-            current_data[appliance_type] = [
-                round(old + new, 2)
-                for old, new in zip(current_data[appliance_type], new_consumption)
-            ]
-        else:
-            current_data[appliance_type] = new_consumption
-    
-    # Update the database with the new combined data
-    email = session.get('email')
-    userid = getUserIDFromEmail(email=email)
-    updated_json = json.dumps(current_data)
-    db.update_user(table='simulation', userid=userid, appliance_consumption=updated_json)
-
-
-  
 def retrieve_usertariffrate(email:str):
     inventoryrecords = db.getall_inventory(email=email,table='inventory')
     tariffrate = inventoryrecords[0]['tariffrate']
@@ -535,33 +531,7 @@ def retrieve_usertariffcompany(email:str):
     tariffcompany = inventoryrecords[0]['tariffcompany']
     return tariffcompany
 
-@app.route('/simulatescenarios', methods=['POST'])
-def simulatescenarios():
-    appliance = request.form.get('appliance-select')
-    appliance_qty = request.form.get('quantity1')
-    paneltype = request.form.get('panel-select')
-    panel_qty = request.form.get('quantity2')
-
-    # Ensure quantities are integers
-    appliance_qty = int(appliance_qty) if appliance_qty else 0
-    panel_qty = int(panel_qty) if panel_qty else 0
-
-    # Process appliances if valid input
-    if appliance and appliance_qty > 0:
-        appliancelist = [appliance] * appliance_qty
-        print(f"Appliances List: {appliancelist}")
-        updateWeeklyKWHConsumption(appliance=appliancelist)
-        add_new_appliances_and_update_simulation(new_appliances=appliancelist)
-
-    # Process panels if valid input
-    if paneltype and panel_qty > 0:
-        updateWeeklySolarPanelEnerProd(paneltype=paneltype, panelqty=panel_qty)
-        updateWeeklyCostEstimation()
-        updateWeeklyCarbonEmission()
-
-    return redirect(url_for('loader'))
-
-
+##################### METHODS POST MODULES FOR USER REGISTRATION AND LOGIN ############################
 
 # Manual Login Route
 @app.route('/userlogin', methods=['POST'])
@@ -675,52 +645,102 @@ def submit_tariff():
     # Confirm user session before redirecting to the dashboard
     session['registered_user'] = email  
     return jsonify({"redirect": url_for('loader')})
-@app.route('/RemoveUser/<email>')
-def RemoveUser(email):
-    userid = getUserIDFromEmail(email)
 
-    try:
-        # Step 1: Delete dependent rows in the related tables
-        db.delete_user(table='greenergyweeklylogs', id=userid)  # Assuming userid matches
-        db.delete_user(table='simulation', id=userid)
-        db.delete_user(table='inventory', id=userid)
-
-        # Step 2: Delete the user from the `user` table
-        db.delete_userid(table='user', id=userid)
-
-        # Return success response
-        return jsonify({"response": "success"})
-    except Exception as e:
-        # Handle errors
-        return jsonify({"response": "error", "message": str(e)})
+@app.route('/setupAppliances', methods=['POST'])
+def setupAppliances():
+    global appliances
+    if request.method == 'POST':
+        appliances = request.form.getlist('mycheckbox')
+        print(appliances)
+        return redirect(url_for('panelsetup'))
+    return redirect(url_for('panelsetup'))
 
 
-@app.route('/loader')
-def loader():
-    return render_template('loader.html',fullname=session.get('name')) if not session.get('name') == None else redirect(url_for('landing'))
+@app.route('/setupPanels', methods=['POST'])
+def setupPanels():
+    global panel_type, panel_quantity
+    if request.method == 'POST':
+        panel_type = request.form.get('solarpanels')
+        print(panel_type)
+        panel_quantity = request.form['quantity']
+        print(panel_quantity)
+    return redirect(url_for('setupTariff'))
+
+
+
+########################## RE CALCULATING THE SIMULATION DATA MODULES ########################################
+
+
+def updateWeeklySolarPanelEnerProd(paneltype, panelqty):
+    # Get user id using email
+    email = session.get('email')
+    userid = getUserIDFromEmail(email=email)
+
+    currentweekenergyprod = retrieve_greenenergy_data()
+    nextweekgreenenergyprod = simulate.getTotalSolarKWH_Production(paneltype,panelqty)
+    result = [round(a + b,2) for a, b in zip(nextweekgreenenergyprod, currentweekenergyprod)]
+    csv_weeklydata = ','.join(map(str, result))
+
+    db.add_user(table='inventory',userid=userid,panelname=paneltype,panel_quantity=panelqty,
+                tariffcompany=retrieve_usertariffcompany(session.get('email')),
+                tariffrate=retrieve_usertariffrate(session.get('email')),
+                tarifftype='Fixed Rate',email=email
+                )
+    db.update_user(table='simulation', userid=userid, panelweekdata=csv_weeklydata)
+
+def updateWeeklyCostEstimation():
+    calculate_total_consumption_equivalent_cost_with_greenenergy(email=session.get('email'), totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariffRate=retrieve_usertariffrate(email=session.get('email')), tariffType=tariff_type)
+
+def updateWeeklyCarbonEmission():
+    calculate_carbon_emission_green(email=session.get('email'),totalConsumption=retrieve_kwhconsumption_data(),totalGreenEnergy=retrieve_greenenergy_data(),tariff_company=retrieve_usertariffcompany(email=session.get('email')))
+
+def updateWeeklyKWHConsumption(appliance: list):
+    # Get user id using email
+    email = session.get('email')
+    userid = getUserIDFromEmail(email=email)
+   
     
-@app.route('/UserManagement')
-def UserManagement():
-    records = db.getall_users(table='user')
-    return render_template('AdminCarbonEmissionDash.html',fullname=session.get('name'),records=records) if not session.get('name') == None else redirect(url_for('landing'))
+    # Calculate total consumption based on counts
+    nextweekkwhconsumption = simulate.getTotalConsumption(appliances=appliance)
+    print(f"updateWeeklyKWHConsumption USERID: {nextweekkwhconsumption}")
+    lastweekconsumption = retrieve_costkwh()
+    
+    # Ensure lengths match to avoid anomalies
+    if len(nextweekkwhconsumption) != len(lastweekconsumption):
+        raise ValueError("Consumption data lengths do not match.")
+    
+    result = [round(a + b, 2) for a, b in zip(nextweekkwhconsumption, lastweekconsumption)]
+    print(f"New updated KWH Consumption: {result}")
+    
+    csv_weeklydata = ','.join(map(str, result))
+    db.update_user(table='simulation', userid=userid, kwhconsumption=csv_weeklydata)
 
-@app.route('/AdminDashboard')
-def AdminDashboard():
-    tariffstats = [
-        len(db.getall_tariffcompanystats('tariffcompany','MERALCO')),
-        len(db.getall_tariffcompanystats('tariffcompany','VECO')),
-        len(db.getall_tariffcompanystats('tariffcompany','CEBECO')),
-        len(db.getall_tariffcompanystats('tariffcompany','TORECO')),
-        len(db.getall_tariffcompanystats('tariffcompany','Aboitiz'))
-    ]
+@app.route('/simulatescenarios', methods=['POST'])
+def simulatescenarios():
+    appliance = request.form.get('appliance-select')
+    appliance_qty = request.form.get('quantity1')
+    paneltype = request.form.get('panel-select')
+    panel_qty = request.form.get('quantity2')
 
-    panelstats = [
-        len(db.getall_tariffcompanystats('panelname','monocrystalline')),
-        len(db.getall_tariffcompanystats('panelname','polycrystalline')),
-        len(db.getall_tariffcompanystats('panelname','thin-film')),
-    ]
+    # Ensure quantities are integers
+    appliance_qty = int(appliance_qty) if appliance_qty else 0
+    panel_qty = int(panel_qty) if panel_qty else 0
 
-    return render_template('AdminDashboardContent.html',fullname=session.get('name'),tariffstats=tariffstats,panelstats=panelstats) if not session.get('name') == None else redirect(url_for('landing'))
+    # Process appliances if valid input
+    if appliance and appliance_qty > 0:
+        appliancelist = [appliance] * appliance_qty
+        print(f"Appliances List: {appliancelist}")
+        updateWeeklyKWHConsumption(appliance=appliancelist)
+        add_new_appliances_and_update_simulation(new_appliances=appliancelist)
+
+    # Process panels if valid input
+    if paneltype and panel_qty > 0:
+        updateWeeklySolarPanelEnerProd(paneltype=paneltype, panelqty=panel_qty)
+        updateWeeklyCostEstimation()
+        updateWeeklyCarbonEmission()
+
+    return redirect(url_for('loader'))
+
 
 def insert_to_inventory(userid,email, appliances: list, panel_type, panel_quantity,tariffcompany,tariffrate,tarifftype):
     # Fetch all appliances and panel details from the database
@@ -758,42 +778,31 @@ def insert_to_inventory(userid,email, appliances: list, panel_type, panel_quanti
         else:
             print(f"Appliance '{appliance}' not found in the database, skipping.")
 
-
-@app.route('/setupTariff')
-def setupTariff():
-    return render_template('setupTariff.html')
-
-
-@app.route('/panelsetup')
-def panelsetup():
-    return render_template('panelsetup.html')
-
-@app.route('/setupPanels', methods=['POST'])
-def setupPanels():
-    global panel_type, panel_quantity
-    if request.method == 'POST':
-        panel_type = request.form.get('solarpanels')
-        print(panel_type)
-        panel_quantity = request.form['quantity']
-        print(panel_quantity)
-    return redirect(url_for('setupTariff'))
-
-@app.route('/setupAppliances', methods=['POST'])
-def setupAppliances():
-    global appliances
-    if request.method == 'POST':
-        appliances = request.form.getlist('mycheckbox')
-        print(appliances)
-        return redirect(url_for('panelsetup'))
-    return redirect(url_for('panelsetup'))
-
-@app.route('/setup')
-def setup():
-    return render_template('setup.html', appliances=appliancesdict)
-# Landing Page
-@app.route('/')
-def landing():
-    return render_template('Landing.html')
+def add_new_appliances_and_update_simulation(new_appliances: list):
+    # Retrieve current simulation data
+    current_data = retrieve_sortedappliances_consumption()
+    
+    # Group new appliances by type and count quantities
+    appliance_counts = {appl: new_appliances.count(appl) for appl in set(new_appliances)}
+    
+    # Simulate weekly consumption for the new appliances
+    new_data = simulate.getTotalConsumption2(appliances=appliance_counts)
+    
+    # Merge new appliance consumption with current data
+    for appliance_type, new_consumption in new_data.items():
+        if appliance_type in current_data:
+            current_data[appliance_type] = [
+                round(old + new, 2)
+                for old, new in zip(current_data[appliance_type], new_consumption)
+            ]
+        else:
+            current_data[appliance_type] = new_consumption
+    
+    # Update the database with the new combined data
+    email = session.get('email')
+    userid = getUserIDFromEmail(email=email)
+    updated_json = json.dumps(current_data)
+    db.update_user(table='simulation', userid=userid, appliance_consumption=updated_json)
 
 
 if __name__ == "__main__":

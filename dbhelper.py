@@ -2,10 +2,10 @@ import mysql.connector as mariadb
 from sqlite3 import connect, Row
 class Databasehelper:
     def __init__(self)->None:
-        self.host = 'localhost'
-        self.user = 'root'
-        self.password = ''
-        self.database_old = 'energreen'
+        # self.host = 'localhost'
+        # self.user = 'root'
+        # self.password = ''
+        # self.database_old = 'energreen'
         self.database = 'energreen.db'
 
     def getdb_connection(self):
@@ -15,19 +15,19 @@ class Databasehelper:
         #     password= self.password,
         #     database= self.database
         # )
-        # return connection
+        # return connection 
         connection = connect(self.database)
         return connection
     
     def getprocess(self,sql:str):
         connection = self.getdb_connection()
-        cursor = connection.cursor()
+        cursor = connection.cursor()    
         cursor.execute(sql)
         cursor.row_factory = Row
         data:list = cursor.fetchall()  # Convert rows to dictionaries
         cursor.close()
         connection.close()
-        return data
+        return data 
 
     def postprocess(self,sql:str):
         connection = self.getdb_connection()
